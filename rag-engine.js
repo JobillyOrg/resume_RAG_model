@@ -687,36 +687,92 @@
     };
   }
 
+  function getLineAt(text, index) {
+    const start = text.lastIndexOf('\n', index) + 1;
+    const end = text.indexOf('\n', index);
+    return text.slice(start, end === -1 ? text.length : end).trim();
+  }
+
+  function isPreferredLine(line) {
+    return /\b(preferred|nice\s+to\s+have|bonus|a\s+plus|ideally|desired)\b/i.test(line) &&
+      !/\b(required|must|minimum|mandatory|essential)\b/i.test(line);
+  }
+
+  function shortenContext(ctx, maxLen = 55) {
+    const s = ctx.replace(/\s+/g, ' ').trim();
+    return s.length <= maxLen ? s : s.slice(0, maxLen - 1) + '…';
+  }
+
   function extractJdRequiredYears(jd) {
-    const mins = [];
-    const patterns = [
-      /(?:minimum|min\.?|at\s+least|least)\s*(\d+)\+?\s*years?/gi,
-      /(\d+)\s*\+\s*years?(?:\s+of)?/gi,
-      /(\d+)\s*(?:to|-)\s*(\d+)\+?\s*years?/gi,
-      /(\d+)\+?\s*years?\s+(?:of\s+)?(?:relevant\s+)?(?:professional\s+)?experience/gi,
-      /(\d+)\+?\s*years?\s+(?:in|with|of)\s+[a-z]/gi,
+    /** @type {{ years: number, context: string, preferred: boolean }[]} */
+    const requirements = [];
+    const seen = new Set();
+
+    const addReq = (years, context, preferred) => {
+      if (!years || years < 1 || years > 40) return;
+      const key = years + '|' + context.toLowerCase().slice(0, 40);
+      if (seen.has(key)) return;
+      seen.add(key);
+      requirements.push({ years, context: shortenContext(context), preferred });
+    };
+
+    const rules = [
+      // "5+ years of relevant work in a data center..."
+      /(\d+)\+?\s*years?\s+of\s+relevant\s+work\b[^.\n]*/gi,
+      // "4+ years of vendor management experience"
+      /(\d+)\+?\s*years?\s+of\s+[^.\n]{3,90}?\s*experience\b/gi,
+      // "5+ years of professional / relevant experience"
+      /(\d+)\+?\s*years?\s+(?:of\s+)?(?:relevant\s+|professional\s+)?experience\b[^.\n]*/gi,
+      // "minimum 5 years", "at least 4 years"
+      /(?:minimum|min\.?|at\s+least|least)\s*(\d+)\+?\s*years?\b[^.\n]*/gi,
+      // "5+ years" / "5 + years"
+      /(\d+)\s*\+\s*years?\b[^.\n]*/gi,
+      // "3-5 years" / "3 to 5 years"
+      /(\d+)\s*(?:to|-)\s*(\d+)\+?\s*years?\b[^.\n]*/gi,
+      // "5 years in Python", "4 years with AWS"
+      /(\d+)\+?\s*years?\s+(?:in|with|of)\s+[^.\n]{3,60}/gi,
     ];
 
-    for (const re of patterns) {
+    for (const re of rules) {
       let m;
-      while ((m = re.exec(jd)) !== null) {
+      const regex = new RegExp(re.source, re.flags);
+      while ((m = regex.exec(jd)) !== null) {
+        const line = getLineAt(jd, m.index);
+        const preferred = isPreferredLine(line);
+        const context = m[0].trim();
+
         const a = parseInt(m[1], 10);
-        if (!isNaN(a) && a > 0 && a <= 40) mins.push(a);
+        addReq(a, context, preferred);
+
         if (m[2]) {
           const b = parseInt(m[2], 10);
-          if (!isNaN(b) && b > 0 && b <= 40) mins.push(b);
+          addReq(b, context + ' (range max)', preferred);
         }
       }
     }
 
-    const minYears = mins.length ? Math.min(...mins) : 0;
-    const maxMention = mins.length ? Math.max(...mins) : 0;
+    const required = requirements.filter(r => !r.preferred);
+    const pool = required.length ? required : requirements;
+    const allYears = pool.map(r => r.years);
+    const strictestYears = allYears.length ? Math.max(...allYears) : 0;
+
     return {
-      minYears,
-      maxMention,
-      detected: mins.length > 0,
-      rawValues: [...new Set(mins)].sort((a, b) => a - b),
+      minYears: strictestYears,
+      maxMention: allYears.length ? Math.max(...allYears) : 0,
+      detected: requirements.length > 0,
+      rawValues: [...new Set(allYears)].sort((a, b) => a - b),
+      requirements,
+      strictestYears,
     };
+  }
+
+  function formatJdRequirements(jdExp) {
+    if (!jdExp.requirements?.length) return `${jdExp.minYears}+ years`;
+    const req = jdExp.requirements.filter(r => !r.preferred);
+    const list = (req.length ? req : jdExp.requirements)
+      .map(r => `${r.years}+ (${r.context})`);
+    if (list.length === 1) return list[0];
+    return list.join(' · ') + ` — strictest: ${jdExp.strictestYears}+ years`;
   }
 
   function analyzeExperienceEligibility(jd, resume) {
@@ -738,20 +794,24 @@
 
     const shortfall = Math.max(0, jdExp.minYears - candExp.years);
     const eligible = candExp.years >= jdExp.minYears;
+    const reqSummary = formatJdRequirements(jdExp);
+    const multiReq = (jdExp.requirements?.filter(r => !r.preferred).length || 0) > 1;
 
     return {
       eligible,
       status: eligible ? 'eligible' : 'ineligible',
       jdYears: jdExp.minYears,
       jdRange: jdExp.rawValues,
+      requirements: jdExp.requirements,
+      reqSummary,
       candidateYears: candExp.years,
       shortfall: Math.round(shortfall * 10) / 10,
       roleCount: candExp.roleCount,
       message: eligible
-        ? `Eligible — candidate has ~${candExp.years} years vs JD requirement of ${jdExp.minYears}+ years.`
-        : `Not eligible — candidate has ~${candExp.years} years but JD requires ${jdExp.minYears}+ years (${shortfall} year(s) short).`,
+        ? `Eligible — candidate has ~${candExp.years} years vs JD requirement of ${jdExp.minYears}+ years${multiReq ? ` (strictest of ${jdExp.rawValues.join(', ')}+)` : ''}.`
+        : `Not eligible — candidate has ~${candExp.years} years but JD requires ${jdExp.minYears}+ years (${shortfall} year(s) short)${multiReq ? `. JD lists: ${reqSummary}` : ''}.`,
       detail: eligible
-        ? 'Experience meets the job description minimum.'
+        ? 'Experience meets the strictest years requirement in the job description.'
         : 'Experience is below the job description requirement. Tailoring cannot replace required tenure.',
     };
   }
