@@ -6,61 +6,288 @@
 (function (global) {
   'use strict';
 
-  // ─── SKILL / ATS KNOWLEDGE BASE ─────────────────────────────────
+  // ─── SKILL / ATS KNOWLEDGE BASE (global job categories) ─────────
   const SKILL_KB = [
-    { label: 'Python', terms: ['python', 'django', 'flask', 'fastapi', 'pandas', 'numpy', 'scipy'] },
-    { label: 'JavaScript', terms: ['javascript', 'typescript', 'node.js', 'nodejs', 'react', 'vue', 'angular', 'next.js'] },
-    { label: 'Java', terms: ['java', 'spring boot', 'spring', 'hibernate', 'maven', 'gradle'] },
-    { label: 'C#', terms: ['c#', 'csharp', '.net', 'asp.net', 'entity framework'] },
-    { label: 'Go', terms: ['golang', ' go '] },
+    // ── Software / Engineering ──
+    { label: 'Python', terms: ['python', 'django', 'flask', 'fastapi', 'pandas', 'numpy', 'scipy', 'pytest', 'unittest', 'pip', 'poetry', 'celery'] },
+    { label: 'JavaScript', terms: ['javascript', 'typescript', 'node.js', 'nodejs', 'react', 'react.js', 'redux', 'vue', 'angular', 'next.js', 'express', 'es6'] },
+    { label: 'Java', terms: ['java', 'spring boot', 'spring mvc', 'spring security', 'spring', 'hibernate', 'jpa', 'maven', 'gradle', 'junit', 'mockito', 'microservices'] },
+    { label: 'C#', terms: ['c#', 'csharp', '.net', 'asp.net', 'entity framework', 'dotnet', 'blazor', 'wpf'] },
+    { label: 'Go', terms: ['golang', 'go '] },
     { label: 'Rust', terms: ['rust'] },
-    { label: 'SQL', terms: ['sql', 'postgresql', 'mysql', 'oracle', 't-sql', 'pl/sql', 'sqlite'] },
-    { label: 'NoSQL', terms: ['mongodb', 'dynamodb', 'cassandra', 'redis', 'elasticsearch'] },
-    { label: 'AWS', terms: ['aws', 'amazon web services', 'ec2', 's3', 'lambda', 'rds', 'cloudformation'] },
-    { label: 'Azure', terms: ['azure', 'microsoft azure', 'azure devops', 'azure functions'] },
-    { label: 'GCP', terms: ['gcp', 'google cloud', 'bigquery', 'cloud run', 'gke'] },
-    { label: 'Docker', terms: ['docker', 'containerization', 'containers'] },
-    { label: 'Kubernetes', terms: ['kubernetes', 'k8s', 'helm', 'eks', 'aks', 'gke'] },
-    { label: 'CI/CD', terms: ['ci/cd', 'cicd', 'jenkins', 'github actions', 'gitlab ci', 'circleci', 'continuous integration', 'continuous deployment'] },
-    { label: 'Terraform', terms: ['terraform', 'infrastructure as code', 'iac'] },
-    { label: 'Machine Learning', terms: ['machine learning', 'ml', 'deep learning', 'neural network', 'scikit-learn', 'tensorflow', 'pytorch'] },
-    { label: 'LLM', terms: ['llm', 'llms', 'large language model', 'gpt', 'chatgpt', 'openai', 'claude', 'gemini'] },
-    { label: 'RAG', terms: ['rag', 'retrieval augmented generation', 'vector database', 'embeddings', 'semantic search'] },
-    { label: 'LangChain', terms: ['langchain', 'langgraph', 'llamaindex'] },
-    { label: 'NLP', terms: ['nlp', 'natural language processing', 'spacy', 'hugging face', 'transformers'] },
-    { label: 'Data Engineering', terms: ['data engineering', 'etl', 'data pipeline', 'apache spark', 'databricks', 'airflow', 'dbt'] },
-    { label: 'REST API', terms: ['rest api', 'restful', 'graphql', 'api design', 'microservices'] },
-    { label: 'Agile', terms: ['agile', 'scrum', 'kanban', 'sprint', 'jira'] },
-    { label: 'DevOps', terms: ['devops', 'site reliability', 'sre', 'observability', 'prometheus', 'grafana'] },
-    { label: 'Testing', terms: ['unit testing', 'integration testing', 'qa', 'test automation', 'pytest', 'jest', 'selenium', 'cypress'] },
-    { label: 'Security', terms: ['cybersecurity', 'oauth', 'jwt', 'encryption', 'penetration testing', 'soc 2'] },
-    { label: 'Linux', terms: ['linux', 'bash', 'shell scripting', 'unix'] },
-    { label: 'Git', terms: ['git', 'github', 'gitlab', 'bitbucket', 'version control'] },
-    { label: 'Power BI', terms: ['power bi', 'tableau', 'looker', 'data visualization'] },
-    { label: 'Snowflake', terms: ['snowflake', 'data warehouse'] },
-    { label: 'Kafka', terms: ['kafka', 'event streaming', 'message queue', 'rabbitmq', 'sqs'] },
-    { label: 'SAP', terms: ['sap', 's/4hana', 'abap'] },
-    { label: 'Salesforce', terms: ['salesforce', 'apex', 'lightning'] },
-    { label: 'Project Management', terms: ['project management', 'pmp', 'stakeholder management', 'cross-functional'] },
-    { label: 'AI Engineer', terms: ['ai engineer', 'ml engineer', 'machine learning engineer', 'ai/ml'] },
-    { label: 'Software Engineer', terms: ['software engineer', 'software developer', 'full stack', 'backend engineer', 'frontend engineer'] },
-    { label: 'Data Scientist', terms: ['data scientist', 'data science', 'statistical modeling'] },
-    { label: 'Business Analyst', terms: ['business analyst', 'requirements gathering', 'user stories'] },
-    { label: 'Product Manager', terms: ['product manager', 'product owner', 'roadmap'] },
-    { label: 'Cloud Architecture', terms: ['cloud architecture', 'solution architect', 'system design'] },
-    { label: 'AutoGen', terms: ['autogen', 'multi-agent', 'agentic ai', 'ai agents'] },
-    { label: 'MLOps', terms: ['mlops', 'model deployment', 'model serving', 'feature store'] },
-    { label: 'HTML/CSS', terms: ['html', 'css', 'responsive design', 'tailwind'] },
-    { label: 'Mobile Development', terms: ['ios', 'android', 'swift', 'kotlin', 'react native', 'flutter'] },
-    { label: 'ITIL', terms: ['itil', 'service desk', 'incident management'] },
-    { label: 'SAP Fiori', terms: ['fiori', 'sap ui5'] },
+    { label: 'C++', terms: ['c++', 'cpp'] },
+    { label: 'PHP', terms: ['php', 'laravel', 'symfony', 'wordpress'] },
+    { label: 'Ruby', terms: ['ruby', 'rails', 'ruby on rails'] },
+    { label: 'Scala', terms: ['scala', 'akka'] },
+    { label: 'Kotlin', terms: ['kotlin', 'android kotlin'] },
+    { label: 'Swift', terms: ['swift', 'swiftui', 'ios'] },
+    { label: 'SQL', terms: ['sql', 'postgresql', 'mysql', 'oracle', 't-sql', 'pl/sql', 'sqlite', 'stored procedures', 'complex sql', 'ssis', 'ssrs'] },
+    { label: 'NoSQL', terms: ['mongodb', 'dynamodb', 'cassandra', 'redis', 'elasticsearch', 'cosmos db', 'neo4j'] },
+    { label: 'AWS', terms: ['aws', 'amazon web services', 'ec2', 's3', 'lambda', 'rds', 'eks', 'cloudformation', 'serverless', 'sagemaker', 'cloudwatch'] },
+    { label: 'Azure', terms: ['azure', 'microsoft azure', 'azure devops', 'azure functions', 'event hubs', 'azure ml', 'bicep', 'aks'] },
+    { label: 'GCP', terms: ['gcp', 'google cloud', 'bigquery', 'cloud run', 'gke', 'pubsub'] },
+    { label: 'Docker', terms: ['docker', 'containerization', 'containers', 'dockerfile'] },
+    { label: 'Kubernetes', terms: ['kubernetes', 'k8s', 'helm', 'eks', 'aks', 'gke', 'yaml manifests'] },
+    { label: 'CI/CD', terms: ['ci/cd', 'cicd', 'jenkins', 'github actions', 'gitlab ci', 'circleci', 'azure devops', 'continuous integration', 'continuous deployment', 'argo cd'] },
+    { label: 'Terraform', terms: ['terraform', 'infrastructure as code', 'iac', 'azure bicep', 'pulumi', 'ansible', 'chef', 'puppet'] },
+    { label: 'Machine Learning', terms: ['machine learning', 'ml', 'deep learning', 'neural network', 'scikit-learn', 'tensorflow', 'pytorch', 'keras', 'xgboost', 'hyperparameter tuning', 'feature engineering', 'computer vision', 'opencv'] },
+    { label: 'LLM', terms: ['llm', 'llms', 'large language model', 'gpt', 'chatgpt', 'openai', 'openai api', 'claude', 'gemini', 'prompt engineering'] },
+    { label: 'RAG', terms: ['rag', 'retrieval augmented generation', 'vector database', 'embeddings', 'semantic search', 'vector store', 'pinecone', 'weaviate', 'chroma'] },
+    { label: 'LangChain', terms: ['langchain', 'langgraph', 'llamaindex', 'haystack'] },
+    { label: 'NLP', terms: ['nlp', 'natural language processing', 'spacy', 'hugging face', 'transformers', 'bert', 'tokenization', 'named entity recognition'] },
+    { label: 'AI Engineer', terms: ['ai engineer', 'ml engineer', 'machine learning engineer', 'ai/ml', 'ai assisted development', 'generative ai'] },
+    { label: 'MLOps', terms: ['mlops', 'model deployment', 'model serving', 'feature store', 'model monitoring', 'mlflow', 'kubeflow'] },
+    { label: 'AutoGen', terms: ['autogen', 'multi-agent', 'agentic ai', 'ai agents', 'crewai'] },
+    { label: 'Code Generation', terms: ['code generation', 'github copilot', 'copilot', 'generative ai', 'cursor'] },
+    { label: 'Data Engineering', terms: ['data engineering', 'etl', 'elt', 'data pipeline', 'apache spark', 'spark', 'hadoop', 'databricks', 'airflow', 'dbt', 'data modeling', 'kafka streams'] },
+    { label: 'Data Scientist', terms: ['data scientist', 'data science', 'statistical modeling', 'shap', 'lime', 'a/b testing', 'experimentation'] },
+    { label: 'Data Analyst', terms: ['data analyst', 'data analysis', 'excel', 'pivot tables', 'vlookup', 'power query', 'sql reporting'] },
+    { label: 'Power BI', terms: ['power bi', 'tableau', 'looker', 'qlik', 'data visualization', 'dashboarding'] },
+    { label: 'Snowflake', terms: ['snowflake', 'data warehouse', 'redshift', 'bigquery', 'synapse'] },
+    { label: 'Kafka', terms: ['kafka', 'apache kafka', 'event streaming', 'message queue', 'rabbitmq', 'jms', 'sqs', 'pubsub'] },
+    { label: 'REST API', terms: ['rest api', 'restful', 'rest apis', 'graphql', 'grpc', 'api design', 'web services', 'high-concurrency', 'microservices', 'soap'] },
+    { label: 'Cloud Architecture', terms: ['cloud architecture', 'solution architect', 'system design', 'event-driven', 'enterprise architecture'] },
     { label: 'Dependency Injection', terms: ['dependency injection', 'ioc', 'inversion of control'] },
-    { label: 'Code Generation', terms: ['code generation', 'github copilot', 'copilot', 'generative ai'] },
+    { label: 'HTML/CSS', terms: ['html', 'html5', 'css', 'css3', 'responsive design', 'bootstrap', 'tailwind', 'websocket', 'sass', 'figma to code'] },
+    { label: 'Mobile Development', terms: ['ios', 'android', 'swift', 'kotlin', 'react native', 'flutter', 'xamarin', 'mobile app'] },
+    { label: 'Game Development', terms: ['unity', 'unreal engine', 'game design', 'c# unity', 'godot'] },
+    { label: 'Embedded Systems', terms: ['embedded', 'firmware', 'rtos', 'arduino', 'raspberry pi', 'iot', 'plc programming'] },
+    { label: 'Blockchain', terms: ['blockchain', 'solidity', 'ethereum', 'smart contracts', 'web3', 'cryptocurrency'] },
+    { label: 'Agile', terms: ['agile', 'scrum', 'safe', 'kanban', 'sprint', 'jira', 'confluence', 'sprint planning'] },
+    { label: 'DevOps', terms: ['devops', 'site reliability', 'sre', 'observability', 'prometheus', 'grafana', 'elk', 'splunk', 'datadog', 'new relic'] },
+    { label: 'Testing', terms: ['unit testing', 'integration testing', 'qa', 'test automation', 'pytest', 'jest', 'selenium', 'cypress', 'playwright', 'testng', 'junit', 'manual testing', 'uat'] },
+    { label: 'Cybersecurity', terms: ['cybersecurity', 'information security', 'oauth', 'jwt', 'encryption', 'penetration testing', 'soc 2', 'sox', 'iso 27001', 'siem', 'firewall', 'vulnerability assessment', 'zero trust'] },
+    { label: 'Linux', terms: ['linux', 'bash', 'shell scripting', 'unix', 'powershell', 'windows server'] },
+    { label: 'Git', terms: ['git', 'github', 'gitlab', 'bitbucket', 'version control', 'svn'] },
+    { label: 'Networking', terms: ['networking', 'tcp/ip', 'dns', 'vpn', 'lan', 'wan', 'cisco', 'routing', 'switching', 'firewall', 'load balancer'] },
+    { label: 'IT Support', terms: ['it support', 'help desk', 'desktop support', 'troubleshooting', 'active directory', 'office 365', 'microsoft 365', 'hardware support', 'ticketing', 'service now', 'servicenow'] },
+    { label: 'ITIL', terms: ['itil', 'service desk', 'incident management', 'change management', 'problem management', 'service management'] },
+    { label: 'SAP', terms: ['sap', 's/4hana', 'abap', 'sap mm', 'sap sd', 'sap fi', 'sap hana'] },
+    { label: 'SAP Fiori', terms: ['fiori', 'sap ui5'] },
+    { label: 'Salesforce', terms: ['salesforce', 'apex', 'lightning', 'sales cloud', 'service cloud', 'soql'] },
+    { label: 'Oracle ERP', terms: ['oracle erp', 'oracle ebs', 'oracle fusion', 'peoplesoft'] },
+    { label: 'Microsoft Dynamics', terms: ['dynamics 365', 'dynamics crm', 'dynamics ax', 'navision'] },
+    { label: 'Software Engineer', terms: ['software engineer', 'software developer', 'full stack', 'full-stack', 'backend engineer', 'frontend engineer', 'platform engineer'] },
+    { label: 'QA Engineer', terms: ['qa engineer', 'quality assurance', 'sdet', 'test engineer', 'automation engineer'] },
+    { label: 'Business Analyst', terms: ['business analyst', 'requirements gathering', 'user stories', 'business requirements', 'process mapping', 'gap analysis'] },
+    { label: 'Product Manager', terms: ['product manager', 'product owner', 'roadmap', 'backlog grooming', 'go-to-market', 'okrs'] },
+    { label: 'Project Management', terms: ['project management', 'pmp', 'prince2', 'stakeholder management', 'cross-functional', 'technical leadership', 'waterfall', 'risk management', 'ms project'] },
+    { label: 'Program Management', terms: ['program manager', 'program management', 'portfolio management', 'epmo'] },
+    { label: 'Scrum Master', terms: ['scrum master', 'agile coach', 'facilitation', 'retrospective'] },
+    { label: 'Technical Writer', terms: ['technical writing', 'documentation', 'api documentation', 'knowledge base'] },
+    { label: 'UI/UX Design', terms: ['ui/ux', 'ux design', 'ui design', 'figma', 'sketch', 'adobe xd', 'wireframing', 'prototyping', 'user research', 'usability testing', 'design systems'] },
+    { label: 'Graphic Design', terms: ['graphic design', 'photoshop', 'illustrator', 'indesign', 'canva', 'branding', 'typography', 'adobe creative suite'] },
+    { label: 'Video Production', terms: ['video editing', 'premiere pro', 'after effects', 'final cut', 'cinematography', 'motion graphics'] },
+    { label: 'Content Writing', terms: ['content writing', 'copywriting', 'seo writing', 'blogging', 'editing', 'proofreading'] },
+    // ── Business / Sales / Marketing ──
+    { label: 'Sales', terms: ['sales', 'b2b sales', 'b2c sales', 'inside sales', 'outside sales', 'account executive', 'quota attainment', 'pipeline management', 'cold calling', 'negotiation'] },
+    { label: 'Account Management', terms: ['account management', 'key account', 'customer success', 'retention', 'upsell', 'cross-sell', 'churn reduction'] },
+    { label: 'Business Development', terms: ['business development', 'partnerships', 'lead generation', 'market expansion'] },
+    { label: 'CRM', terms: ['crm', 'hubspot', 'salesforce crm', 'zoho crm', 'pipedrive'] },
+    { label: 'Digital Marketing', terms: ['digital marketing', 'seo', 'sem', 'ppc', 'google ads', 'facebook ads', 'meta ads', 'social media marketing', 'email marketing', 'content marketing', 'affiliate marketing'] },
+    { label: 'Marketing Analytics', terms: ['google analytics', 'ga4', 'marketing analytics', 'conversion rate', 'attribution', 'mixpanel', 'amplitude'] },
+    { label: 'Brand Marketing', terms: ['brand management', 'brand strategy', 'campaign management', 'market research', 'positioning'] },
+    { label: 'Growth Marketing', terms: ['growth hacking', 'growth marketing', 'a/b testing', 'funnel optimization', 'lifecycle marketing'] },
+    { label: 'Public Relations', terms: ['public relations', 'media relations', 'press releases', 'crisis communication', 'corporate communications'] },
+    { label: 'Customer Service', terms: ['customer service', 'customer support', 'call center', 'zendesk', 'freshdesk', 'nps', 'csat', 'first call resolution'] },
+    // ── Finance / Accounting ──
+    { label: 'Accounting', terms: ['accounting', 'bookkeeping', 'gaap', 'ifrs', 'general ledger', 'accounts payable', 'accounts receivable', 'reconciliations', 'month-end close'] },
+    { label: 'Financial Analysis', terms: ['financial analysis', 'financial modeling', 'forecasting', 'budgeting', 'variance analysis', 'fp&a', 'valuation', 'dcf'] },
+    { label: 'Audit', terms: ['audit', 'internal audit', 'external audit', 'sox compliance', 'controls testing', 'risk assessment'] },
+    { label: 'Taxation', terms: ['taxation', 'tax preparation', 'corporate tax', 'gst', 'vat', 'transfer pricing'] },
+    { label: 'Investment Banking', terms: ['investment banking', 'm&a', 'due diligence', 'ipo', 'capital markets', 'pitch books'] },
+    { label: 'Corporate Finance', terms: ['corporate finance', 'treasury', 'cash management', 'working capital', 'capex'] },
+    { label: 'Risk Management', terms: ['risk management', 'credit risk', 'market risk', 'operational risk', 'basel', 'var'] },
+    { label: 'FinTech', terms: ['fintech', 'payments', 'kyc', 'aml', 'fraud detection', 'open banking'] },
+    { label: 'QuickBooks', terms: ['quickbooks', 'xero', 'sage', 'netsuite', 'sap fi'] },
+    { label: 'CPA', terms: ['cpa', 'acca', 'cfa', 'cima', 'chartered accountant'] },
+    // ── HR / People ──
+    { label: 'Human Resources', terms: ['human resources', 'hr', 'hrbp', 'employee relations', 'hr policies', 'workforce planning'] },
+    { label: 'Talent Acquisition', terms: ['talent acquisition', 'recruiting', 'sourcing', 'interviewing', 'ats', 'greenhouse', 'lever', 'workday recruiting'] },
+    { label: 'Compensation Benefits', terms: ['compensation', 'benefits', 'payroll', 'total rewards', 'job evaluation'] },
+    { label: 'Learning Development', terms: ['learning and development', 'training', 'instructional design', 'lms', 'onboarding'] },
+    { label: 'HRIS', terms: ['hris', 'workday', 'bamboohr', 'adp', 'successfactors', 'oracle hcm'] },
+    { label: 'Diversity Inclusion', terms: ['diversity', 'inclusion', 'dei', 'belonging', 'equal opportunity'] },
+    // ── Operations / Supply Chain / Manufacturing ──
+    { label: 'Operations Management', terms: ['operations management', 'process improvement', 'lean', 'six sigma', 'kaizen', 'kpi', 'sop'] },
+    { label: 'Supply Chain', terms: ['supply chain', 'logistics', 'procurement', 'inventory management', 'demand planning', 's&op', 'warehousing', 'distribution'] },
+    { label: 'Procurement', terms: ['procurement', 'purchasing', 'vendor management', 'rfp', 'contract negotiation', 'strategic sourcing'] },
+    { label: 'Manufacturing', terms: ['manufacturing', 'production planning', 'cnc', 'assembly', 'quality control', 'oee', 'mes'] },
+    { label: 'Quality Control', terms: ['quality control', 'quality assurance', 'iso 9001', 'six sigma', 'spc', 'root cause analysis', 'capa'] },
+    { label: 'Lean Six Sigma', terms: ['lean six sigma', 'six sigma', 'black belt', 'green belt', 'dmaic', '5s'] },
+    { label: 'Warehouse Management', terms: ['warehouse management', 'wms', 'forklift', 'inventory control', 'picking packing'] },
+    { label: 'Transportation', terms: ['transportation', 'fleet management', 'freight', 'tms', 'last mile', 'shipping'] },
+    // ── Healthcare / Life Sciences ──
+    { label: 'Nursing', terms: ['nursing', 'registered nurse', 'rn', 'patient care', 'vital signs', 'medication administration', 'ehr', 'epic', 'cerner'] },
+    { label: 'Clinical Research', terms: ['clinical research', 'clinical trials', 'gcp', 'protocol', 'informed consent', 'cra', 'crc'] },
+    { label: 'Pharmacy', terms: ['pharmacy', 'pharmacist', 'pharmacology', 'dispensing', 'medication therapy'] },
+    { label: 'Medical Coding', terms: ['medical coding', 'icd-10', 'cpt', 'hcpcs', 'medical billing', 'revenue cycle'] },
+    { label: 'Healthcare Administration', terms: ['healthcare administration', 'hipaa', 'patient scheduling', 'medical office', 'claims processing'] },
+    { label: 'Biotechnology', terms: ['biotechnology', 'pcr', 'cell culture', 'assay development', 'gmp', 'glp'] },
+    { label: 'Pharmaceutical', terms: ['pharmaceutical', 'drug development', 'pharmacovigilance', 'regulatory affairs', 'fda'] },
+    { label: 'Allied Health', terms: ['physical therapy', 'occupational therapy', 'radiology', 'sonography', 'respiratory therapy'] },
+    // ── Education ──
+    { label: 'Teaching', terms: ['teaching', 'curriculum development', 'lesson planning', 'classroom management', 'assessment', 'differentiated instruction'] },
+    { label: 'Special Education', terms: ['special education', 'iep', 'inclusion', 'behavioral intervention'] },
+    { label: 'Higher Education', terms: ['higher education', 'academic advising', 'research supervision', 'grant writing'] },
+    { label: 'Instructional Design', terms: ['instructional design', 'e-learning', 'articulate', 'captivate', 'scorm'] },
+    { label: 'EdTech', terms: ['edtech', 'learning management system', 'canvas', 'blackboard', 'moodle'] },
+    // ── Legal / Compliance ──
+    { label: 'Legal', terms: ['legal research', 'litigation', 'contract drafting', 'corporate law', 'compliance', 'paralegal', 'case management'] },
+    { label: 'Contract Management', terms: ['contract management', 'contract negotiation', 'msa', 'nda', 'vendor contracts'] },
+    { label: 'Regulatory Compliance', terms: ['regulatory compliance', 'gdpr', 'ccpa', 'aml', 'kyc', 'policy development'] },
+    { label: 'Intellectual Property', terms: ['intellectual property', 'patents', 'trademarks', 'copyright'] },
+    // ── Engineering (non-software) ──
+    { label: 'Mechanical Engineering', terms: ['mechanical engineering', 'cad', 'solidworks', 'autocad', 'ansys', 'fea', 'thermodynamics', 'manufacturing drawings'] },
+    { label: 'Electrical Engineering', terms: ['electrical engineering', 'circuit design', 'pcb', 'power systems', 'plc', 'scada', 'matlab', 'simulink'] },
+    { label: 'Civil Engineering', terms: ['civil engineering', 'structural analysis', 'autocad civil', 'revit', 'construction management', 'surveying'] },
+    { label: 'Chemical Engineering', terms: ['chemical engineering', 'process engineering', 'piping', 'heat transfer', 'mass balance'] },
+    { label: 'Industrial Engineering', terms: ['industrial engineering', 'time study', 'ergonomics', 'facility layout', 'simulation'] },
+    { label: 'Architecture', terms: ['architecture', 'revit', 'bim', 'building design', 'construction documents'] },
+    // ── Trades / Field ──
+    { label: 'Electrical Trade', terms: ['electrician', 'wiring', 'conduit', 'nec', 'panel installation', 'troubleshooting electrical'] },
+    { label: 'Plumbing', terms: ['plumbing', 'pipefitting', 'hvac', 'refrigeration', 'boiler'] },
+    { label: 'Welding', terms: ['welding', 'mig', 'tig', 'arc welding', 'fabrication', 'blueprint reading'] },
+    { label: 'Automotive', terms: ['automotive', 'diagnostics', 'ase', 'engine repair', 'brake systems', 'ev maintenance'] },
+    { label: 'Construction', terms: ['construction', 'carpentry', 'site supervision', 'osha', 'blueprint reading', 'estimating'] },
+    // ── Hospitality / Retail / Food ──
+    { label: 'Hospitality', terms: ['hospitality', 'hotel management', 'front desk', 'guest services', 'reservations', 'opera pms'] },
+    { label: 'Food Service', terms: ['food service', 'culinary', 'kitchen management', 'food safety', 'haccp', 'menu planning'] },
+    { label: 'Retail', terms: ['retail', 'merchandising', 'pos', 'inventory', 'visual merchandising', 'store operations', 'loss prevention'] },
+    { label: 'Event Management', terms: ['event planning', 'event management', 'conference coordination', 'vendor coordination'] },
+    // ── Science / Research / Environment ──
+    { label: 'Laboratory Science', terms: ['laboratory', 'lab technician', 'sample analysis', 'chromatography', 'spectroscopy', 'glp'] },
+    { label: 'Environmental Science', terms: ['environmental science', 'environmental compliance', 'sustainability', 'esa', 'waste management', 'air quality'] },
+    { label: 'Research Scientist', terms: ['research scientist', 'experimental design', 'publications', 'grant writing', 'peer review'] },
+    // ── Real Estate / Insurance ──
+    { label: 'Real Estate', terms: ['real estate', 'property management', 'leasing', 'appraisal', 'mls', 'closing'] },
+    { label: 'Insurance', terms: ['insurance', 'underwriting', 'claims', 'actuarial', 'policy administration', 'risk assessment'] },
+    // ── Soft / Cross-cutting ──
+    { label: 'Communication', terms: ['communication', 'presentation skills', 'public speaking', 'stakeholder communication', 'written communication'] },
+    { label: 'Leadership', terms: ['leadership', 'team leadership', 'mentoring', 'coaching', 'people management', 'conflict resolution'] },
+    { label: 'Change Management', terms: ['change management', 'organizational change', 'prosci', 'adoption'] },
+    { label: 'Customer Experience', terms: ['customer experience', 'cx', 'journey mapping', 'voice of customer'] },
+    { label: 'Languages', terms: ['bilingual', 'multilingual', 'translation', 'interpretation', 'spanish', 'french', 'german', 'mandarin', 'hindi', 'arabic'] },
   ];
+
+  /**
+   * Skill families — if an anchor remains, keep related ecosystem skills from the original resume.
+   */
+  const SKILL_FAMILIES = {
+    python: [
+      'python', 'django', 'flask', 'fastapi', 'pandas', 'numpy', 'scipy', 'pytest', 'unittest',
+      'matplotlib', 'seaborn', 'jupyter', 'pip', 'poetry', 'celery',
+    ],
+    java: [
+      'java', 'spring', 'spring boot', 'spring mvc', 'spring security', 'hibernate', 'jpa',
+      'maven', 'gradle', 'junit', 'mockito', 'testng', 'microservices', 'eureka', 'hystrix',
+    ],
+    javascript: [
+      'javascript', 'typescript', 'react', 'react.js', 'redux', 'angular', 'vue', 'next.js',
+      'node.js', 'nodejs', 'express', 'es6', 'websocket', 'spa',
+    ],
+    frontend: [
+      'html', 'html5', 'css', 'css3', 'bootstrap', 'tailwind', 'responsive', 'frontend', 'front-end', 'sass', 'figma',
+    ],
+    csharp: [
+      'c#', 'csharp', '.net', 'asp.net', 'entity framework', 'dotnet', 'blazor', 'wpf',
+    ],
+    php: ['php', 'laravel', 'symfony', 'wordpress'],
+    ruby: ['ruby', 'rails', 'ruby on rails'],
+    mobile: ['ios', 'android', 'swift', 'kotlin', 'react native', 'flutter', 'xamarin', 'swiftui'],
+    ai_ml: [
+      'ai', 'machine learning', 'ml', 'deep learning', 'llm', 'llms', 'openai', 'openai api',
+      'langchain', 'langgraph', 'rag', 'nlp', 'bert', 'transformers', 'pytorch', 'tensorflow',
+      'keras', 'xgboost', 'scikit-learn', 'sklearn', 'prompt engineering', 'hugging face',
+      'shap', 'lime', 'feature engineering', 'hyperparameter tuning', 'generative ai', 'computer vision', 'opencv',
+    ],
+    data: [
+      'sql', 'postgresql', 'mysql', 'oracle', 'mongodb', 'etl', 'elt', 'data modeling', 'spark',
+      'apache spark', 'hadoop', 'airflow', 'databricks', 'pandas', 'numpy', 'dbt', 'snowflake', 'redshift',
+    ],
+    analytics: [
+      'power bi', 'tableau', 'looker', 'excel', 'google analytics', 'ga4', 'data visualization', 'dashboarding',
+    ],
+    aws: [
+      'aws', 'lambda', 's3', 'ec2', 'rds', 'eks', 'sagemaker', 'serverless', 'cloudformation', 'cloudwatch',
+    ],
+    azure: [
+      'azure', 'azure devops', 'event hubs', 'azure ml', 'azure functions', 'bicep', 'aks',
+    ],
+    gcp: ['gcp', 'google cloud', 'bigquery', 'cloud run', 'gke', 'pubsub'],
+    devops: [
+      'docker', 'kubernetes', 'k8s', 'helm', 'jenkins', 'github actions', 'ci/cd', 'terraform',
+      'prometheus', 'grafana', 'elk', 'splunk', 'git', 'ansible', 'datadog',
+    ],
+    messaging: [
+      'kafka', 'apache kafka', 'rabbitmq', 'jms', 'sqs', 'event-driven', 'protocol buffers', 'grpc', 'pubsub',
+    ],
+    testing: [
+      'pytest', 'unittest', 'junit', 'mockito', 'selenium', 'cypress', 'playwright', 'testng', 'jest', 'uat', 'qa',
+    ],
+    security: [
+      'cybersecurity', 'penetration testing', 'siem', 'firewall', 'oauth', 'jwt', 'encryption', 'iso 27001', 'soc 2', 'zero trust',
+    ],
+    networking: [
+      'networking', 'tcp/ip', 'dns', 'vpn', 'cisco', 'routing', 'switching', 'lan', 'wan', 'load balancer',
+    ],
+    itsupport: [
+      'it support', 'help desk', 'desktop support', 'active directory', 'office 365', 'microsoft 365', 'servicenow', 'ticketing',
+    ],
+    erp: [
+      'sap', 's/4hana', 'abap', 'fiori', 'salesforce', 'dynamics 365', 'netsuite', 'oracle erp', 'workday',
+    ],
+    sales: [
+      'sales', 'b2b sales', 'account executive', 'pipeline', 'crm', 'hubspot', 'negotiation', 'quota', 'lead generation',
+    ],
+    marketing: [
+      'digital marketing', 'seo', 'sem', 'ppc', 'google ads', 'facebook ads', 'content marketing', 'email marketing', 'campaign management',
+    ],
+    finance: [
+      'accounting', 'gaap', 'ifrs', 'financial modeling', 'forecasting', 'budgeting', 'fp&a', 'audit', 'quickbooks', 'reconciliation',
+    ],
+    hr: [
+      'human resources', 'talent acquisition', 'recruiting', 'hris', 'workday', 'payroll', 'employee relations', 'onboarding',
+    ],
+    supply_chain: [
+      'supply chain', 'logistics', 'procurement', 'inventory', 'warehousing', 'demand planning', 'wms', 's&op',
+    ],
+    manufacturing: [
+      'manufacturing', 'lean', 'six sigma', 'kaizen', 'quality control', 'cnc', 'plc', 'oee', 'mes', 'iso 9001',
+    ],
+    healthcare: [
+      'nursing', 'patient care', 'ehr', 'epic', 'cerner', 'hipaa', 'clinical', 'pharmacy', 'medical coding', 'icd-10',
+    ],
+    design: [
+      'figma', 'sketch', 'adobe xd', 'photoshop', 'illustrator', 'ui/ux', 'wireframing', 'prototyping', 'design systems',
+    ],
+    project_mgmt: [
+      'project management', 'pmp', 'prince2', 'jira', 'ms project', 'stakeholder management', 'risk management', 'agile', 'scrum',
+    ],
+    legal: [
+      'legal research', 'contract drafting', 'compliance', 'gdpr', 'litigation', 'paralegal', 'contract management',
+    ],
+    mechanical: [
+      'mechanical engineering', 'solidworks', 'autocad', 'ansys', 'fea', 'cad', 'thermodynamics',
+    ],
+    electrical: [
+      'electrical engineering', 'pcb', 'plc', 'scada', 'matlab', 'circuit design', 'power systems',
+    ],
+    civil: [
+      'civil engineering', 'revit', 'bim', 'structural analysis', 'construction management', 'surveying',
+    ],
+    hospitality: [
+      'hospitality', 'hotel management', 'guest services', 'food safety', 'haccp', 'pos', 'retail', 'merchandising',
+    ],
+    education: [
+      'teaching', 'curriculum', 'lesson planning', 'classroom management', 'instructional design', 'lms', 'iep',
+    ],
+  };
 
   const ATS_RULES_KB = [
     { id: 'kw-primary', text: 'Primary keywords must appear in skills section and experience bullets for ATS match score' },
     { id: 'kw-secondary', text: 'Secondary keywords should appear at least once in resume body or skills' },
+    { id: 'skill-families', text: 'Keep related skill families together across all job categories — tech business healthcare finance trades and more' },
     { id: 'metrics', text: 'Quantified bullets with numbers percentages dollar amounts improve ATS and recruiter scores' },
     { id: 'summary-title', text: 'Summary first sentence should mirror exact job title from job description' },
     { id: 'format-headers', text: 'Use ALL CAPS section headers SUMMARY SKILLS EXPERIENCE EDUCATION plain text single column' },
@@ -496,6 +723,12 @@
     const title = extractJdTitle(jd);
 
     const resumePreview = resume.split('\n').filter(Boolean).slice(0, 8).join('\n');
+    const baseSkills = extractSkillsFromResume(resume);
+    const activeFams = [...detectActiveFamilies(baseSkills, resume.toLowerCase())];
+    const familyHints = activeFams.map(f => {
+      const members = (SKILL_FAMILIES[f] || []).slice(0, 10).join(', ');
+      return `• ${f}: keep related originals (${members})`;
+    });
 
     return [
       '=== RAG-RETRIEVED JD CONTEXT (most relevant sections) ===',
@@ -508,6 +741,10 @@
       '=== KEYWORDS TO EMBED ===',
       `PRIMARY (must appear 2x each): ${keywords.primary.join(', ')}`,
       `SECONDARY (appear 1x): ${keywords.secondary.join(', ')}`,
+      '',
+      '=== SKILL FAMILIES TO PRESERVE (do not strip related ecosystem skills) ===',
+      ...(familyHints.length ? familyHints : ['• Keep related ecosystem skills when the anchor language remains']),
+      baseSkills.length ? `BASE SKILLS DETECTED: ${baseSkills.slice(0, 40).join(', ')}` : '',
       '',
       '=== RESUME HEADER PREVIEW ===',
       resumePreview,
@@ -905,6 +1142,118 @@
     });
   }
 
+  function skillMatchesMember(skillNorm, member) {
+    const m = member.toLowerCase().trim();
+    if (!m || !skillNorm) return false;
+    return skillNorm === m || skillNorm.includes(m) || m.includes(skillNorm);
+  }
+
+  function familiesForSkill(skill) {
+    const sn = normalizeSkill(skill);
+    const families = [];
+    for (const [fam, members] of Object.entries(SKILL_FAMILIES)) {
+      if (members.some(m => skillMatchesMember(sn, m))) families.push(fam);
+    }
+    return families;
+  }
+
+  function detectActiveFamilies(skillsList, textLower) {
+    const active = new Set();
+    const norms = (skillsList || []).map(normalizeSkill);
+    for (const [fam, members] of Object.entries(SKILL_FAMILIES)) {
+      const hit = members.some(m =>
+        norms.some(s => skillMatchesMember(s, m)) ||
+        (textLower && textLower.includes(m.trim()))
+      );
+      if (hit) active.add(fam);
+    }
+    return active;
+  }
+
+  /**
+   * Re-add original skills dropped during tailoring when they belong to an
+   * active family still present on the tailored resume (or still JD-relevant).
+   * Example: Python kept → restore Flask, NumPy, PyTorch, NLP, LLM from original.
+   */
+  function preserveRelatedSkills(originalResume, tailoredResume, jd) {
+    if (!originalResume || !tailoredResume) return tailoredResume || '';
+    const cmp = compareSkills(originalResume, tailoredResume);
+    if (!cmp.removed.length) return tailoredResume;
+
+    const tailoredLower = tailoredResume.toLowerCase();
+    const jdLower = (jd || '').toLowerCase();
+    const active = detectActiveFamilies(cmp.after, tailoredLower);
+
+    // Also activate families that appear in BOTH original resume and JD
+    for (const [fam, members] of Object.entries(SKILL_FAMILIES)) {
+      const inOrig = members.some(m => cmp.before.some(s => skillMatchesMember(normalizeSkill(s), m)));
+      const inJd = members.some(m => jdLower.includes(m.trim()));
+      if (inOrig && inJd) active.add(fam);
+    }
+
+    if (!active.size) return tailoredResume;
+
+    const toRestore = cmp.removed.filter(skill => {
+      const fams = familiesForSkill(skill);
+      return fams.some(f => active.has(f));
+    });
+    if (!toRestore.length) return tailoredResume;
+
+    return appendSkillsToTechnicalLine(tailoredResume, toRestore);
+  }
+
+  function appendSkillsToTechnicalLine(resumeText, skillsToAdd) {
+    if (!skillsToAdd.length) return resumeText;
+    const lines = resumeText.split('\n');
+    let skillsIdx = -1;
+    let techLineIdx = -1;
+    let insertAfter = -1;
+
+    for (let i = 0; i < lines.length; i++) {
+      const raw = lines[i].trim();
+      const u = raw.toUpperCase();
+      const isSkillSubLabel = /^(technical skills|tools\s*&\s*platforms|methodologies|core competencies)\s*:/i.test(raw);
+
+      if (skillsIdx >= 0 && isSkillSubLabel) {
+        if (/^technical skills\s*:/i.test(raw)) techLineIdx = i;
+        insertAfter = i;
+        continue;
+      }
+      if (/^(SKILLS|TECHNICAL SKILLS|CORE COMPETENCIES|KEY SKILLS)\b/.test(u) && u.length < 55 && !/:\s*\S/.test(raw)) {
+        skillsIdx = i;
+        insertAfter = i;
+        continue;
+      }
+      if (skillsIdx >= 0) {
+        if (/^(EXPERIENCE|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EDUCATION|PROJECTS|CERTIFICATIONS|SUMMARY)\b/.test(u) && u.length < 55) break;
+        if (raw) insertAfter = i;
+      }
+    }
+
+    const existingLower = resumeText.toLowerCase();
+    const uniqueAdd = skillsToAdd.filter(s => !existingLower.includes(s.toLowerCase()));
+    if (!uniqueAdd.length) return resumeText;
+    const toAdd = uniqueAdd.join(', ');
+
+    if (techLineIdx >= 0) {
+      const line = lines[techLineIdx];
+      const m = line.match(/^([^:]+:\s*)(.*)$/);
+      if (m) {
+        const existing = m[2].trim();
+        lines[techLineIdx] = existing ? `${m[1]}${existing}, ${toAdd}` : `${m[1]}${toAdd}`;
+      } else {
+        lines[techLineIdx] = `${line}, ${toAdd}`;
+      }
+    } else if (skillsIdx >= 0) {
+      lines.splice(skillsIdx + 1, 0, `Technical Skills: ${toAdd}`);
+    } else if (insertAfter >= 0) {
+      lines.splice(insertAfter + 1, 0, 'SKILLS', `Technical Skills: ${toAdd}`);
+    } else {
+      lines.push('', 'SKILLS', `Technical Skills: ${toAdd}`);
+    }
+    return lines.join('\n');
+  }
+
   function compareSkills(beforeResume, afterResume) {
     const beforeList = extractSkillsFromResume(beforeResume);
     const afterList = extractSkillsFromResume(afterResume);
@@ -937,9 +1286,12 @@
     cacheGet,
     cacheSet,
     SKILL_KB,
+    SKILL_FAMILIES,
     analyzeExperienceEligibility,
     extractSkillsFromResume,
     compareSkills,
+    preserveRelatedSkills,
+    familiesForSkill,
   };
 
   global.RAGEngine = RAGEngine;

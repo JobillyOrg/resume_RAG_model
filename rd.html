@@ -1605,6 +1605,7 @@ SKILLS — use EXACTLY these 4 sub-labels, no others:
    Keep each sub-label on its own single line in this exact label format
    DO NOT use "Soft Skills", "Key Skills", "Competencies" or any other label — ONLY the 4 above
    CRITICAL: Missing a primary keyword from Skills is a failed first pass.
+   SKILL FAMILY PRESERVE: If the original resume has Python, KEEP related Python-ecosystem skills (Flask, Django, FastAPI, NumPy, Pandas, PyTorch, TensorFlow, Pytest). If Java is present, KEEP Spring Boot, Spring MVC, Spring Security, Hibernate, JPA, JUnit. If AI/ML/LLM is present, KEEP OpenAI API, LangChain, RAG, NLP, BERT, Transformers, PyTorch, TensorFlow. Do NOT strip an entire related family when the anchor skill remains.
 
 EXPERIENCE (MANDATORY — include ALL roles):
 - COUNT the number of roles in the original resume before writing. Output the EXACT same number of roles.
@@ -1802,7 +1803,10 @@ async function runAnalysis() {
 
     // Lower temperature → stronger keyword compliance on first pass
     const ragContext = RAGEngine.buildCompactRewriteContext(jd, resume, keywords);
-    const tailoredResume = await callClaude(buildRewritePrompt(jd, resume, keywords, ragContext), 0.35, 6000);
+    let tailoredResume = await callClaude(buildRewritePrompt(jd, resume, keywords, ragContext), 0.35, 6000);
+    if (RAGEngine.preserveRelatedSkills) {
+      tailoredResume = RAGEngine.preserveRelatedSkills(resume, tailoredResume, jd);
+    }
     state.tailoredResume = tailoredResume;
 
     // Stream output visually
@@ -2310,15 +2314,17 @@ async function boostScore(opts = {}) {
       boostBtn.textContent = `⏳ Boost ${pass}/${MAX_BOOST_PASSES}...`;
 
       const boostedResume = await callClaude(buildBoostPrompt(jd, sc, atsScore2), 0.25, 6000);
-      state.tailoredResume = boostedResume;
-      document.getElementById('outputArea').textContent = boostedResume;
+      state.tailoredResume = RAGEngine.preserveRelatedSkills
+        ? RAGEngine.preserveRelatedSkills(orig, boostedResume, jd)
+        : boostedResume;
+      document.getElementById('outputArea').textContent = state.tailoredResume;
 
-      renderSkillsCompare(RAGEngine.compareSkills(orig, boostedResume));
+      renderSkillsCompare(RAGEngine.compareSkills(orig, state.tailoredResume));
       const expBoost = RAGEngine.analyzeExperienceEligibility(jd, orig);
       state.experienceAnalysis = expBoost;
       renderExperienceEligibility('resultsExpEligibility', expBoost);
 
-      const ragScore2 = RAGEngine.computeAtsScore(jd, boostedResume, primary, secondary, aliasMap);
+      const ragScore2 = RAGEngine.computeAtsScore(jd, state.tailoredResume, primary, secondary, aliasMap);
       state.scorecard = ragScore2.scorecard;
       const ui = applyBoostScoreUi(keywords, ragScore2);
       atsScore2 = ui.atsScore2;
