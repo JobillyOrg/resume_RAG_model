@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/rd.html" }
+  ],
+  "functions": {
+    "api/gemini.js": {
+      "maxDuration": 60
+    }
+  }
+}
