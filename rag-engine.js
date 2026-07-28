@@ -576,6 +576,60 @@
     return null;
   }
 
+  function extractExperienceSectionLines(resume) {
+    const lines = resume.split('\n');
+    const EXP_HDR = /^(EXPERIENCE|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT(?: HISTORY)?|CAREER(?: HISTORY)?|WORK HISTORY)$/i;
+    const STOP_HDR = /^(EDUCATION|ACADEMIC(?: BACKGROUND)?|CERTIF(?:ICATIONS?)?|LICENSES|PROJECTS|SKILLS|TECHNICAL SKILLS|CORE COMPETENCIES|KEY SKILLS|SUMMARY|PROFESSIONAL SUMMARY|OBJECTIVE|PROFILE|PUBLICATIONS|AWARDS|VOLUNTEER|REFERENCES|LANGUAGES?|INTERESTS?)$/i;
+
+    let expStart = -1;
+    let expEnd = lines.length;
+
+    for (let i = 0; i < lines.length; i++) {
+      const t = lines[i].trim();
+      if (!t) continue;
+      const upper = t.toUpperCase().replace(/:$/, '');
+
+      if (expStart === -1) {
+        if (EXP_HDR.test(upper) || EXP_HDR.test(t)) expStart = i + 1;
+        continue;
+      }
+      if (STOP_HDR.test(upper) || STOP_HDR.test(t)) {
+        expEnd = i;
+        break;
+      }
+    }
+
+    if (expStart === -1) {
+      // No EXPERIENCE header — scan whole resume but strip EDUCATION+ sections
+      const out = [];
+      let inBlocked = false;
+      for (const line of lines) {
+        const t = line.trim();
+        const upper = t.toUpperCase().replace(/:$/, '');
+        if (STOP_HDR.test(upper)) { inBlocked = true; continue; }
+        if (EXP_HDR.test(upper)) { inBlocked = false; continue; }
+        if (!inBlocked) out.push(line);
+      }
+      return out;
+    }
+
+    return lines.slice(expStart, expEnd);
+  }
+
+  const EDUCATION_LINE = /\b(bachelor|master|b\.?\s*s\.?|m\.?\s*s\.?|b\.?\s*tech|m\.?\s*tech|ph\.?\s*d|mba|associate|university|college|school|gpa|degree|coursework|graduated|dissertation|thesis|academic)\b/i;
+
+  function isEducationLine(line) {
+    if (!line || !line.trim()) return false;
+    if (EDUCATION_LINE.test(line)) return true;
+    // "2019 - 2023" with no employer/title signals — often education
+    if (/\b(19|20)\d{2}\s*[-–—]\s*((19|20)\d{2}|present)\b/i.test(line) &&
+        !/\b(inc|llc|ltd|corp|company|engineer|developer|analyst|manager|consultant|intern)\b/i.test(line) &&
+        line.length < 80) {
+      return EDUCATION_LINE.test(line) || /\b(b\.?s|m\.?s|b\.?a|m\.?a|b\.?e|m\.?e)\b/i.test(line);
+    }
+    return false;
+  }
+
   function extractDateRanges(text) {
     const ranges = [];
     const rangeRe = /(\b(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s*[,.]?\s*(?:19|20)\d{2}|\b(?:19|20)\d{2}\b)\s*[-–—to]+\s*(\b(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s*[,.]?\s*(?:19|20)\d{2}|\b(?:19|20)\d{2}\b|present|current|now|today|ongoing)\b/gi;
@@ -587,6 +641,16 @@
       const start = parseDateToken(parts[0]);
       const end = parseDateToken(parts[parts.length - 1]);
       if (start && end && end >= start) ranges.push({ start, end });
+    }
+    return ranges;
+  }
+
+  function extractExperienceDateRanges(resume) {
+    const expLines = extractExperienceSectionLines(resume);
+    const ranges = [];
+    for (const line of expLines) {
+      if (isEducationLine(line)) continue;
+      ranges.push(...extractDateRanges(line));
     }
     return ranges;
   }
@@ -613,17 +677,7 @@
   }
 
   function extractResumeExperienceYears(resume) {
-    const upper = resume.toUpperCase();
-    const expIdx = ['EXPERIENCE', 'WORK EXPERIENCE', 'PROFESSIONAL EXPERIENCE', 'EMPLOYMENT']
-      .map(h => upper.indexOf(h))
-      .filter(i => i >= 0)
-      .sort((a, b) => a - b)[0];
-
-    const scanText = expIdx != null
-      ? resume.slice(expIdx)
-      : resume;
-
-    const ranges = extractDateRanges(scanText);
+    const ranges = extractExperienceDateRanges(resume);
     const merged = mergeDateRanges(ranges);
     const totalYears = merged.reduce((sum, r) => sum + yearsBetween(r.start, r.end), 0);
     return {
