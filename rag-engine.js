@@ -454,6 +454,7 @@
       bulletLines, bulletsWithNum, fmtCheck, fmtIssues, missingSections,
       gaps, improvementSuggestions, confidence,
       scorecard: {
+        atsScore,
         keywordMatch: primaryFound.length,
         keywordsFound: primaryFound,
         keywordsMissing: primaryMissing,

@@ -685,7 +685,7 @@
         <button class="btn-secondary" onclick="downloadTxt()">⬇ Download .txt</button>
         <button class="btn-secondary" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
         <button class="btn-secondary" onclick="printResume()">🖨 Print / Save PDF</button>
-        <button class="btn-warning hidden" id="boostBtn" onclick="boostScore()">🎯 Boost to 100</button>
+        <button class="btn-warning hidden" id="boostBtn" onclick="boostScore()">🎯 Boost to 95+</button>
       </div>
     </div>
 
@@ -768,6 +768,7 @@ function getGeminiApiUrl() {
 const USE_RAG = true;
 const GEMINI_KEYWORD_FALLBACK = false;
 const SCORE_TAILOR_THRESHOLD = 95;
+const MAX_BOOST_PASSES = 3; // boost only until score hits 95+
 
 // ─── STATE ────────────────────────────────────────────────────────
 let state = {
@@ -1445,24 +1446,33 @@ function buildRewritePrompt(jd, resume, keywords, ragContext) {
     cf.location ? `  Location: ${cf.location}` : `  Location: [NONE — the master resume contact header contains NO location field. Do NOT add any city, state, or country to the contact header line. Do NOT use location tokens from experience role lines.]`,
   ].join('\n');
 
-  return `You are a human resume writer — a real career coach who has helped 10,000+ professionals land jobs at top companies. You write resumes that pass ATS machines AND make hiring managers stop scrolling and say "I want to meet this person."
+  return `You are an AGGRESSIVE ATS resume writer. Your ONLY success metric for this first rewrite is an ATS score of ${SCORE_TAILOR_THRESHOLD}+ / 100.
 
-Your single most important job: make this resume sound like a real human wrote it about their real career — not like an AI optimized a document.
+MISSION — hit ${SCORE_TAILOR_THRESHOLD}+ on the FIRST tailor pass:
+1. Embed EVERY primary keyword in SKILLS and at least once in Summary/Experience (2+ times total).
+2. Embed EVERY secondary keyword at least once.
+3. Rewrite bullets to mirror JD responsibilities using the candidate's real employers.
+4. Every bullet needs a measurable metric.
+5. Below ${SCORE_TAILOR_THRESHOLD} is a failed first pass — cover gaps aggressively before outputting.
+
+You still write like a human career coach — not robotic keyword soup — but keyword coverage for ${SCORE_TAILOR_THRESHOLD}+ is mandatory.
 
 BEFORE YOU WRITE — think through these 5 questions:
 1. What is the exact job title in the JD? Mirror it precisely.
 2. What seniority level does this candidate appear to be? (Junior / Mid / Senior / Director / VP) — match tone accordingly.
 3. What is the single most impressive thing this candidate has done? Lead with it in the summary.
 4. What career story does this resume tell? Each role should build logically toward the target role.
-5. Which keywords fit naturally into each bullet — not forced, not listed, just naturally woven in?
+5. Which JD keywords are still missing — and how will every one land in Skills + bullets?
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 1 — INTEGRITY (non-negotiable)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- NEVER invent experience, companies, degrees, certifications, or skills not in the original resume
+- NEVER invent companies, degrees, education history, or certifications not in the original resume
+- DO add every JD primary/secondary keyword into Skills and weave into bullets (required for ${SCORE_TAILOR_THRESHOLD}+)
 - INCLUDE EVERY SINGLE ROLE from the original resume — if the master resume has 4 jobs, the output MUST have all 4 jobs; if it has 6 jobs, output all 6 — DO NOT drop, skip, merge, or omit any role under any circumstances
 - Keep ALL original roles, companies, dates, and education — only rewrite the language
 - If a metric is missing, estimate conservatively based on typical industry benchmarks — never fabricate a specific number without basis
+- NEVER invent certifications — omit CERTIFICATIONS section if the original has none
 
 PERSONAL DETAILS INTEGRITY RULE — the values below are pre-extracted from the master resume and are LOCKED:
 ${contactLockBlock}
@@ -1570,13 +1580,13 @@ FORMATTING:
 - Single column layout throughout
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-RULE 7 — KEYWORD EMBEDDING (invisible to humans, critical for ATS)
+RULE 7 — KEYWORD EMBEDDING (mandatory for first-pass ${SCORE_TAILOR_THRESHOLD}+)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Every PRIMARY keyword MUST appear in the SKILLS section (under the correct sub-label) AND at least 1-2 more times naturally across Summary + Experience bullets — minimum 2 appearances total
-- Every SECONDARY keyword must appear at least once anywhere in the resume
-- Before finishing, go through all 10 primary keywords one by one and confirm each is in SKILLS — if any is missing from SKILLS, add it to the most relevant sub-label
-- Keywords must flow naturally inside sentences — never dumped in a list, never forced
-- Test: if a keyword feels out of place when reading aloud, rewrite the sentence
+- Every PRIMARY keyword MUST appear in the SKILLS section AND at least 1-2 more times in Summary + Experience — minimum 2 appearances total
+- Every SECONDARY keyword must appear at least once
+- Before finishing, audit ALL primary and secondary keywords — if any is missing, ADD it NOW
+- Presence of every JD keyword is mandatory to clear ${SCORE_TAILOR_THRESHOLD}+ on this first tailor
+- Prefer natural sentences, but never omit a keyword to sound prettier
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 8 — SECTION QUALITY
@@ -1588,12 +1598,13 @@ SUMMARY (3-4 sentences — this is your 10-second pitch):
 - S4: What you uniquely bring to THIS role/company (reference something specific from the JD)
 
 SKILLS — use EXACTLY these 4 sub-labels, no others:
-   Technical Skills: comma-separated exact hard skills from the original resume that match the JD first; put the strongest and most ATS-critical keywords in the first 8 items
-   Tools & Platforms: comma-separated software, cloud, databases, devtools using exact product names from the resume/JD overlap
-   Methodologies: comma-separated methods such as Agile, Scrum, SDLC, ITIL, CI/CD only when supported by the original resume
+   Technical Skills: comma-separated — LEAD with EVERY primary JD keyword, then secondary JD keywords, then matching original hard skills
+   Tools & Platforms: comma-separated software, cloud, databases, devtools from JD + resume overlap
+   Methodologies: comma-separated methods such as Agile, Scrum, SDLC, ITIL, CI/CD when in original OR required by JD
    Core Competencies: exactly 3-4 concise items most relevant to the JD and supported by the experience bullets
    Keep each sub-label on its own single line in this exact label format
    DO NOT use "Soft Skills", "Key Skills", "Competencies" or any other label — ONLY the 4 above
+   CRITICAL: Missing a primary keyword from Skills is a failed first pass.
 
 EXPERIENCE (MANDATORY — include ALL roles):
 - COUNT the number of roles in the original resume before writing. Output the EXACT same number of roles.
@@ -1784,14 +1795,14 @@ async function runAnalysis() {
     const roleCountMsg  = detectedRoles.length > 0
       ? `Detected ${detectedRoles.length} roles — all will be preserved...`
       : 'Rewriting all sections...';
-    setProgress(40, 'Rewriting resume to 100/100 ATS alignment...', roleCountMsg);
+    setProgress(40, `Aggressive first tailor → ${SCORE_TAILOR_THRESHOLD}+ ATS...`, roleCountMsg);
     setStep(3);
     await delay(300);
-    setLoading('Rewriting resume...');
+    setLoading('Aggressive rewrite for 95+...');
 
-    // temperature 0.7 → varied language; RAG context shrinks JD payload (~40% fewer input tokens)
+    // Lower temperature → stronger keyword compliance on first pass
     const ragContext = RAGEngine.buildCompactRewriteContext(jd, resume, keywords);
-    const tailoredResume = await callClaude(buildRewritePrompt(jd, resume, keywords, ragContext), 0.7, 6000);
+    const tailoredResume = await callClaude(buildRewritePrompt(jd, resume, keywords, ragContext), 0.35, 6000);
     state.tailoredResume = tailoredResume;
 
     // Stream output visually
@@ -2002,23 +2013,27 @@ async function runAnalysis() {
     document.getElementById('filenameReason').textContent =
       'ATS systems and recruiters sort by filename. Using FirstName_LastName_RoleTitle.doc ensures immediate identification and avoids generic filenames.';
 
-    // ── DONE ──────────────────────────────────────────────────
-    setProgress(100, `✅ Complete — ATS Score: ${atsScore}/100 · ${kwMatch}/10 keywords`, 'RAG scoring · Gemini rewrite only');
-    await delay(1000);
-    document.getElementById('progressSection').classList.add('hidden');
-    stopLoading();
+    // ── DONE — auto-boost only if first tailor is still below 95 ──
     document.getElementById('analyzeBtn').classList.add('hidden');
     document.getElementById('rerunBtn').classList.remove('hidden');
     document.getElementById('analyzeBtn').disabled = false;
     setStep(5);
-    showToast(`✅ Done! ATS Score: ${atsScore}/100 · ${kwMatch}/${primaryTotal} keywords matched`);
 
-    // Show Boost button if score is below threshold
     if (atsScore < SCORE_TAILOR_THRESHOLD) {
       document.getElementById('boostBtn').classList.remove('hidden');
-    } else {
-      document.getElementById('boostBtn').classList.add('hidden');
+      document.getElementById('boostBtn').textContent = `🎯 Boost to ${SCORE_TAILOR_THRESHOLD}+`;
+      setProgress(92, `First tailor ${atsScore}/100 — boosting until ${SCORE_TAILOR_THRESHOLD}+...`, `Up to ${MAX_BOOST_PASSES} passes · stops at ${SCORE_TAILOR_THRESHOLD}+`);
+      showToast(`First tailor ${atsScore}/100 — boosting to ${SCORE_TAILOR_THRESHOLD}+...`, '#fbbf24');
+      await boostScore({ auto: true });
+      return;
     }
+
+    document.getElementById('boostBtn').classList.add('hidden');
+    setProgress(100, `✅ Complete — ATS Score: ${atsScore}/100 · ${kwMatch}/10 keywords`, `First tailor hit ${SCORE_TAILOR_THRESHOLD}+`);
+    await delay(800);
+    document.getElementById('progressSection').classList.add('hidden');
+    stopLoading();
+    showToast(`✅ Done! ATS Score: ${atsScore}/100 · ${kwMatch}/${primaryTotal} keywords matched`);
 
   } catch (err) {
     // Show error inside outputArea — preserves the tab structure and download buttons
@@ -2109,53 +2124,34 @@ function clearAll() {
   resetAndRun();
 }
 
-// ─── BOOST TO 100 ─────────────────────────────────────────────────
-async function boostScore() {
-  if (!state.tailoredResume || !state.keywords?.primary?.length) {
-    showToast('⚠️ No tailored resume to boost. Run analysis first.', '#ef4444');
-    return;
-  }
-
-  const jd       = document.getElementById('jdInput').value.trim();
-  const sc       = state.scorecard || {};
-  const keywords = state.keywords;
-  const primary  = keywords.primary  || [];
-  const secondary= keywords.secondary|| [];
-
-  // Build precise gap list from scorecard
+// ─── BOOST TO 95+ (loop until pass or max passes) ─────────────────
+function buildBoostPrompt(jd, sc, currentScore) {
   const missingPrimary   = sc.keywordsMissing   || [];
   const missingSecondary = sc.secondaryMissing  || [];
   const gaps             = sc.gaps              || [];
   const suggestions      = sc.improvementSuggestions || [];
   const bulletsTotal     = sc.bulletsTotal      || 0;
   const bulletsMetrics   = sc.bulletsWithMetrics|| 0;
-  const bulletsNeedFix   = bulletsTotal - bulletsMetrics;
+  const bulletsNeedFix   = Math.max(0, bulletsTotal - bulletsMetrics);
 
-  const boostPrompt = `You are a precision ATS resume editor. The resume below has already been tailored but scored below ${SCORE_TAILOR_THRESHOLD}/100. Your ONLY job is to fix the EXACT gaps listed — nothing else.
+  return `You are an AGGRESSIVE ATS resume editor. Current score: ${currentScore}/100. Target: ${SCORE_TAILOR_THRESHOLD}+ ONLY — stop once that bar is cleared (do not chase 100).
 
-DO NOT restructure the resume. DO NOT rewrite sections that are already passing. Make the minimum targeted edits needed to reach 100/100.
+Fix every gap below so the resume scores ${SCORE_TAILOR_THRESHOLD}+.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-EXACT GAPS TO FIX (do ONLY these):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${missingPrimary.length > 0   ? `MISSING PRIMARY KEYWORDS — add each to the SKILLS section and weave into at least one bullet:\n${missingPrimary.map(k => `  - "${k}"`).join('\n')}` : 'PRIMARY KEYWORDS: all present — do not touch.'}
+DO NOT invent companies, titles, dates, education, or certifications.
+DO add every missing JD keyword into Skills and weave into bullets.
 
-${missingSecondary.length > 0 ? `MISSING SECONDARY KEYWORDS — add each at least once (SKILLS or bullet):\n${missingSecondary.map(k => `  - "${k}"`).join('\n')}` : 'SECONDARY KEYWORDS: all present — do not touch.'}
+EXACT GAPS:
+${missingPrimary.length > 0   ? `MISSING PRIMARY — add each to SKILLS and at least one bullet:\n${missingPrimary.map(k => `  - "${k}"`).join('\n')}` : 'PRIMARY: all present.'}
 
-${bulletsNeedFix > 0 ? `BULLETS WITHOUT METRICS — ${bulletsNeedFix} bullet(s) have no measurable number. Add a count, %, time, or dollar figure to each weak bullet. Do NOT touch bullets that already have a number.` : 'BULLET METRICS: all bullets have metrics — do not touch.'}
+${missingSecondary.length > 0 ? `MISSING SECONDARY — add each at least once:\n${missingSecondary.map(k => `  - "${k}"`).join('\n')}` : 'SECONDARY: all present.'}
 
-${gaps.length > 0 ? `JD GAPS TO ADDRESS:\n${gaps.map(g => `  - ${g}`).join('\n')}` : ''}
-${suggestions.length > 0 ? `IMPROVEMENT SUGGESTIONS:\n${suggestions.map(s => `  - ${s}`).join('\n')}` : ''}
+${bulletsNeedFix > 0 ? `BULLETS WITHOUT METRICS — ${bulletsNeedFix} need a count, %, time, or dollar figure.` : 'BULLET METRICS: OK.'}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-INTEGRITY RULES (non-negotiable):
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Do NOT change: name, headline, email, phone, LinkedIn, company names, job titles, dates, locations, education, GPA, certifications
-- Do NOT add sections that don't exist
-- Do NOT add commentary, preamble, or metadata
-- Only rewrite bullets or SKILLS lines that directly fix the gaps above
-- Every bullet must still end with a period (.)
-- Output the COMPLETE resume with fixes applied — same structure, same sections, same roles
+${gaps.length > 0 ? `JD GAPS:\n${gaps.map(g => `  - ${g}`).join('\n')}` : ''}
+${suggestions.length > 0 ? `SUGGESTIONS:\n${suggestions.map(s => `  - ${s}`).join('\n')}` : ''}
+
+INTEGRITY: Do not change name/headline/contact/companies/titles/dates/education/GPA. Never add certifications. Output COMPLETE resume only.
 
 JOB DESCRIPTION:
 ${jd}
@@ -2164,83 +2160,46 @@ RESUME TO FIX:
 ${state.tailoredResume}
 
 OUTPUT: The fixed resume only. Start with the candidate's name on line 1.`;
+}
 
-  // UI: disable boost button, show progress
-  const boostBtn = document.getElementById('boostBtn');
-  boostBtn.disabled = true;
-  boostBtn.textContent = '⏳ Boosting...';
-  document.getElementById('progressSection').classList.remove('hidden');
-  setProgress(10, '🎯 Boost Pass — fixing gaps...', 'Targeting missing keywords and weak bullets...');
-  setLoading('Boosting ATS score...');
+function applyBoostScoreUi(keywords, ragScore2) {
+  const primary = keywords.primary || [];
+  const secondary = keywords.secondary || [];
+  const sc2 = ragScore2.scorecard;
+  const kwMatch2 = sc2.keywordMatch != null ? sc2.keywordMatch : 0;
+  const fmtCheck2 = sc2.formatCheck || 'PASS';
+  const confidence2 = sc2.confidenceLevel || 'High';
+  const primaryTotal = primary.length || 10;
+  const secTotal2 = secondary.length || 10;
+  const atsScore2 = ragScore2.atsScore;
+  const kwPts2 = ragScore2.kwPts;
+  const secPts2 = ragScore2.secPts;
+  const metricPts2 = ragScore2.metricPts;
+  const summaryPts2 = ragScore2.summaryPts;
+  const fmtPts2 = ragScore2.fmtPts;
+  const secCompPts2 = ragScore2.sectionPts;
 
-  try {
-    // Run targeted rewrite
-    setProgress(30, 'Applying targeted fixes...', `Missing keywords: ${missingPrimary.length} primary, ${missingSecondary.length} secondary · Weak bullets: ${bulletsNeedFix}`);
-    const boostedResume = await callClaude(boostPrompt, 0.4, 6000);
-    state.tailoredResume = boostedResume;
+  const atsColour2 = atsScore2 >= SCORE_TAILOR_THRESHOLD ? 'green' : atsScore2 >= 70 ? 'yellow' : 'red';
+  document.getElementById('atsScore').textContent = atsScore2 + '/100';
+  document.getElementById('atsScore').className = 'score-value ' + atsColour2;
+  document.getElementById('kwMatch').textContent = kwMatch2 + '/' + primaryTotal;
+  const fmtEl2 = document.getElementById('fmtCheck');
+  fmtEl2.textContent = fmtCheck2 + (fmtCheck2 === 'PASS' ? ' ✓' : ' ⚠');
+  fmtEl2.className = 'score-value ' + (fmtCheck2 === 'PASS' ? 'green' : 'yellow');
+  const confEl = document.getElementById('confScore');
+  if (confEl) {
+    confEl.textContent = confidence2.toUpperCase();
+    confEl.className = 'score-value ' + (confidence2 === 'High' ? 'green' : confidence2 === 'Medium' ? 'yellow' : 'red');
+  }
 
-    // Stream updated resume into output
-    const outputEl = document.getElementById('outputArea');
-    outputEl.textContent = '';
-    outputEl.classList.add('streaming-cursor');
-    setProgress(55, '✓ Fixes applied · Rendering...', 'Streaming updated resume...');
-    const chunkSize = 30;
-    for (let i = 0; i < boostedResume.length; i += chunkSize) {
-      outputEl.textContent += boostedResume.slice(i, i + chunkSize);
-      outputEl.scrollTop = outputEl.scrollHeight;
-      await delay(6);
-    }
-    outputEl.classList.remove('streaming-cursor');
-
-    const skillsCmp2 = RAGEngine.compareSkills(state.originalResume || document.getElementById('resumeInput').value.trim(), boostedResume);
-    renderSkillsCompare(skillsCmp2);
-
-    const expBoost = RAGEngine.analyzeExperienceEligibility(jd, state.originalResume || document.getElementById('resumeInput').value.trim());
-    state.experienceAnalysis = expBoost;
-    renderExperienceEligibility('resultsExpEligibility', expBoost);
-
-    // Re-score (local RAG — no API)
-    setProgress(75, 'Re-scoring boosted resume (RAG)...', 'Local deterministic scoring...');
-    setLoading('Re-scoring...');
-    const aliasMap = keywords.aliasMap || Object.fromEntries([...primary, ...secondary].map(k => [k, [k]]));
-    const ragScore2 = RAGEngine.computeAtsScore(jd, boostedResume, primary, secondary, aliasMap);
-    const sc2 = ragScore2.scorecard;
-    state.scorecard = sc2;
-
-    // Use RAG engine score directly
-    const kwMatch2     = sc2.keywordMatch != null ? sc2.keywordMatch : 0;
-    const fmtCheck2    = sc2.formatCheck  || 'PASS';
-    const confidence2  = sc2.confidenceLevel || 'High';
-    const primaryTotal = primary.length || 10;
-    const secTotal2    = secondary.length || 10;
-    const kwPts2       = ragScore2.kwPts;
-    const secPts2      = ragScore2.secPts;
-    const metricPts2   = ragScore2.metricPts;
-    const summaryPts2  = ragScore2.summaryPts;
-    const fmtPts2      = ragScore2.fmtPts;
-    const secCompPts2  = ragScore2.sectionPts;
-    const atsScore2    = ragScore2.atsScore;
-
-    // Update score tiles
-    const atsColour2 = atsScore2 >= 90 ? 'green' : atsScore2 >= 70 ? 'yellow' : 'red';
-    document.getElementById('atsScore').textContent = atsScore2 + '/100';
-    document.getElementById('atsScore').className   = 'score-value ' + atsColour2;
-    document.getElementById('kwMatch').textContent  = kwMatch2 + '/' + primaryTotal;
-    const fmtEl2 = document.getElementById('fmtCheck');
-    fmtEl2.textContent = fmtCheck2 + (fmtCheck2 === 'PASS' ? ' ✓' : ' ⚠');
-    fmtEl2.className   = 'score-value ' + (fmtCheck2 === 'PASS' ? 'green' : 'yellow');
-    document.getElementById('confScore').textContent = confidence2.toUpperCase();
-    document.getElementById('confScore').className   = 'score-value ' + (confidence2 === 'High' ? 'green' : confidence2 === 'Medium' ? 'yellow' : 'red');
-
-    // Update scorecard tab
-    const scDiv2 = document.getElementById('scorecardContent');
-    const atsScoreClass2 = atsScore2 >= 90 ? 'sc-green' : atsScore2 >= 70 ? 'sc-yellow' : 'sc-red';
-    const secFound2 = (sc2.secondaryFound || []).length;
-    const bulletsScore2 = sc2.bulletsWithMetrics != null
-      ? (sc2.bulletsTotal != null ? `${sc2.bulletsWithMetrics} of ${sc2.bulletsTotal} bullets` : `${sc2.bulletsWithMetrics} bullets`)
-      : 'N/A';
-    scDiv2.innerHTML = `
+  const atsScoreClass2 = atsScore2 >= SCORE_TAILOR_THRESHOLD ? 'sc-green' : atsScore2 >= 70 ? 'sc-yellow' : 'sc-red';
+  const secFound2 = (sc2.secondaryFound || []).length;
+  const bulletsScore2 = sc2.bulletsWithMetrics != null
+    ? (sc2.bulletsTotal != null ? `${sc2.bulletsWithMetrics} of ${sc2.bulletsTotal} bullets` : `${sc2.bulletsWithMetrics} bullets`)
+    : 'N/A';
+  document.getElementById('scorecardContent').innerHTML = `
       <div class="scorecard-row"><span class="sc-label">ATS Score (after boost)</span><span class="sc-value ${atsScoreClass2}" style="font-size:28px;">${atsScore2} / 100</span></div>
+      <div class="scorecard-row"><span class="sc-label">Pass Threshold</span><span class="sc-value ${atsScore2 >= SCORE_TAILOR_THRESHOLD ? 'sc-green' : 'sc-yellow'}">${atsScore2 >= SCORE_TAILOR_THRESHOLD ? 'PASS (95+)' : 'Needs 95+'}</span></div>
       <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:10px 0 4px;">Score Breakdown</div>
       <div class="scorecard-row"><span class="sc-label">Primary Keywords (60 pts max)</span><span class="sc-value sc-blue">${kwPts2} pts &nbsp;·&nbsp; ${kwMatch2} of ${primaryTotal} found</span></div>
       <div class="scorecard-row"><span class="sc-label">Secondary Keywords (15 pts max)</span><span class="sc-value sc-blue">${secPts2} pts &nbsp;·&nbsp; ${secFound2} of ${secTotal2} found</span></div>
@@ -2249,83 +2208,151 @@ OUTPUT: The fixed resume only. Start with the candidate's name on line 1.`;
       <div class="scorecard-row"><span class="sc-label">Format Compliance (5 pts max)</span><span class="sc-value ${fmtCheck2 === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts2} pts &nbsp;·&nbsp; ${fmtCheck2}</span></div>
       <div class="scorecard-row"><span class="sc-label">Section Completeness (5 pts max)</span><span class="sc-value ${sc2.sectionCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${secCompPts2} pts &nbsp;·&nbsp; ${sc2.sectionCheck || 'PASS'}</span></div>
       <div class="scorecard-row"><span class="sc-label">Confidence</span><span class="sc-value ${confidence2 === 'High' ? 'sc-green' : 'sc-yellow'}">${confidence2} — ${sc2.confidenceReason || 'All major JD requirements addressed'}</span></div>
-      ${sc2.formatIssues?.length ? `<div class="scorecard-row"><span class="sc-label">Format Notes</span><span class="sc-value sc-yellow">${sc2.formatIssues.join('; ')}</span></div>` : ''}
-      ${sc2.improvementSuggestions?.length ? `<div class="scorecard-row"><span class="sc-label">To reach 100/100</span><span class="sc-value sc-yellow">${sc2.improvementSuggestions.join(' · ')}</span></div>` : ''}
     `;
 
-    // Update keyword grid
-    const kwGrid2 = document.getElementById('kwGrid');
-    kwGrid2.innerHTML = '';
-    const found2   = sc2.keywordsFound   || primary.slice(0, kwMatch2);
-    function kwIsFound2(list, kw) {
-      const kl = kw.toLowerCase();
-      return list.some(f => {
-        const fl = f.toLowerCase();
-        return fl === kl ||
-          new RegExp('(^|\\s)' + kl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\s|$)').test(fl) ||
-          new RegExp('(^|\\s)' + fl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\s|$)').test(kl);
-      });
-    }
-    primary.forEach(kw => {
-      const isFound = kwIsFound2(found2, kw);
+  const kwGrid2 = document.getElementById('kwGrid');
+  kwGrid2.innerHTML = '';
+  const found2 = sc2.keywordsFound || [];
+  const kwIsFound2 = (list, kw) => {
+    const kl = kw.toLowerCase();
+    return list.some(f => {
+      const fl = f.toLowerCase();
+      return fl === kl ||
+        new RegExp('(^|\\s)' + kl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\s|$)').test(fl) ||
+        new RegExp('(^|\\s)' + fl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\s|$)').test(kl);
+    });
+  };
+  primary.forEach(kw => {
+    const tag = document.createElement('span');
+    const ok = kwIsFound2(found2, kw);
+    tag.className = 'kw-tag ' + (ok ? 'kw-match' : 'kw-miss');
+    tag.textContent = (ok ? '✓ ' : '✗ ') + kw;
+    kwGrid2.appendChild(tag);
+  });
+  if (secondary.length > 0) {
+    const div = document.createElement('div');
+    div.style.cssText = 'width:100%;font-size:11px;color:#475569;margin-top:8px;margin-bottom:2px;text-transform:uppercase;letter-spacing:0.8px;';
+    div.textContent = 'Secondary Keywords';
+    kwGrid2.appendChild(div);
+    secondary.forEach(kw => {
       const tag = document.createElement('span');
-      tag.className = 'kw-tag ' + (isFound ? 'kw-match' : 'kw-miss');
-      tag.textContent = (isFound ? '✓ ' : '✗ ') + kw;
+      const ok = kwIsFound2(sc2.secondaryFound || [], kw);
+      tag.className = 'kw-tag ' + (ok ? 'kw-match' : 'kw-miss');
+      tag.style.opacity = '0.8';
+      tag.textContent = (ok ? '✓ ' : '✗ ') + kw;
       kwGrid2.appendChild(tag);
     });
-    if (secondary.length > 0) {
-      const div = document.createElement('div');
-      div.style.cssText = 'width:100%;font-size:11px;color:#475569;margin-top:8px;margin-bottom:2px;text-transform:uppercase;letter-spacing:0.8px;';
-      div.textContent = 'Secondary Keywords';
-      kwGrid2.appendChild(div);
-      const secFoundList2 = sc2.secondaryFound || [];
-      secondary.forEach(kw => {
-        const isFound = kwIsFound2(secFoundList2, kw);
-        const tag = document.createElement('span');
-        tag.className = 'kw-tag ' + (isFound ? 'kw-match' : 'kw-miss');
-        tag.style.opacity = '0.8';
-        tag.textContent = (isFound ? '✓ ' : '✗ ') + kw;
-        kwGrid2.appendChild(tag);
-      });
-    }
-    document.getElementById('kwProgressBar').style.width = (kwMatch2 / primaryTotal * 100) + '%';
-    document.getElementById('kwProgressLabel').textContent =
-      kwMatch2 + ' of ' + primaryTotal + ' primary keywords matched · ' +
-      (sc2.secondaryFound?.length || 0) + ' of ' + secTotal2 + ' secondary keywords matched';
+  }
+  document.getElementById('kwProgressBar').style.width = (kwMatch2 / primaryTotal * 100) + '%';
+  document.getElementById('kwProgressLabel').textContent =
+    kwMatch2 + ' of ' + primaryTotal + ' primary keywords matched · ' +
+    (sc2.secondaryFound?.length || 0) + ' of ' + secTotal2 + ' secondary keywords matched';
 
-    // Update gaps tab
-    const gaps2 = sc2.gaps || [];
-    const gapsDiv2 = document.getElementById('gapsContent');
-    gapsDiv2.innerHTML = '';
-    if (gaps2.length === 0) {
-      gapsDiv2.innerHTML = '<div style="color:#4ade80;font-size:14px;font-weight:600;">✅ No critical gaps detected. All major JD requirements addressed.</div>';
-    } else {
-      gaps2.forEach(g => { gapsDiv2.innerHTML += `<div class="gap-item"><strong>⚠️</strong> ${g}</div>`; });
+  const gapsDiv2 = document.getElementById('gapsContent');
+  const gaps2 = sc2.gaps || [];
+  gapsDiv2.innerHTML = '';
+  if (gaps2.length === 0) {
+    gapsDiv2.innerHTML = '<div style="color:#4ade80;font-size:14px;font-weight:600;">✅ No critical gaps detected. All major JD requirements addressed.</div>';
+  } else {
+    gaps2.forEach(g => { gapsDiv2.innerHTML += `<div class="gap-item"><strong>⚠️</strong> ${g}</div>`; });
+  }
+  return { atsScore2, kwMatch2, primaryTotal };
+}
+
+async function boostScore(opts = {}) {
+  const auto = !!opts.auto;
+  if (!state.tailoredResume || !state.keywords?.primary?.length) {
+    showToast('⚠️ No tailored resume to boost. Run analysis first.', '#ef4444');
+    return;
+  }
+
+  const jd = document.getElementById('jdInput').value.trim();
+  const keywords = state.keywords;
+  const primary = keywords.primary || [];
+  const secondary = keywords.secondary || [];
+  const aliasMap = keywords.aliasMap || Object.fromEntries([...primary, ...secondary].map(k => [k, [k]]));
+  const orig = state.originalResume || document.getElementById('resumeInput').value.trim();
+
+  let atsScore2 = state.scorecard?.atsScore;
+  if (atsScore2 == null) {
+    atsScore2 = RAGEngine.computeAtsScore(jd, state.tailoredResume, primary, secondary, aliasMap).atsScore;
+  }
+
+  if (atsScore2 >= SCORE_TAILOR_THRESHOLD) {
+    document.getElementById('boostBtn').classList.add('hidden');
+    showToast(`✅ Already at ${atsScore2}/100 (≥${SCORE_TAILOR_THRESHOLD}). No boost needed.`);
+    if (auto) {
+      document.getElementById('progressSection').classList.add('hidden');
+      stopLoading();
     }
-    if (sc2.improvementSuggestions?.length) {
-      gapsDiv2.innerHTML += '<div style="margin-top:16px;font-size:12px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.8px;">Score Improvement Tips</div>';
-      sc2.improvementSuggestions.forEach(tip => { gapsDiv2.innerHTML += `<div class="gap-item"><strong>💡</strong> ${tip}</div>`; });
+    return;
+  }
+
+  const boostBtn = document.getElementById('boostBtn');
+  boostBtn.disabled = true;
+  boostBtn.textContent = '⏳ Boosting to 95+...';
+  document.getElementById('progressSection').classList.remove('hidden');
+  setLoading(`Boosting to ${SCORE_TAILOR_THRESHOLD}+...`);
+
+  try {
+    let pass = 0;
+    let kwMatch2 = state.scorecard?.keywordMatch || 0;
+    const primaryTotal = primary.length || 10;
+
+    while (atsScore2 < SCORE_TAILOR_THRESHOLD && pass < MAX_BOOST_PASSES) {
+      pass++;
+      const sc = state.scorecard || {};
+      setProgress(
+        20 + pass * 20,
+        `🎯 Boost pass ${pass}/${MAX_BOOST_PASSES} — ${atsScore2}/100 → ${SCORE_TAILOR_THRESHOLD}+`,
+        `Missing: ${(sc.keywordsMissing || []).length} primary, ${(sc.secondaryMissing || []).length} secondary`
+      );
+      boostBtn.textContent = `⏳ Boost ${pass}/${MAX_BOOST_PASSES}...`;
+
+      const boostedResume = await callClaude(buildBoostPrompt(jd, sc, atsScore2), 0.25, 6000);
+      state.tailoredResume = boostedResume;
+      document.getElementById('outputArea').textContent = boostedResume;
+
+      renderSkillsCompare(RAGEngine.compareSkills(orig, boostedResume));
+      const expBoost = RAGEngine.analyzeExperienceEligibility(jd, orig);
+      state.experienceAnalysis = expBoost;
+      renderExperienceEligibility('resultsExpEligibility', expBoost);
+
+      const ragScore2 = RAGEngine.computeAtsScore(jd, boostedResume, primary, secondary, aliasMap);
+      state.scorecard = ragScore2.scorecard;
+      const ui = applyBoostScoreUi(keywords, ragScore2);
+      atsScore2 = ui.atsScore2;
+      kwMatch2 = ui.kwMatch2;
+      if (atsScore2 >= SCORE_TAILOR_THRESHOLD) break;
     }
 
-    setProgress(100, `✅ Boost complete — ATS Score: ${atsScore2}/100 · ${kwMatch2}/${primaryTotal} keywords`, 'Targeted fixes applied');
-    await delay(1000);
+    setProgress(
+      100,
+      atsScore2 >= SCORE_TAILOR_THRESHOLD
+        ? `✅ Passed ${SCORE_TAILOR_THRESHOLD}+ — ATS Score: ${atsScore2}/100`
+        : `⚠️ Boost finished at ${atsScore2}/100 after ${pass} pass(es)`,
+      atsScore2 >= SCORE_TAILOR_THRESHOLD ? 'Threshold met — stopped boosting' : 'Max boost passes reached'
+    );
+    await delay(900);
     document.getElementById('progressSection').classList.add('hidden');
     stopLoading();
 
-    // Hide boost button if now at/above threshold
-    if (atsScore2 >= SCORE_TAILOR_THRESHOLD) {
-      boostBtn.classList.add('hidden');
-    }
+    if (atsScore2 >= SCORE_TAILOR_THRESHOLD) boostBtn.classList.add('hidden');
+    else boostBtn.classList.remove('hidden');
     boostBtn.disabled = false;
-    boostBtn.textContent = '🎯 Boost to 100';
+    boostBtn.textContent = `🎯 Boost to ${SCORE_TAILOR_THRESHOLD}+`;
 
-    showToast(`🎯 Boost done! ATS Score: ${atsScore2}/100 · ${kwMatch2}/${primaryTotal} keywords matched`);
-
+    showToast(
+      atsScore2 >= SCORE_TAILOR_THRESHOLD
+        ? `🎯 Passed ${SCORE_TAILOR_THRESHOLD}+! ATS Score: ${atsScore2}/100 · ${kwMatch2}/${primaryTotal} keywords`
+        : `Boost ended at ${atsScore2}/100 — still below ${SCORE_TAILOR_THRESHOLD}. Click Boost to retry.`,
+      atsScore2 >= SCORE_TAILOR_THRESHOLD ? undefined : '#fbbf24'
+    );
   } catch (err) {
     stopLoading();
     document.getElementById('progressSection').classList.add('hidden');
     boostBtn.disabled = false;
-    boostBtn.textContent = '🎯 Boost to 100';
+    boostBtn.textContent = `🎯 Boost to ${SCORE_TAILOR_THRESHOLD}+`;
     showToast('❌ Boost failed: ' + err.message.slice(0, 60), '#ef4444');
   }
 }
