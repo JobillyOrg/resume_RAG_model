@@ -343,6 +343,8 @@
   }
 
   // ─── ATS SCORING ────────────────────────────────────────────────
+  // Rubric (keyword-first, mirrors real ATS weight):
+  //   Primary keywords 60 · Secondary 15 · Metrics 10 · Summary 5 · Format 5 · Sections 5 = 100
   function computeAtsScore(jd, resume, primary, secondary, aliasMap) {
     const resumeLines = resume.split('\n').map(l =>
       l.replace(/^[\s\u00A0\u200B\u200C\u200D\uFEFF\u202F\u2060\u3000]+/, '')
@@ -352,32 +354,51 @@
 
     const primaryFound = primary.filter(k => kwOrAliasInText(k, resumeText, aliasMap));
     const primaryMissing = primary.filter(k => !kwOrAliasInText(k, resumeText, aliasMap));
-    const kwPts = Math.round((primaryFound.length / Math.max(primary.length, 1)) * 40);
+    const kwPts = primary.length === 0
+      ? 60
+      : Math.round((primaryFound.length / primary.length) * 60);
 
     const secFound = secondary.filter(k => kwOrAliasInText(k, resumeText, aliasMap));
     const secMissing = secondary.filter(k => !kwOrAliasInText(k, resumeText, aliasMap));
-    const secPts = Math.round((secFound.length / Math.max(secondary.length, 1)) * 10);
+    const secPts = secondary.length === 0
+      ? 15
+      : Math.round((secFound.length / secondary.length) * 15);
 
     const bulletLines = resumeLines.filter(l => {
       if (!l || l.length < 10) return false;
       if (/^[\u2022\u2023\u25E6\u2043\u2219\u25AA\u25AB\u25CF\u25C6\u2012\u2013\u2014\u00B7\u00BB\u2192\u2794\u27A4●•·‣▸▶►○◦\*]/.test(l)) return true;
       if (/^-\s+\S/.test(l)) return true;
       if (/^\d{1,2}[.)]\s+\S/.test(l)) return true;
+      // Plain-text achievement lines (common when pasting from Word/PDF)
+      if (/^(led|built|designed|developed|managed|created|implemented|improved|reduced|increased|delivered|owned|drove|optimized|automated|migrated|launched|scaled)\b/i.test(l) && l.length > 40) return true;
       return false;
     });
     const bulletsWithNum = bulletLines.filter(l => /\d/.test(l));
-    const metricPts = bulletLines.length > 0
-      ? Math.round((bulletsWithNum.length / bulletLines.length) * 20) : 0;
+    let metricPts;
+    if (bulletLines.length > 0) {
+      metricPts = Math.round((bulletsWithNum.length / bulletLines.length) * 10);
+    } else {
+      // No bullets detected — still credit numbered achievements in body
+      const numberedLines = resumeLines.filter(l => l.length > 40 && /\d/.test(l) && !/^(email|phone|http|www|linkedin)/i.test(l));
+      metricPts = numberedLines.length >= 4 ? 7 : numberedLines.length >= 2 ? 5 : numberedLines.length >= 1 ? 3 : 2;
+    }
 
     let jdTitle = extractJdTitle(jd).toLowerCase().replace(/[^\w\s]/g, '').trim();
-    const summaryArea = resumeLines.filter(Boolean).slice(0, 10).join(' ').toLowerCase();
+    // Search first ~20 content lines so long contact headers don't tank summary score
+    const summaryArea = resumeLines.filter(Boolean).slice(0, 20).join(' ').toLowerCase();
     const titleWords = jdTitle.split(/\s+/).filter(w => w.length > 3);
     const titleHits = titleWords.filter(w => summaryArea.includes(w)).length;
-    const summaryPts = titleWords.length === 0 ? 10
-      : titleHits >= titleWords.length ? 15
-      : titleHits >= Math.ceil(titleWords.length * 0.6) ? 10 : 5;
+    const summaryPts = titleWords.length === 0 ? 5
+      : titleHits >= titleWords.length ? 5
+      : titleHits >= Math.ceil(titleWords.length * 0.5) ? 4
+      : titleHits >= 1 ? 2 : 1;
 
     const upperHeaders = resumeLines.filter(l => /^[A-Z][A-Z\s\/&\-]{2,44}$/.test(l) && l.trim().length > 2);
+    const titleCaseHeaders = resumeLines.filter(l =>
+      /^(Summary|Professional Summary|Profile|Experience|Work Experience|Professional Experience|Skills|Technical Skills|Education|Projects|Certifications)\b/i.test(l.trim())
+      && l.trim().length < 50
+    );
+    const hasSectionHeaders = upperHeaders.length > 0 || titleCaseHeaders.length >= 2;
     const hasBullets = bulletLines.length > 0;
     const hasTable = resumeLines.some(l => {
       const parts = l.split('|');
@@ -386,17 +407,25 @@
     });
     const hasColumns = (resume.match(/\t{2,}/g) || []).length > 5;
     const fmtIssues = [];
-    if (upperHeaders.length === 0) fmtIssues.push('No ALL-CAPS section headers detected');
+    if (!hasSectionHeaders) fmtIssues.push('No clear section headers detected');
     if (!hasBullets) fmtIssues.push('No bullet points found — ATS prefers hyphen bullets');
     if (hasTable) fmtIssues.push('Table formatting detected — may confuse ATS parsers');
     if (hasColumns) fmtIssues.push('Multi-column layout detected — use single column');
     const fmtCheck = fmtIssues.length === 0 ? 'PASS' : 'WARNING';
-    const fmtPts = fmtCheck === 'PASS' ? 10 : Math.max(0, 10 - fmtIssues.length * 3);
+    const fmtPts = fmtCheck === 'PASS' ? 5 : Math.max(1, 5 - fmtIssues.length * 1);
 
     const REQUIRED_SECTIONS = ['SUMMARY', 'EXPERIENCE', 'SKILLS', 'EDUCATION'];
     const resumeUpper = resume.toUpperCase();
-    const missingSections = REQUIRED_SECTIONS.filter(s => !resumeUpper.includes(s));
-    const sectionPts = missingSections.length === 0 ? 5 : Math.max(0, 5 - missingSections.length * 2);
+    const SECTION_ALIASES = {
+      SUMMARY: ['SUMMARY', 'PROFILE', 'OBJECTIVE', 'ABOUT'],
+      EXPERIENCE: ['EXPERIENCE', 'EMPLOYMENT', 'WORK HISTORY', 'PROFESSIONAL EXPERIENCE'],
+      SKILLS: ['SKILLS', 'TECHNICAL SKILLS', 'CORE COMPETENCIES', 'TECHNOLOGIES'],
+      EDUCATION: ['EDUCATION', 'ACADEMIC', 'QUALIFICATIONS'],
+    };
+    const missingSections = REQUIRED_SECTIONS.filter(s =>
+      !(SECTION_ALIASES[s] || [s]).some(alias => resumeUpper.includes(alias))
+    );
+    const sectionPts = missingSections.length === 0 ? 5 : Math.max(1, 5 - missingSections.length);
 
     const atsScore = Math.min(100, kwPts + secPts + metricPts + summaryPts + fmtPts + sectionPts);
     const confidence = atsScore >= 85 ? 'High' : atsScore >= 70 ? 'Medium' : 'Low';
@@ -413,8 +442,8 @@
 
     const improvementSuggestions = [];
     if (primaryMissing.length) improvementSuggestions.push(`Add missing primary keywords to SKILLS: ${primaryMissing.slice(0, 3).join(', ')}`);
-    if (bulletsWithNum.length < bulletLines.length) improvementSuggestions.push('Add metrics to bullets without numbers');
-    if (summaryPts < 13 && jdTitle) improvementSuggestions.push(`Open summary with job title: ${extractJdTitle(jd)}`);
+    if (bulletLines.length > 0 && bulletsWithNum.length < bulletLines.length) improvementSuggestions.push('Add metrics to bullets without numbers');
+    if (summaryPts < 5 && jdTitle) improvementSuggestions.push(`Open summary with job title: ${extractJdTitle(jd)}`);
     if (missingSections.length) improvementSuggestions.push(`Add missing sections: ${missingSections.join(', ')}`);
 
     return {

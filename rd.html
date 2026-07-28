@@ -952,11 +952,11 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
   document.getElementById('freeScorecard').innerHTML = `
     <div class="scorecard-row"><span class="sc-label">ATS Score</span><span class="sc-value ${atsClass}" style="font-size:26px;">${atsScore} / 100</span></div>
     <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:8px 0 4px;">Score Breakdown</div>
-    <div class="scorecard-row"><span class="sc-label">Primary Keywords (40 pts max)</span><span class="sc-value sc-blue">${kwPts} pts · ${primaryFound.length}/${primary.length} found</span></div>
-    <div class="scorecard-row"><span class="sc-label">Secondary Keywords (10 pts max)</span><span class="sc-value sc-blue">${secPts} pts · ${secFound.length}/${secondary.length} found</span></div>
-    <div class="scorecard-row"><span class="sc-label">Quantified Bullets (20 pts max)</span><span class="sc-value sc-yellow">${metricPts} pts · ${bulletsWithNum.length} of ${bulletLines.length} bullets have metrics</span></div>
-    <div class="scorecard-row"><span class="sc-label">Summary Alignment (15 pts max)</span><span class="sc-value ${summaryPts >= 13 ? 'sc-green' : summaryPts >= 8 ? 'sc-yellow' : 'sc-red'}">${summaryPts} pts</span></div>
-    <div class="scorecard-row"><span class="sc-label">Format Compliance (10 pts max)</span><span class="sc-value ${fmtCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts} pts · ${fmtCheck}${fmtIssues.length ? ' — ' + fmtIssues.join('; ') : ''}</span></div>
+    <div class="scorecard-row"><span class="sc-label">Primary Keywords (60 pts max)</span><span class="sc-value sc-blue">${kwPts} pts · ${primaryFound.length}/${primary.length} found</span></div>
+    <div class="scorecard-row"><span class="sc-label">Secondary Keywords (15 pts max)</span><span class="sc-value sc-blue">${secPts} pts · ${secFound.length}/${secondary.length || 0} found</span></div>
+    <div class="scorecard-row"><span class="sc-label">Quantified Bullets (10 pts max)</span><span class="sc-value sc-yellow">${metricPts} pts · ${bulletsWithNum.length} of ${bulletLines.length} bullets have metrics</span></div>
+    <div class="scorecard-row"><span class="sc-label">Summary Alignment (5 pts max)</span><span class="sc-value ${summaryPts >= 4 ? 'sc-green' : summaryPts >= 2 ? 'sc-yellow' : 'sc-red'}">${summaryPts} pts</span></div>
+    <div class="scorecard-row"><span class="sc-label">Format Compliance (5 pts max)</span><span class="sc-value ${fmtCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts} pts · ${fmtCheck}${fmtIssues.length ? ' — ' + fmtIssues.join('; ') : ''}</span></div>
     <div class="scorecard-row"><span class="sc-label">Section Completeness (5 pts max)</span><span class="sc-value ${missingSections.length === 0 ? 'sc-green' : 'sc-yellow'}">${sectionPts} pts${missingSections.length ? ' · Missing: ' + missingSections.join(', ') : ' · All sections present'}</span></div>
     <div class="scorecard-row"><span class="sc-label">Experience Eligibility</span><span class="sc-value ${expClass}">${expLabel}</span></div>
   `;
@@ -1848,30 +1848,20 @@ async function runAnalysis() {
     const skillsCmp = RAGEngine.compareSkills(resume, tailoredResume);
     renderSkillsCompare(skillsCmp);
 
-    // ── DERIVE CONSISTENT ATS SCORE FROM RUBRIC FIELDS ───────
-    // The AI returns individual scoring fields reliably. We recompute
-    // atsScore from them so the top score always matches the scorecard rows.
-    const kwMatch    = sc.keywordMatch != null ? Math.min(sc.keywordMatch, 10) : 0;
+    // ── USE RAG ENGINE SCORE DIRECTLY (single source of truth) ───
+    const kwMatch    = sc.keywordMatch != null ? sc.keywordMatch : 0;
     const fmtCheck   = sc.formatCheck  || 'PASS';
     const confidence = sc.confidenceLevel || 'High';
     const primaryTotal = keywords.primary.length || 10;
     const secTotalForScore = keywords.secondary.length || 10;
 
-    // Rubric:  40 + 10 + 20 + 15 + 10 + 5 = 100
-    const kwPts       = Math.round((kwMatch / primaryTotal) * 40);                                 // 40 pts
-    const secPts      = secTotalForScore > 0
-      ? Math.round(((sc.secondaryFound?.length || 0) / secTotalForScore) * 10)
-      : 10;                                                                                         // 10 pts
-    const bTotal      = sc.bulletsTotal      || 0;
-    const bMetrics    = sc.bulletsWithMetrics != null ? sc.bulletsWithMetrics : 0;
-    const metricPts   = bTotal > 0 ? Math.round((bMetrics / bTotal) * 20) : 0;                    // 20 pts
-    const summaryPts  = (sc.summaryScore != null) ? sc.summaryScore                                // 15 pts
-                      : (confidence === 'High' ? 15 : confidence === 'Medium' ? 10 : 5);
-    const fmtPts      = fmtCheck === 'PASS' ? 10 : Math.max(0, 10 - (sc.formatIssues?.length || 1) * 3); // 10 pts
-    const secCompPts  = sc.sectionCheck === 'FAIL'
-      ? Math.max(0, 5 - (sc.missingSections?.length || 1) * 2) : 5;                               // 5 pts
-
-    const atsScore = Math.min(100, kwPts + secPts + metricPts + summaryPts + fmtPts + secCompPts);
+    const kwPts       = ragScore.kwPts;
+    const secPts      = ragScore.secPts;
+    const metricPts   = ragScore.metricPts;
+    const summaryPts  = ragScore.summaryPts;
+    const fmtPts      = ragScore.fmtPts;
+    const secCompPts  = ragScore.sectionPts;
+    const atsScore    = ragScore.atsScore;
 
     // ATS score colour: ≥90 green, ≥70 yellow, else red
     const atsColour = atsScore >= 90 ? 'green' : atsScore >= 70 ? 'yellow' : 'red';
@@ -1905,11 +1895,11 @@ async function runAnalysis() {
     scDiv.innerHTML = `
       <div class="scorecard-row"><span class="sc-label">ATS Score</span><span class="sc-value ${atsScoreClass}" style="font-size:28px;">${atsScore} / 100</span></div>
       <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:10px 0 4px;">Score Breakdown</div>
-      <div class="scorecard-row"><span class="sc-label">Primary Keywords (40 pts max)</span><span class="sc-value sc-blue">${kwPts} pts &nbsp;·&nbsp; ${kwMatch} of ${primaryTotal} found</span></div>
-      <div class="scorecard-row"><span class="sc-label">Secondary Keywords (10 pts max)</span><span class="sc-value sc-blue">${secPts} pts &nbsp;·&nbsp; ${secFound} of ${secTotal} found</span></div>
-      <div class="scorecard-row"><span class="sc-label">Quantified Bullets (20 pts max)</span><span class="sc-value sc-yellow">${metricPts} pts &nbsp;·&nbsp; ${bulletsScore} have metrics</span></div>
-      <div class="scorecard-row"><span class="sc-label">Summary Alignment (15 pts max)</span><span class="sc-value ${summaryPts >= 13 ? 'sc-green' : summaryPts >= 8 ? 'sc-yellow' : 'sc-red'}">${summaryPts} pts</span></div>
-      <div class="scorecard-row"><span class="sc-label">Format Compliance (10 pts max)</span><span class="sc-value ${fmtCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts} pts &nbsp;·&nbsp; ${fmtCheck}</span></div>
+      <div class="scorecard-row"><span class="sc-label">Primary Keywords (60 pts max)</span><span class="sc-value sc-blue">${kwPts} pts &nbsp;·&nbsp; ${kwMatch} of ${primaryTotal} found</span></div>
+      <div class="scorecard-row"><span class="sc-label">Secondary Keywords (15 pts max)</span><span class="sc-value sc-blue">${secPts} pts &nbsp;·&nbsp; ${secFound} of ${secTotal} found</span></div>
+      <div class="scorecard-row"><span class="sc-label">Quantified Bullets (10 pts max)</span><span class="sc-value sc-yellow">${metricPts} pts &nbsp;·&nbsp; ${bulletsScore} have metrics</span></div>
+      <div class="scorecard-row"><span class="sc-label">Summary Alignment (5 pts max)</span><span class="sc-value ${summaryPts >= 4 ? 'sc-green' : summaryPts >= 2 ? 'sc-yellow' : 'sc-red'}">${summaryPts} pts</span></div>
+      <div class="scorecard-row"><span class="sc-label">Format Compliance (5 pts max)</span><span class="sc-value ${fmtCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts} pts &nbsp;·&nbsp; ${fmtCheck}</span></div>
       <div class="scorecard-row"><span class="sc-label">Section Completeness (5 pts max)</span><span class="sc-value ${sc.sectionCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${secCompPts} pts &nbsp;·&nbsp; ${sc.sectionCheck || 'PASS'}</span></div>
       <div class="scorecard-row"><span class="sc-label">Confidence</span><span class="sc-value ${confidence === 'High' ? 'sc-green' : 'sc-yellow'}">${confidence} — ${sc.confidenceReason || 'All major JD requirements addressed'}</span></div>
       ${sc.formatIssues?.length ? `<div class="scorecard-row"><span class="sc-label">Format Notes</span><span class="sc-value sc-yellow">${sc.formatIssues.join('; ')}</span></div>` : ''}
@@ -2217,21 +2207,19 @@ OUTPUT: The fixed resume only. Start with the candidate's name on line 1.`;
     const sc2 = ragScore2.scorecard;
     state.scorecard = sc2;
 
-    // Recompute score
-    const kwMatch2     = sc2.keywordMatch != null ? Math.min(sc2.keywordMatch, 10) : 0;
+    // Use RAG engine score directly
+    const kwMatch2     = sc2.keywordMatch != null ? sc2.keywordMatch : 0;
     const fmtCheck2    = sc2.formatCheck  || 'PASS';
     const confidence2  = sc2.confidenceLevel || 'High';
     const primaryTotal = primary.length || 10;
     const secTotal2    = secondary.length || 10;
-    const kwPts2       = Math.round((kwMatch2 / primaryTotal) * 40);
-    const secPts2      = secTotal2 > 0 ? Math.round(((sc2.secondaryFound?.length || 0) / secTotal2) * 10) : 10;
-    const bTotal2      = sc2.bulletsTotal      || 0;
-    const bMetrics2    = sc2.bulletsWithMetrics != null ? sc2.bulletsWithMetrics : 0;
-    const metricPts2   = bTotal2 > 0 ? Math.round((bMetrics2 / bTotal2) * 20) : 0;
-    const summaryPts2  = sc2.summaryScore != null ? sc2.summaryScore : (confidence2 === 'High' ? 15 : confidence2 === 'Medium' ? 10 : 5);
-    const fmtPts2      = fmtCheck2 === 'PASS' ? 10 : Math.max(0, 10 - (sc2.formatIssues?.length || 1) * 3);
-    const secCompPts2  = sc2.sectionCheck === 'FAIL' ? Math.max(0, 5 - (sc2.missingSections?.length || 1) * 2) : 5;
-    const atsScore2    = Math.min(100, kwPts2 + secPts2 + metricPts2 + summaryPts2 + fmtPts2 + secCompPts2);
+    const kwPts2       = ragScore2.kwPts;
+    const secPts2      = ragScore2.secPts;
+    const metricPts2   = ragScore2.metricPts;
+    const summaryPts2  = ragScore2.summaryPts;
+    const fmtPts2      = ragScore2.fmtPts;
+    const secCompPts2  = ragScore2.sectionPts;
+    const atsScore2    = ragScore2.atsScore;
 
     // Update score tiles
     const atsColour2 = atsScore2 >= 90 ? 'green' : atsScore2 >= 70 ? 'yellow' : 'red';
@@ -2254,11 +2242,11 @@ OUTPUT: The fixed resume only. Start with the candidate's name on line 1.`;
     scDiv2.innerHTML = `
       <div class="scorecard-row"><span class="sc-label">ATS Score (after boost)</span><span class="sc-value ${atsScoreClass2}" style="font-size:28px;">${atsScore2} / 100</span></div>
       <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:10px 0 4px;">Score Breakdown</div>
-      <div class="scorecard-row"><span class="sc-label">Primary Keywords (40 pts max)</span><span class="sc-value sc-blue">${kwPts2} pts &nbsp;·&nbsp; ${kwMatch2} of ${primaryTotal} found</span></div>
-      <div class="scorecard-row"><span class="sc-label">Secondary Keywords (10 pts max)</span><span class="sc-value sc-blue">${secPts2} pts &nbsp;·&nbsp; ${secFound2} of ${secTotal2} found</span></div>
-      <div class="scorecard-row"><span class="sc-label">Quantified Bullets (20 pts max)</span><span class="sc-value sc-yellow">${metricPts2} pts &nbsp;·&nbsp; ${bulletsScore2} have metrics</span></div>
-      <div class="scorecard-row"><span class="sc-label">Summary Alignment (15 pts max)</span><span class="sc-value ${summaryPts2 >= 13 ? 'sc-green' : summaryPts2 >= 8 ? 'sc-yellow' : 'sc-red'}">${summaryPts2} pts</span></div>
-      <div class="scorecard-row"><span class="sc-label">Format Compliance (10 pts max)</span><span class="sc-value ${fmtCheck2 === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts2} pts &nbsp;·&nbsp; ${fmtCheck2}</span></div>
+      <div class="scorecard-row"><span class="sc-label">Primary Keywords (60 pts max)</span><span class="sc-value sc-blue">${kwPts2} pts &nbsp;·&nbsp; ${kwMatch2} of ${primaryTotal} found</span></div>
+      <div class="scorecard-row"><span class="sc-label">Secondary Keywords (15 pts max)</span><span class="sc-value sc-blue">${secPts2} pts &nbsp;·&nbsp; ${secFound2} of ${secTotal2} found</span></div>
+      <div class="scorecard-row"><span class="sc-label">Quantified Bullets (10 pts max)</span><span class="sc-value sc-yellow">${metricPts2} pts &nbsp;·&nbsp; ${bulletsScore2} have metrics</span></div>
+      <div class="scorecard-row"><span class="sc-label">Summary Alignment (5 pts max)</span><span class="sc-value ${summaryPts2 >= 4 ? 'sc-green' : summaryPts2 >= 2 ? 'sc-yellow' : 'sc-red'}">${summaryPts2} pts</span></div>
+      <div class="scorecard-row"><span class="sc-label">Format Compliance (5 pts max)</span><span class="sc-value ${fmtCheck2 === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts2} pts &nbsp;·&nbsp; ${fmtCheck2}</span></div>
       <div class="scorecard-row"><span class="sc-label">Section Completeness (5 pts max)</span><span class="sc-value ${sc2.sectionCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${secCompPts2} pts &nbsp;·&nbsp; ${sc2.sectionCheck || 'PASS'}</span></div>
       <div class="scorecard-row"><span class="sc-label">Confidence</span><span class="sc-value ${confidence2 === 'High' ? 'sc-green' : 'sc-yellow'}">${confidence2} — ${sc2.confidenceReason || 'All major JD requirements addressed'}</span></div>
       ${sc2.formatIssues?.length ? `<div class="scorecard-row"><span class="sc-label">Format Notes</span><span class="sc-value sc-yellow">${sc2.formatIssues.join('; ')}</span></div>` : ''}
