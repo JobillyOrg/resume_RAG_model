@@ -259,6 +259,54 @@
     }
     .gap-item strong { color: #c084fc; }
 
+    .eligibility-banner {
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .eligibility-banner.eligible { background: #052e16; border: 1px solid #22c55e; color: #86efac; }
+    .eligibility-banner.ineligible { background: #2d1515; border: 1px solid #ef4444; color: #fca5a5; }
+    .eligibility-banner.unknown { background: #1e2535; border: 1px solid #64748b; color: #cbd5e1; }
+    .eligibility-banner strong { display: block; font-size: 14px; margin-bottom: 4px; }
+
+    .skills-compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 900px) { .skills-compare-grid { grid-template-columns: 1fr; } }
+    .skills-col {
+      background: #0f1117;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 14px;
+      min-height: 120px;
+    }
+    .skills-col h4 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 10px;
+      color: #94a3b8;
+    }
+    .skills-col.before { border-color: #475569; }
+    .skills-col.added { border-color: #22c55e; }
+    .skills-col.after { border-color: #3b82f6; }
+    .skill-pill {
+      display: inline-block;
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin: 0 6px 6px 0;
+      font-weight: 600;
+    }
+    .skill-pill.before { background: #1e2535; color: #94a3b8; border: 1px solid #475569; }
+    .skill-pill.added { background: #052e16; color: #4ade80; border: 1px solid #22c55e; }
+    .skill-pill.after { background: #1e3a5f; color: #93c5fd; border: 1px solid #3b82f6; }
+    .skill-pill.removed { background: #2d1515; color: #f87171; border: 1px solid #ef4444; text-decoration: line-through; opacity: 0.85; }
+
     /* TOAST */
     #toast {
       position: fixed; bottom: 24px; right: 24px;
@@ -359,7 +407,7 @@
     <h1>ATS Resume Tailoring Dashboard</h1>
     <p>Local RAG scoring (free) · Gemini only for resume rewrite · ~60% fewer API calls</p>
   </div>
-  <div class="api-badge"><div class="api-dot"></div> Gemini AI Connected</div>
+  <div class="api-badge" id="apiBadge"><div class="api-dot" id="apiDot"></div> <span id="apiBadgeText">Checking API…</span></div>
 </header>
 
 <div class="container">
@@ -408,6 +456,7 @@
   <!-- FREE ATS RESULT PANEL -->
   <div id="freeAtsPanel" class="hidden card" style="margin-bottom:20px;border-color:#a855f7;">
     <div class="card-title" style="color:#d8b4fe;">🔍 ATS Score Analysis</div>
+    <div id="freeExpEligibility"></div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;" id="freeScoreGrid">
       <div class="score-card">
         <div class="score-label">ATS Score</div>
@@ -458,6 +507,7 @@
 
   <!-- SCORE CARDS -->
   <div id="scoreSection" class="hidden">
+    <div id="resultsExpEligibility"></div>
     <div class="score-grid">
       <div class="score-card">
         <div class="score-label">ATS Score</div>
@@ -488,6 +538,7 @@
       <button class="tab-btn active" onclick="switchTab('tailored', this)">📝 Tailored Resume</button>
       <button class="tab-btn" onclick="switchTab('scorecard', this)">📊 ATS Scorecard</button>
       <button class="tab-btn" onclick="switchTab('keywords', this)">🔑 Keyword Analysis</button>
+      <button class="tab-btn" onclick="switchTab('skills', this)">🧩 Skills Changes</button>
       <button class="tab-btn" onclick="switchTab('gaps', this)">⚠️ Gap Analysis</button>
       <button class="tab-btn" onclick="switchTab('filename', this)">📁 ATS Filename</button>
     </div>
@@ -521,6 +572,30 @@
       </div>
     </div>
 
+    <!-- TAB: SKILLS CHANGES -->
+    <div class="tab-content" id="tab-skills">
+      <p style="font-size:13px;color:#94a3b8;margin-bottom:12px;">Skills extracted from your original resume vs the tailored resume. <strong style="color:#4ade80;">Green</strong> = newly added during tailoring.</p>
+      <div id="skillsCompareSummary" style="font-size:13px;color:#94a3b8;margin-bottom:14px;"></div>
+      <div class="skills-compare-grid" id="skillsCompareGrid">
+        <div class="skills-col before">
+          <h4>Before (Original)</h4>
+          <div id="skillsBefore"></div>
+        </div>
+        <div class="skills-col added">
+          <h4>Added by Tailoring</h4>
+          <div id="skillsAdded"></div>
+        </div>
+        <div class="skills-col after">
+          <h4>After (Tailored)</h4>
+          <div id="skillsAfter"></div>
+        </div>
+      </div>
+      <div id="skillsRemovedWrap" style="margin-top:16px;display:none;">
+        <h4 style="font-size:11px;text-transform:uppercase;letter-spacing:0.8px;color:#94a3b8;margin-bottom:8px;">Removed during tailoring</h4>
+        <div id="skillsRemoved"></div>
+      </div>
+    </div>
+
     <!-- TAB: GAP ANALYSIS -->
     <div class="tab-content" id="tab-gaps">
       <p style="font-size:13px;color:#94a3b8;margin-bottom:12px;">Requirements from the JD that may need attention or further strengthening.</p>
@@ -549,7 +624,10 @@
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────────
 // Gemini calls go through /api/gemini — key lives in Vercel env vars only.
-const GEMINI_API_ROUTE = '/api/gemini';
+function getGeminiApiUrl() {
+  if (window.location.protocol === 'file:') return null;
+  return new URL('/api/gemini', window.location.origin).href;
+}
 
 // RAG: local keyword extraction + ATS scoring (zero API cost). Gemini only for rewrite/boost.
 const USE_RAG = true;
@@ -560,9 +638,12 @@ const SCORE_TAILOR_THRESHOLD = 95;
 let state = {
   keywords: null,
   tailoredResume: '',
+  originalResume: '',
   scorecard: null,
   gaps: [],
-  filename: ''
+  filename: '',
+  experienceAnalysis: null,
+  skillsCompare: null,
 };
 
 // Simple djb2 hash — converts a JD string into a short stable key for localStorage
@@ -675,6 +756,15 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
     return primaryFound.some(f => f.toLowerCase() === kw.toLowerCase())
       || secFound.some(f => f.toLowerCase() === kw.toLowerCase());
   }
+
+  const expAnalysis = RAGEngine.analyzeExperienceEligibility(jd, resume);
+  state.experienceAnalysis = expAnalysis;
+  const expClass = expAnalysis.status === 'eligible' ? 'sc-green'
+    : expAnalysis.status === 'ineligible' ? 'sc-red' : 'sc-yellow';
+  const expLabel = expAnalysis.status === 'eligible' ? `Eligible · ~${expAnalysis.candidateYears} yrs`
+    : expAnalysis.status === 'ineligible' ? `Not eligible · ${expAnalysis.candidateYears}/${expAnalysis.jdYears} yrs`
+    : `~${expAnalysis.candidateYears} yrs (JD req. not detected)`;
+
   // Score tiles
   const freeScoreEl = document.getElementById('freeAtsScore');
   freeScoreEl.textContent = atsScore + '/100';
@@ -733,6 +823,7 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
     <div class="scorecard-row"><span class="sc-label">Summary Alignment (15 pts max)</span><span class="sc-value ${summaryPts >= 13 ? 'sc-green' : summaryPts >= 8 ? 'sc-yellow' : 'sc-red'}">${summaryPts} pts</span></div>
     <div class="scorecard-row"><span class="sc-label">Format Compliance (10 pts max)</span><span class="sc-value ${fmtCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts} pts · ${fmtCheck}${fmtIssues.length ? ' — ' + fmtIssues.join('; ') : ''}</span></div>
     <div class="scorecard-row"><span class="sc-label">Section Completeness (5 pts max)</span><span class="sc-value ${missingSections.length === 0 ? 'sc-green' : 'sc-yellow'}">${sectionPts} pts${missingSections.length ? ' · Missing: ' + missingSections.join(', ') : ' · All sections present'}</span></div>
+    <div class="scorecard-row"><span class="sc-label">Experience Eligibility</span><span class="sc-value ${expClass}">${expLabel}</span></div>
   `;
 
   // Gaps
@@ -757,6 +848,16 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
         <div style="font-size:13px;color:#fbbf24;margin-bottom:10px;">Score ${atsScore}/100 is below target (${SCORE_TAILOR_THRESHOLD}). Tailor your resume to close keyword gaps.</div>
         <button class="btn-primary" onclick="runAnalysis()">🚀 AI Tailor to ${SCORE_TAILOR_THRESHOLD}+</button>
       </div>`;
+  }
+
+  renderExperienceEligibility('freeExpEligibility', expAnalysis);
+
+  if (expAnalysis.status === 'ineligible') {
+    gapsDiv.innerHTML = `
+      <div class="gap-item" style="border-color:#ef4444;background:#2d1515;color:#fca5a5;margin-bottom:10px;">
+        <strong>⛔ Not eligible — insufficient experience</strong><br>
+        JD requires ${expAnalysis.jdYears}+ years · Candidate has ~${expAnalysis.candidateYears} years (${expAnalysis.shortfall} year(s) short).
+      </div>` + gapsDiv.innerHTML;
   }
 
   // Show panel
@@ -825,13 +926,101 @@ function switchTab(name, btn) {
   if (btn) btn.classList.add('active');
 }
 
+function renderExperienceEligibility(containerId, analysis) {
+  const el = document.getElementById(containerId);
+  if (!el || !analysis) { if (el) el.innerHTML = ''; return; }
+
+  const cls = analysis.status === 'eligible' ? 'eligible'
+    : analysis.status === 'ineligible' ? 'ineligible' : 'unknown';
+  const icon = analysis.status === 'eligible' ? '✅'
+    : analysis.status === 'ineligible' ? '⛔' : 'ℹ️';
+  const title = analysis.status === 'eligible' ? 'Experience: Eligible'
+    : analysis.status === 'ineligible' ? 'Experience: Not Eligible'
+    : 'Experience: Requirement Not Detected';
+
+  const stats = analysis.jdYears > 0
+    ? `JD requires <strong>${analysis.jdYears}+ years</strong> · Candidate has <strong>~${analysis.candidateYears} years</strong>`
+    : `Candidate has <strong>~${analysis.candidateYears} years</strong> across ${analysis.roleCount} role(s)`;
+
+  el.innerHTML = `
+    <div class="eligibility-banner ${cls}">
+      <strong>${icon} ${title}</strong>
+      ${stats}<br>
+      ${analysis.message}
+      ${analysis.status === 'ineligible' ? '<br><span style="opacity:0.9;">Tailoring can add keywords but cannot replace required years of experience.</span>' : ''}
+    </div>`;
+}
+
+function renderSkillPills(container, items, pillClass) {
+  if (!container) return;
+  if (!items?.length) {
+    container.innerHTML = '<span style="font-size:12px;color:#64748b;">None detected</span>';
+    return;
+  }
+  container.innerHTML = items.map(s =>
+    `<span class="skill-pill ${pillClass}">${s}</span>`
+  ).join('');
+}
+
+function renderSkillsCompare(compare) {
+  state.skillsCompare = compare;
+  const summary = document.getElementById('skillsCompareSummary');
+  if (!compare) {
+    if (summary) summary.textContent = 'Run AI Tailor to see before/after skills.';
+    ['skillsBefore', 'skillsAdded', 'skillsAfter', 'skillsRemoved'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '';
+    });
+    const wrap = document.getElementById('skillsRemovedWrap');
+    if (wrap) wrap.style.display = 'none';
+    return;
+  }
+
+  if (summary) {
+    summary.innerHTML = `Original: <strong>${compare.beforeCount}</strong> skills · ` +
+      `Tailored: <strong>${compare.afterCount}</strong> skills · ` +
+      `Added: <strong style="color:#4ade80;">${compare.addedCount}</strong>` +
+      (compare.removed.length ? ` · Removed: <strong style="color:#f87171;">${compare.removed.length}</strong>` : '');
+  }
+
+  renderSkillPills(document.getElementById('skillsBefore'), compare.before, 'before');
+  renderSkillPills(document.getElementById('skillsAdded'), compare.added, 'added');
+  renderSkillPills(document.getElementById('skillsAfter'), compare.after, 'after');
+
+  const removedWrap = document.getElementById('skillsRemovedWrap');
+  if (compare.removed.length) {
+    removedWrap.style.display = 'block';
+    renderSkillPills(document.getElementById('skillsRemoved'), compare.removed, 'removed');
+  } else if (removedWrap) {
+    removedWrap.style.display = 'none';
+  }
+}
+
 // ─── GEMINI API CALL (via Vercel serverless proxy) ────────────────
 async function callClaude(prompt, temperature = 0.3, maxTokens = 4096) {
-  const res = await fetch(GEMINI_API_ROUTE, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt, temperature, maxTokens })
-  });
+  const apiUrl = getGeminiApiUrl();
+
+  if (!apiUrl) {
+    throw new Error(
+      'Cannot reach /api/gemini from a local file. Open your Vercel deployed URL, or run: vercel dev'
+    );
+  }
+
+  let res;
+  try {
+    res = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, temperature, maxTokens }),
+    });
+  } catch (err) {
+    if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
+      throw new Error(
+        `Cannot reach ${apiUrl}. If deployed on Vercel: (1) add GEMINI_API_KEY in Environment Variables, (2) redeploy, (3) test ${apiUrl.replace('/gemini', '/health')}`
+      );
+    }
+    throw err;
+  }
 
   const data = await res.json().catch(() => ({}));
 
@@ -840,6 +1029,24 @@ async function callClaude(prompt, temperature = 0.3, maxTokens = 4096) {
   }
 
   return data.text || '';
+}
+
+async function checkApiConnection() {
+  if (window.location.protocol === 'file:') {
+    return { ok: false, message: 'Local file — use Vercel URL or vercel dev' };
+  }
+  try {
+    const healthUrl = new URL('/api/health', window.location.origin).href;
+    const res = await fetch(healthUrl);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return { ok: false, message: data.error || 'API health check failed' };
+    if (!data.geminiKeyConfigured) {
+      return { ok: false, message: 'GEMINI_API_KEY not set in Vercel — add it and redeploy' };
+    }
+    return { ok: true, message: 'API connected' };
+  } catch {
+    return { ok: false, message: 'API unreachable — redeploy with api/ folder on Vercel' };
+  }
 }
 
 // ─── PROMPTS ──────────────────────────────────────────────────────
@@ -1401,7 +1608,7 @@ async function runAnalysis() {
   if (!jd)     { showToast('⚠️ Please paste a Job Description', '#ef4444'); return; }
   if (!resume) { showToast('⚠️ Please paste your Resume', '#ef4444'); return; }
 
-  // UI reset
+  state.originalResume = resume;
   document.getElementById('analyzeBtn').disabled = true;
   document.getElementById('scoreSection').classList.add('hidden');
   document.getElementById('resultsSection').classList.add('hidden');
@@ -1491,6 +1698,13 @@ async function runAnalysis() {
     const ragScore = RAGEngine.computeAtsScore(jd, tailoredResume, keywords.primary, keywords.secondary || [], aliasMap);
     const sc = ragScore.scorecard;
     state.scorecard = sc;
+
+    const expAnalysis = RAGEngine.analyzeExperienceEligibility(jd, resume);
+    state.experienceAnalysis = expAnalysis;
+    renderExperienceEligibility('resultsExpEligibility', expAnalysis);
+
+    const skillsCmp = RAGEngine.compareSkills(resume, tailoredResume);
+    renderSkillsCompare(skillsCmp);
 
     // ── DERIVE CONSISTENT ATS SCORE FROM RUBRIC FIELDS ───────
     // The AI returns individual scoring fields reliably. We recompute
@@ -1613,6 +1827,14 @@ async function runAnalysis() {
     state.gaps = gaps;
     const gapsDiv = document.getElementById('gapsContent');
     gapsDiv.innerHTML = '';
+    if (expAnalysis.status === 'ineligible') {
+      gapsDiv.innerHTML += `
+        <div class="gap-item" style="border-color:#ef4444;background:#2d1515;color:#fca5a5;">
+          <strong>⛔ Not eligible — insufficient experience</strong><br>
+          JD requires ${expAnalysis.jdYears}+ years · Candidate has ~${expAnalysis.candidateYears} years (${expAnalysis.shortfall} year(s) short).
+          Tailoring added ${skillsCmp.addedCount} skill(s) but cannot replace required tenure.
+        </div>`;
+    }
     if (gaps.length === 0) {
       gapsDiv.innerHTML = '<div style="color:#4ade80;font-size:14px;font-weight:600;">✅ No critical gaps detected. All major JD requirements addressed.</div>';
     } else {
@@ -1674,7 +1896,9 @@ async function runAnalysis() {
         <strong>⚠️ Gemini API Error</strong><br><br>
         ${err.message}<br><br>
         <strong>Common fixes:</strong><br>
-        • Ensure <code>GEMINI_API_KEY</code> is set in Vercel Environment Variables<br>
+        • <strong>Not opening as a local file?</strong> Use your Vercel URL (not file://)<br>
+        • Test API: <a href="/api/health" target="_blank" style="color:#60a5fa;">/api/health</a> — should show <code>geminiKeyConfigured: true</code><br>
+        • Ensure <code>GEMINI_API_KEY</code> is set in Vercel Environment Variables, then <strong>Redeploy</strong><br>
         • Get a key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#60a5fa;">aistudio.google.com</a><br>
         • Ensure your JD and Resume are not empty<br>
         • Try again in a few seconds (rate limit)<br>
@@ -1692,7 +1916,16 @@ async function runAnalysis() {
 // ─── RESET & RUN ──────────────────────────────────────────────────
 function resetAndRun() {
   // Reset state
-  state = { keywords: null, tailoredResume: '', scorecard: null, gaps: [], filename: '' };
+  state = {
+    keywords: null,
+    tailoredResume: '',
+    originalResume: '',
+    scorecard: null,
+    gaps: [],
+    filename: '',
+    experienceAnalysis: null,
+    skillsCompare: null,
+  };
 
   // Hide result panels
   document.getElementById('scoreSection').classList.add('hidden');
@@ -1715,6 +1948,9 @@ function resetAndRun() {
   document.getElementById('scorecardContent').innerHTML = '';
   document.getElementById('kwGrid').innerHTML = '';
   document.getElementById('gapsContent').innerHTML = '';
+  document.getElementById('freeExpEligibility').innerHTML = '';
+  document.getElementById('resultsExpEligibility').innerHTML = '';
+  renderSkillsCompare(null);
   document.getElementById('suggestedFilename').textContent = '';
   document.getElementById('filenameReason').textContent = '';
 
@@ -1823,6 +2059,13 @@ OUTPUT: The fixed resume only. Start with the candidate's name on line 1.`;
       await delay(6);
     }
     outputEl.classList.remove('streaming-cursor');
+
+    const skillsCmp2 = RAGEngine.compareSkills(state.originalResume || document.getElementById('resumeInput').value.trim(), boostedResume);
+    renderSkillsCompare(skillsCmp2);
+
+    const expBoost = RAGEngine.analyzeExperienceEligibility(jd, state.originalResume || document.getElementById('resumeInput').value.trim());
+    state.experienceAnalysis = expBoost;
+    renderExperienceEligibility('resultsExpEligibility', expBoost);
 
     // Re-score (local RAG — no API)
     setProgress(75, 'Re-scoring boosted resume (RAG)...', 'Local deterministic scoring...');
@@ -2341,6 +2584,31 @@ function printResume() {
 function copyFilename() {
   navigator.clipboard.writeText(state.filename).then(() => showToast('📋 Filename copied!'));
 }
+
+// API status on load (Vercel / vercel dev only)
+(async function initApiBadge() {
+  const badge = document.getElementById('apiBadge');
+  const text = document.getElementById('apiBadgeText');
+  if (!badge || !text) return;
+
+  if (window.location.protocol === 'file:') {
+    badge.style.borderColor = '#f59e0b';
+    badge.style.background = '#422006';
+    badge.style.color = '#fcd34d';
+    text.textContent = 'Local file — deploy or vercel dev for AI';
+    return;
+  }
+
+  const status = await checkApiConnection();
+  if (status.ok) {
+    text.textContent = 'Gemini API connected';
+  } else {
+    badge.style.borderColor = '#ef4444';
+    badge.style.background = '#2d1515';
+    badge.style.color = '#fca5a5';
+    text.textContent = status.message;
+  }
+})();
 </script>
 </body>
 </html>

@@ -551,6 +551,238 @@
     return { ...payload, source: 'rag' };
   }
 
+  // ─── EXPERIENCE ELIGIBILITY ─────────────────────────────────────
+  const MONTH_MAP = {
+    jan: 0, january: 0, feb: 1, february: 1, mar: 2, march: 2,
+    apr: 3, april: 3, may: 4, jun: 5, june: 5, jul: 6, july: 6,
+    aug: 7, august: 7, sep: 8, sept: 8, september: 8,
+    oct: 9, october: 9, nov: 10, november: 10, dec: 11, december: 11,
+  };
+
+  function parseDateToken(token) {
+    if (!token) return null;
+    const t = token.trim().toLowerCase();
+    if (/present|current|now|today|ongoing/.test(t)) return new Date();
+
+    const mmyyyy = t.match(/\b(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s*[,.]?\s*((?:19|20)\d{2})\b/i);
+    if (mmyyyy) {
+      const mk = mmyyyy[1].slice(0, 3).toLowerCase();
+      const month = MONTH_MAP[mk] ?? MONTH_MAP[mmyyyy[1].toLowerCase()] ?? 0;
+      return new Date(parseInt(mmyyyy[2], 10), month, 1);
+    }
+
+    const yyyy = t.match(/\b((?:19|20)\d{2})\b/);
+    if (yyyy) return new Date(parseInt(yyyy[1], 10), 0, 1);
+    return null;
+  }
+
+  function extractDateRanges(text) {
+    const ranges = [];
+    const rangeRe = /(\b(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s*[,.]?\s*(?:19|20)\d{2}|\b(?:19|20)\d{2}\b)\s*[-–—to]+\s*(\b(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s*[,.]?\s*(?:19|20)\d{2}|\b(?:19|20)\d{2}\b|present|current|now|today|ongoing)\b/gi;
+    let m;
+    while ((m = rangeRe.exec(text)) !== null) {
+      const chunk = m[0];
+      const parts = chunk.split(/\s*[-–—]|\s+to\s+/i);
+      if (parts.length < 2) continue;
+      const start = parseDateToken(parts[0]);
+      const end = parseDateToken(parts[parts.length - 1]);
+      if (start && end && end >= start) ranges.push({ start, end });
+    }
+    return ranges;
+  }
+
+  function mergeDateRanges(ranges) {
+    if (!ranges.length) return [];
+    const sorted = [...ranges].sort((a, b) => a.start - b.start);
+    const merged = [sorted[0]];
+    for (let i = 1; i < sorted.length; i++) {
+      const last = merged[merged.length - 1];
+      const cur = sorted[i];
+      if (cur.start <= last.end) {
+        if (cur.end > last.end) last.end = cur.end;
+      } else {
+        merged.push(cur);
+      }
+    }
+    return merged;
+  }
+
+  function yearsBetween(start, end) {
+    const months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+    return Math.max(0, months / 12);
+  }
+
+  function extractResumeExperienceYears(resume) {
+    const upper = resume.toUpperCase();
+    const expIdx = ['EXPERIENCE', 'WORK EXPERIENCE', 'PROFESSIONAL EXPERIENCE', 'EMPLOYMENT']
+      .map(h => upper.indexOf(h))
+      .filter(i => i >= 0)
+      .sort((a, b) => a - b)[0];
+
+    const scanText = expIdx != null
+      ? resume.slice(expIdx)
+      : resume;
+
+    const ranges = extractDateRanges(scanText);
+    const merged = mergeDateRanges(ranges);
+    const totalYears = merged.reduce((sum, r) => sum + yearsBetween(r.start, r.end), 0);
+    return {
+      years: Math.round(totalYears * 10) / 10,
+      roleCount: ranges.length,
+      ranges: merged,
+    };
+  }
+
+  function extractJdRequiredYears(jd) {
+    const mins = [];
+    const patterns = [
+      /(?:minimum|min\.?|at\s+least|least)\s*(\d+)\+?\s*years?/gi,
+      /(\d+)\s*\+\s*years?(?:\s+of)?/gi,
+      /(\d+)\s*(?:to|-)\s*(\d+)\+?\s*years?/gi,
+      /(\d+)\+?\s*years?\s+(?:of\s+)?(?:relevant\s+)?(?:professional\s+)?experience/gi,
+      /(\d+)\+?\s*years?\s+(?:in|with|of)\s+[a-z]/gi,
+    ];
+
+    for (const re of patterns) {
+      let m;
+      while ((m = re.exec(jd)) !== null) {
+        const a = parseInt(m[1], 10);
+        if (!isNaN(a) && a > 0 && a <= 40) mins.push(a);
+        if (m[2]) {
+          const b = parseInt(m[2], 10);
+          if (!isNaN(b) && b > 0 && b <= 40) mins.push(b);
+        }
+      }
+    }
+
+    const minYears = mins.length ? Math.min(...mins) : 0;
+    const maxMention = mins.length ? Math.max(...mins) : 0;
+    return {
+      minYears,
+      maxMention,
+      detected: mins.length > 0,
+      rawValues: [...new Set(mins)].sort((a, b) => a - b),
+    };
+  }
+
+  function analyzeExperienceEligibility(jd, resume) {
+    const jdExp = extractJdRequiredYears(jd);
+    const candExp = extractResumeExperienceYears(resume);
+
+    if (!jdExp.detected) {
+      return {
+        eligible: null,
+        status: 'unknown',
+        jdYears: 0,
+        candidateYears: candExp.years,
+        shortfall: 0,
+        roleCount: candExp.roleCount,
+        message: 'Job description does not state a clear years-of-experience requirement.',
+        detail: `Candidate has ~${candExp.years} years of experience across ${candExp.roleCount} role(s).`,
+      };
+    }
+
+    const shortfall = Math.max(0, jdExp.minYears - candExp.years);
+    const eligible = candExp.years >= jdExp.minYears;
+
+    return {
+      eligible,
+      status: eligible ? 'eligible' : 'ineligible',
+      jdYears: jdExp.minYears,
+      jdRange: jdExp.rawValues,
+      candidateYears: candExp.years,
+      shortfall: Math.round(shortfall * 10) / 10,
+      roleCount: candExp.roleCount,
+      message: eligible
+        ? `Eligible — candidate has ~${candExp.years} years vs JD requirement of ${jdExp.minYears}+ years.`
+        : `Not eligible — candidate has ~${candExp.years} years but JD requires ${jdExp.minYears}+ years (${shortfall} year(s) short).`,
+      detail: eligible
+        ? 'Experience meets the job description minimum.'
+        : 'Experience is below the job description requirement. Tailoring cannot replace required tenure.',
+    };
+  }
+
+  // ─── SKILLS EXTRACTION & COMPARE ────────────────────────────────
+  const SKILL_SECTION_HEADERS = [
+    'SKILLS', 'TECHNICAL SKILLS', 'CORE COMPETENCIES', 'KEY SKILLS',
+    'TOOLS & PLATFORMS', 'TECHNICAL SKILLS:', 'TOOLS & PLATFORMS:',
+    'METHODOLOGIES:', 'CORE COMPETENCIES:',
+  ];
+
+  function normalizeSkill(s) {
+    return s.trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
+  function extractSkillsFromResume(resume) {
+    const lines = resume.split('\n').map(l => l.trim()).filter(Boolean);
+    const skills = new Map();
+    let inSkills = false;
+
+    for (const line of lines) {
+      const upper = line.toUpperCase();
+      const isHeader = /^[A-Z][A-Z\s\/&:\-]{2,50}$/.test(upper) && upper.length < 55;
+
+      if (isHeader) {
+        const headerKey = upper.replace(/:$/, '').trim();
+        inSkills = SKILL_SECTION_HEADERS.some(h => headerKey === h || headerKey.startsWith(h.replace(':', '')));
+        if (inSkills && /:/.test(line)) {
+          const afterColon = line.split(':').slice(1).join(':').trim();
+          if (afterColon) parseSkillLine(afterColon, skills);
+        }
+        continue;
+      }
+
+      if (!inSkills) continue;
+
+      if (isHeader && !SKILL_SECTION_HEADERS.some(h => upper.startsWith(h.replace(':', '')))) break;
+
+      if (/^(technical skills|tools\s*&\s*platforms|methodologies|core competencies)\s*:/i.test(line)) {
+        parseSkillLine(line.replace(/^[^:]+:\s*/i, ''), skills);
+        continue;
+      }
+
+      if (!/^[A-Z][A-Z\s\/&\-]{2,44}$/.test(upper)) {
+        parseSkillLine(line, skills);
+      }
+    }
+
+    return [...skills.values()];
+  }
+
+  function parseSkillLine(line, skillsMap) {
+    line.split(/[,;|•·]/).forEach(part => {
+      let s = part.trim()
+        .replace(/^[-•*]\s*/, '')
+        .replace(/^(technical skills|tools\s*&\s*platforms|methodologies|core competencies)\s*:\s*/i, '');
+      if (s.length < 2 || s.length > 60) return;
+      if (/^\d+$/.test(s)) return;
+      const key = normalizeSkill(s);
+      if (!skillsMap.has(key)) skillsMap.set(key, s);
+    });
+  }
+
+  function compareSkills(beforeResume, afterResume) {
+    const beforeList = extractSkillsFromResume(beforeResume);
+    const afterList = extractSkillsFromResume(afterResume);
+    const beforeSet = new Set(beforeList.map(normalizeSkill));
+    const afterSet = new Set(afterList.map(normalizeSkill));
+
+    const added = afterList.filter(s => !beforeSet.has(normalizeSkill(s)));
+    const removed = beforeList.filter(s => !afterSet.has(normalizeSkill(s)));
+    const unchanged = afterList.filter(s => beforeSet.has(normalizeSkill(s)));
+
+    return {
+      before: beforeList,
+      after: afterList,
+      added,
+      removed,
+      unchanged,
+      addedCount: added.length,
+      beforeCount: beforeList.length,
+      afterCount: afterList.length,
+    };
+  }
+
   // ─── PUBLIC API ─────────────────────────────────────────────────
   const RAGEngine = {
     extractKeywordsRAG,
@@ -561,6 +793,9 @@
     cacheGet,
     cacheSet,
     SKILL_KB,
+    analyzeExperienceEligibility,
+    extractSkillsFromResume,
+    compareSkills,
   };
 
   global.RAGEngine = RAGEngine;
