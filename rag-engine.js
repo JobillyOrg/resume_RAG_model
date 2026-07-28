@@ -289,7 +289,7 @@
     { id: 'kw-secondary', text: 'Secondary keywords should appear at least once in resume body or skills' },
     { id: 'skill-families', text: 'Keep related skill families together across all job categories — tech business healthcare finance trades and more' },
     { id: 'metrics', text: 'Quantified bullets with numbers percentages dollar amounts improve ATS and recruiter scores' },
-    { id: 'summary-title', text: 'Summary must describe candidate skills and experience only — never copy JD marketing phrases like Why join us or hiring company names' },
+    { id: 'summary-title', text: 'Summary is a plain human overview of full work experience for HR — no percentages no metric spam no JD marketing fluff' },
     { id: 'format-headers', text: 'Use ALL CAPS section headers SUMMARY SKILLS EXPERIENCE EDUCATION plain text single column' },
     { id: 'format-bullets', text: 'Use hyphen bullets avoid tables columns icons special unicode' },
     { id: 'sections', text: 'Required sections SUMMARY SKILLS EXPERIENCE EDUCATION must all be present' },
@@ -689,7 +689,7 @@
     const improvementSuggestions = [];
     if (primaryMissing.length) improvementSuggestions.push(`Add missing primary keywords to SKILLS: ${primaryMissing.slice(0, 3).join(', ')}`);
     if (bulletLines.length > 0 && bulletsWithNum.length < bulletLines.length) improvementSuggestions.push('Add metrics to bullets without numbers');
-    if (summaryPts < 5) improvementSuggestions.push('Strengthen summary with years of experience and top skills from the resume — avoid JD marketing fluff');
+    if (summaryPts < 5) improvementSuggestions.push('Rewrite summary as a clear HR-friendly overview of full experience — no percentages');
     if (missingSections.length) improvementSuggestions.push(`Add missing sections: ${missingSections.join(', ')}`);
 
     return {
@@ -1267,6 +1267,11 @@
         const re = new RegExp('\\b' + co.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
         line = line.replace(re, '');
       }
+      // Summary must stay HR-readable — strip percentages (keep metrics in Experience only)
+      line = line.replace(/\bby\s+\d+(?:\.\d+)?\s*%/gi, '');
+      line = line.replace(/\bof\s+\d+(?:\.\d+)?\s*%/gi, '');
+      line = line.replace(/\b\d+(?:\.\d+)?\s*%/g, '');
+      line = line.replace(/\b\d+(?:\.\d+)?\s*percent(?:age)?s?\b/gi, '');
       // Fix dangling "at Company" leftovers after company strip
       line = line.replace(/\bat\s*[.,;:]/gi, '.').replace(/\bat\s*$/i, '');
       line = line.replace(/\s+at\s+while/gi, ' while').replace(/\s+at\s+to\b/gi, ' to');

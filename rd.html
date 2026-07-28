@@ -1460,8 +1460,8 @@ You still write like a human career coach — not robotic keyword soup — but k
 BEFORE YOU WRITE — think through these 5 questions:
 1. What professional title best fits the candidate from their resume skills + experience (aligned to the JD role, but grounded in their background)?
 2. What seniority level does this candidate appear to be? Match tone accordingly.
-3. What is the single most impressive thing this candidate has done? Lead with it in the summary.
-4. What career story does this resume tell from their real experience?
+3. How would an HR recruiter describe this person's full career in plain English (roles, domains, strengths) — without percentages?
+4. What career story does this resume tell from their real experience across ALL roles?
 5. Which JD keywords are still missing — and how will every one land in Skills + bullets?
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1510,7 +1510,7 @@ A great resume tells a story of upward momentum. When reading all roles together
 
 - Each role's bullets should reflect the scope and seniority of that time period
 - Show progression: early roles show execution, recent roles show leadership and impact
-- The SUMMARY is the thesis statement — it should make the reader want to read every line below
+- The SUMMARY is a plain-English career overview for HR — readable, human, no metric spam — then the Experience section proves it with details
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 4 — BULLET CRAFT
@@ -1592,12 +1592,17 @@ RULE 7 — KEYWORD EMBEDDING (mandatory for first-pass ${SCORE_TAILOR_THRESHOLD}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 8 — SECTION QUALITY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SUMMARY (3-4 sentences — candidate skills & experience ONLY):
-- Write ONLY from the candidate's real skills, tools, years, and achievements on the original resume
-- S1: [Professional title aligned to candidate background] with X years + top 2-3 genuine strengths/skills from their experience
-- S2: Strongest quantified achievement from their real work history
-- S3: Second proof point or skill pattern across roles (technologies / domains they actually used)
-- S4: How their existing skills map to this role's needs — skills/tools language only
+SUMMARY (3-5 short sentences — human, HR-friendly career overview):
+- Audience: a recruiter or HR partner scanning in 10 seconds — write so a non-engineer can understand it easily
+- Purpose: SUMMARISE the candidate's FULL work history into a clear story (what they do, domains they've worked in, how they've grown) — not one flashy metric
+- Write ONLY from real skills, tools, years, and roles on the original resume
+- S1: Who they are — professional title + years of experience + main focus areas in plain words
+- S2: Career arc across ALL roles — industries/domains served, kinds of work (e.g. cloud systems, APIs, data, stakeholder work) without listing every company
+- S3: Core strengths in everyday language — tools and ways of working they actually used (keep skill names natural, not keyword stuffing)
+- S4 (optional): Soft close on what they bring to similar roles — skills/experience only, no employer pitch
+- NO percentages anywhere in the Summary (never "40%", "reduced by 30%", etc.) — save those for Experience bullets
+- NO dense metric spam in the Summary (avoid "$2M", "3x", stacked numbers) — use plain impact words like "faster delivery", "lower overhead", "broader scale" if needed
+- Years of experience (e.g. "8+ years") is fine; keep the rest readable and conversational
 - NEVER start with or include JD marketing text ("Why join us?", "About the job", employer slogans)
 - NEVER name the hiring company (HermanMiller, MillerKnoll, etc.) in the Summary
 - NEVER paste JD preamble into the Summary — analyse skills + experience and write that only
@@ -1671,7 +1676,7 @@ FINAL SILENT CHECK — verify before outputting:
 =======================================================
 [ ] First line is the candidate's name only — nothing else
 [ ] Line 2 is the professional headline copied EXACTLY from the master resume — not the JD title
-[ ] Summary is skills/experience only — NO "Why join us", NO hiring company name, NO JD marketing fluff
+[ ] Summary is a human HR-readable overview of ALL experience — NO percentages, NO metric spam, NO "Why join us", NO hiring company name, NO JD marketing fluff
 [ ] ROLE COUNT CHECK: count roles in original resume → confirm same number of roles appear in output — if any are missing, add them before outputting
 [ ] EXPERIENCE JOB TITLES: every role's job title matches the master resume exactly — NOT the JD title (e.g. "Software Engineer Analyst" stays "Software Engineer Analyst")
 [ ] EXPERIENCE COMPANY NAMES: every company name copied exactly — no abbreviations or expansions
@@ -2162,6 +2167,8 @@ ${bulletsNeedFix > 0 ? `BULLETS WITHOUT METRICS — ${bulletsNeedFix} need a cou
 
 ${gaps.length > 0 ? `JD GAPS:\n${gaps.map(g => `  - ${g}`).join('\n')}` : ''}
 ${suggestions.length > 0 ? `SUGGESTIONS:\n${suggestions.map(s => `  - ${s}`).join('\n')}` : ''}
+
+SUMMARY RULE: Keep Summary as a plain-English overview of the candidate's full experience for HR — no percentages, no dense metrics; put numbers only in Experience bullets.
 
 INTEGRITY: Do not change name/headline/contact/companies/titles/dates/education/GPA. Never add certifications. Output COMPLETE resume only.
 
