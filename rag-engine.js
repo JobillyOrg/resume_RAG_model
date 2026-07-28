@@ -289,7 +289,7 @@
     { id: 'kw-secondary', text: 'Secondary keywords should appear at least once in resume body or skills' },
     { id: 'skill-families', text: 'Keep related skill families together across all job categories — tech business healthcare finance trades and more' },
     { id: 'metrics', text: 'Quantified bullets with numbers percentages dollar amounts improve ATS and recruiter scores' },
-    { id: 'summary-title', text: 'Summary first sentence should mirror exact job title from job description' },
+    { id: 'summary-title', text: 'Summary must describe candidate skills and experience only — never copy JD marketing phrases like Why join us or hiring company names' },
     { id: 'format-headers', text: 'Use ALL CAPS section headers SUMMARY SKILLS EXPERIENCE EDUCATION plain text single column' },
     { id: 'format-bullets', text: 'Use hyphen bullets avoid tables columns icons special unicode' },
     { id: 'sections', text: 'Required sections SUMMARY SKILLS EXPERIENCE EDUCATION must all be present' },
@@ -406,17 +406,36 @@
   }
 
   function extractJdTitle(jd) {
-    const titleLabelMatch = jd.match(/(?:job title|position title|role title)\s*[:\-]\s*([^\n]{3,60})/i);
-    if (titleLabelMatch) return titleLabelMatch[1].trim();
-    const m = jd.match(/(?:seeking|hiring|looking for)\s+an?\s+([A-Z][A-Za-z\s\/\-]{3,50}?)(?:\s+to\b|\s+who\b|\s+with\b|[,\n])/);
-    if (m) return m[1].trim();
-    const skipRe = /^(about|job summary|overview|description|we are|responsibilities|requirements)/i;
-    for (const line of jd.split('\n').map(l => l.trim()).filter(Boolean).slice(0, 15)) {
-      if (line.length < 4 || line.length > 55 || skipRe.test(line)) continue;
+    const titleLabelMatch = jd.match(/(?:job title|position title|role title|position)\s*[:\-]\s*([^\n]{3,80})/i);
+    if (titleLabelMatch) {
+      const t = cleanJdTitleCandidate(titleLabelMatch[1]);
+      if (t) return t;
+    }
+    const m = jd.match(/(?:seeking|hiring|looking for)\s+an?\s+([A-Z][A-Za-z0-9\s\/\-]{3,50}?)(?:\s+to\b|\s+who\b|\s+with\b|[,\n])/);
+    if (m) {
+      const t = cleanJdTitleCandidate(m[1]);
+      if (t) return t;
+    }
+    const skipRe = /^(about|why join|why you|who we|job summary|overview|description|we are|our purpose|responsibilities|requirements|qualifications|essential|general purpose|benefits|equal opportunity|who we hire|physical demands)/i;
+    for (const line of jd.split('\n').map(l => l.trim()).filter(Boolean).slice(0, 25)) {
+      if (line.length < 4 || line.length > 60 || skipRe.test(line)) continue;
+      if (/\?$/.test(line)) continue; // marketing questions like "Why join us?"
       const w = line.split(/\s+/);
-      if (w.length >= 2 && w.length <= 6 && /^[A-Z]/.test(line)) return line;
+      if (w.length >= 2 && w.length <= 8 && /^[A-Z]/.test(line) && !/herman|miller|knoll|inc\.|llc|corp/i.test(line)) {
+        const t = cleanJdTitleCandidate(line);
+        if (t) return t;
+      }
     }
     return '';
+  }
+
+  function cleanJdTitleCandidate(raw) {
+    if (!raw) return '';
+    let t = raw.replace(/[?!.]+$/g, '').trim();
+    t = t.replace(/^(why join us|about the job|job description)\s*[:\-]?\s*/i, '').trim();
+    if (!t || /^(why join|about|overview|description|qualifications|requirements)$/i.test(t)) return '';
+    if (t.length < 3 || t.length > 70) return '';
+    return t;
   }
 
   function extractDirectTerms(jd) {
@@ -670,7 +689,7 @@
     const improvementSuggestions = [];
     if (primaryMissing.length) improvementSuggestions.push(`Add missing primary keywords to SKILLS: ${primaryMissing.slice(0, 3).join(', ')}`);
     if (bulletLines.length > 0 && bulletsWithNum.length < bulletLines.length) improvementSuggestions.push('Add metrics to bullets without numbers');
-    if (summaryPts < 5 && jdTitle) improvementSuggestions.push(`Open summary with job title: ${extractJdTitle(jd)}`);
+    if (summaryPts < 5) improvementSuggestions.push('Strengthen summary with years of experience and top skills from the resume — avoid JD marketing fluff');
     if (missingSections.length) improvementSuggestions.push(`Add missing sections: ${missingSections.join(', ')}`);
 
     return {
@@ -1202,6 +1221,61 @@
     return appendSkillsToTechnicalLine(tailoredResume, toRestore);
   }
 
+  /**
+   * Strip JD marketing fluff / hiring-company names that models sometimes paste into SUMMARY.
+   */
+  function sanitizeSummaryFluff(resumeText, jd) {
+    if (!resumeText) return resumeText || '';
+    const lines = resumeText.split('\n');
+    let inSummary = false;
+    let summaryStart = -1;
+    let summaryEnd = lines.length;
+
+    for (let i = 0; i < lines.length; i++) {
+      const u = lines[i].trim().toUpperCase();
+      if (/^(SUMMARY|PROFESSIONAL SUMMARY|PROFILE|OBJECTIVE)\b/.test(u) && u.length < 40) {
+        inSummary = true;
+        summaryStart = i + 1;
+        continue;
+      }
+      if (inSummary && /^(SKILLS|TECHNICAL SKILLS|EXPERIENCE|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EDUCATION|PROJECTS|CERTIFICATIONS)\b/.test(u) && u.length < 55) {
+        summaryEnd = i;
+        break;
+      }
+    }
+    if (summaryStart < 0) return resumeText;
+
+    // Employer names often appear in JD headers / signatures
+    const companyHints = [];
+    const jdLines = (jd || '').split('\n').map(l => l.trim()).filter(Boolean).slice(0, 8);
+    for (const jl of jdLines) {
+      if (/herman|miller|knoll|inc\.|llc|corp|company/i.test(jl) && jl.length < 60) {
+        const name = jl.replace(/[^a-zA-Z0-9\s&.\-]/g, '').trim();
+        if (name.length >= 4) companyHints.push(name);
+      }
+    }
+    // Always strip common offenders from this JD family
+    ['HermanMiller', 'Herman Miller', 'MillerKnoll', 'Miller Knoll', 'Why join us', 'Why Join Us', 'About the job', 'About the Job']
+      .forEach(n => companyHints.push(n));
+
+    for (let i = summaryStart; i < summaryEnd; i++) {
+      let line = lines[i];
+      line = line.replace(/^\s*Why join us\??\s*/i, '');
+      line = line.replace(/^\s*About the job\s*/i, '');
+      for (const co of companyHints) {
+        if (!co) continue;
+        const re = new RegExp('\\b' + co.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+        line = line.replace(re, '');
+      }
+      // Fix dangling "at Company" leftovers after company strip
+      line = line.replace(/\bat\s*[.,;:]/gi, '.').replace(/\bat\s*$/i, '');
+      line = line.replace(/\s+at\s+while/gi, ' while').replace(/\s+at\s+to\b/gi, ' to');
+      line = line.replace(/\s{2,}/g, ' ').replace(/\s+([.,;:])/g, '$1').trim();
+      lines[i] = line;
+    }
+    return lines.join('\n');
+  }
+
   function appendSkillsToTechnicalLine(resumeText, skillsToAdd) {
     if (!skillsToAdd.length) return resumeText;
     const lines = resumeText.split('\n');
@@ -1291,6 +1365,7 @@
     extractSkillsFromResume,
     compareSkills,
     preserveRelatedSkills,
+    sanitizeSummaryFluff,
     familiesForSkill,
   };
 

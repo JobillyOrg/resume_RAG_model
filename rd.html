@@ -1458,10 +1458,10 @@ MISSION — hit ${SCORE_TAILOR_THRESHOLD}+ on the FIRST tailor pass:
 You still write like a human career coach — not robotic keyword soup — but keyword coverage for ${SCORE_TAILOR_THRESHOLD}+ is mandatory.
 
 BEFORE YOU WRITE — think through these 5 questions:
-1. What is the exact job title in the JD? Mirror it precisely.
-2. What seniority level does this candidate appear to be? (Junior / Mid / Senior / Director / VP) — match tone accordingly.
+1. What professional title best fits the candidate from their resume skills + experience (aligned to the JD role, but grounded in their background)?
+2. What seniority level does this candidate appear to be? Match tone accordingly.
 3. What is the single most impressive thing this candidate has done? Lead with it in the summary.
-4. What career story does this resume tell? Each role should build logically toward the target role.
+4. What career story does this resume tell from their real experience?
 5. Which JD keywords are still missing — and how will every one land in Skills + bullets?
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1490,6 +1490,7 @@ BANNED WORDS AND PHRASES (never use any of these):
 - "dynamic", "results-driven", "passionate", "self-starter", "go-getter", "team player"
 - "detail-oriented", "hard-working", "fast-paced environment", "wore many hats"
 - Any phrase that starts with "I" or "My"
+- JD MARKETING / EMPLOYER FLUFF (never put in SUMMARY or anywhere on the resume): "Why join us", "About the job", "Who We Hire", hiring-company names (e.g. HermanMiller, MillerKnoll), "mission-critical transformation at [Company]", employer taglines
 
 WRITE INSTEAD:
 - Concrete actions with real context: what problem existed, what you specifically did, what changed
@@ -1591,11 +1592,15 @@ RULE 7 — KEYWORD EMBEDDING (mandatory for first-pass ${SCORE_TAILOR_THRESHOLD}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 8 — SECTION QUALITY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SUMMARY (3-4 sentences — this is your 10-second pitch):
-- S1: [Exact JD title] with X years building/leading/delivering [top 2-3 genuine strengths]
-- S2: Single most impressive quantified achievement — make it specific and concrete
-- S3: Second strongest proof point or a pattern of success across roles
-- S4: What you uniquely bring to THIS role/company (reference something specific from the JD)
+SUMMARY (3-4 sentences — candidate skills & experience ONLY):
+- Write ONLY from the candidate's real skills, tools, years, and achievements on the original resume
+- S1: [Professional title aligned to candidate background] with X years + top 2-3 genuine strengths/skills from their experience
+- S2: Strongest quantified achievement from their real work history
+- S3: Second proof point or skill pattern across roles (technologies / domains they actually used)
+- S4: How their existing skills map to this role's needs — skills/tools language only
+- NEVER start with or include JD marketing text ("Why join us?", "About the job", employer slogans)
+- NEVER name the hiring company (HermanMiller, MillerKnoll, etc.) in the Summary
+- NEVER paste JD preamble into the Summary — analyse skills + experience and write that only
 
 SKILLS — use EXACTLY these 4 sub-labels, no others:
    Technical Skills: comma-separated — LEAD with EVERY primary JD keyword, then secondary JD keywords, then matching original hard skills
@@ -1666,7 +1671,7 @@ FINAL SILENT CHECK — verify before outputting:
 =======================================================
 [ ] First line is the candidate's name only — nothing else
 [ ] Line 2 is the professional headline copied EXACTLY from the master resume — not the JD title
-[ ] Summary opens with exact JD job title
+[ ] Summary is skills/experience only — NO "Why join us", NO hiring company name, NO JD marketing fluff
 [ ] ROLE COUNT CHECK: count roles in original resume → confirm same number of roles appear in output — if any are missing, add them before outputting
 [ ] EXPERIENCE JOB TITLES: every role's job title matches the master resume exactly — NOT the JD title (e.g. "Software Engineer Analyst" stays "Software Engineer Analyst")
 [ ] EXPERIENCE COMPANY NAMES: every company name copied exactly — no abbreviations or expansions
@@ -1806,6 +1811,9 @@ async function runAnalysis() {
     let tailoredResume = await callClaude(buildRewritePrompt(jd, resume, keywords, ragContext), 0.35, 6000);
     if (RAGEngine.preserveRelatedSkills) {
       tailoredResume = RAGEngine.preserveRelatedSkills(resume, tailoredResume, jd);
+    }
+    if (RAGEngine.sanitizeSummaryFluff) {
+      tailoredResume = RAGEngine.sanitizeSummaryFluff(tailoredResume, jd);
     }
     state.tailoredResume = tailoredResume;
 
@@ -2314,9 +2322,13 @@ async function boostScore(opts = {}) {
       boostBtn.textContent = `⏳ Boost ${pass}/${MAX_BOOST_PASSES}...`;
 
       const boostedResume = await callClaude(buildBoostPrompt(jd, sc, atsScore2), 0.25, 6000);
-      state.tailoredResume = RAGEngine.preserveRelatedSkills
+      let cleaned = RAGEngine.preserveRelatedSkills
         ? RAGEngine.preserveRelatedSkills(orig, boostedResume, jd)
         : boostedResume;
+      if (RAGEngine.sanitizeSummaryFluff) {
+        cleaned = RAGEngine.sanitizeSummaryFluff(cleaned, jd);
+      }
+      state.tailoredResume = cleaned;
       document.getElementById('outputArea').textContent = state.tailoredResume;
 
       renderSkillsCompare(RAGEngine.compareSkills(orig, state.tailoredResume));
