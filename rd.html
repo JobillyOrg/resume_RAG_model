@@ -394,9 +394,12 @@
       color: var(--jb-ink-secondary);
       box-shadow: var(--neo-inset);
     }
-    .eligibility-banner.eligible { background: var(--jb-success-soft); color: var(--jb-success-text); }
-    .eligibility-banner.ineligible { background: var(--jb-danger-soft); color: var(--jb-danger); }
-    .eligibility-banner.unknown { color: var(--jb-ink-muted); }
+    .eligibility-banner.eligible,
+    .eligibility-banner.suitable { background: var(--jb-success-soft); color: var(--jb-success-text); }
+    .eligibility-banner.ineligible,
+    .eligibility-banner.unsuitable { background: var(--jb-danger-soft); color: var(--jb-danger); }
+    .eligibility-banner.unknown,
+    .eligibility-banner.partial { background: var(--jb-warning-soft, #fff7ed); color: var(--jb-warning, #b45309); }
     .eligibility-banner strong { display: block; font-size: 14px; margin-bottom: 4px; color: var(--jb-ink); }
 
     .skills-compare-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
@@ -590,6 +593,7 @@
   <!-- FREE ATS RESULT PANEL -->
   <div id="freeAtsPanel" class="hidden card" style="margin-bottom:20px;">
     <div class="card-title">🔍 ATS Score Analysis</div>
+    <div id="freeJdFit"></div>
     <div id="freeExpEligibility"></div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;" id="freeScoreGrid">
       <div class="score-card">
@@ -641,6 +645,7 @@
 
   <!-- SCORE CARDS -->
   <div id="scoreSection" class="hidden">
+    <div id="resultsJdFit"></div>
     <div id="resultsExpEligibility"></div>
     <div class="score-grid">
       <div class="score-card">
@@ -780,6 +785,7 @@ let state = {
   filename: '',
   experienceAnalysis: null,
   skillsCompare: null,
+  jdFit: null,
 };
 
 // Simple djb2 hash — converts a JD string into a short stable key for localStorage
@@ -874,6 +880,10 @@ function parseKeywordJson(kwRaw) {
     keywords.primary   = flat.slice(0, 10);
     keywords.secondary = flat.slice(10, 20);
   }
+  // Drop job titles/roles — primary/secondary must be technical skills only
+  if (RAGEngine.sanitizeKeywordPayload) {
+    return RAGEngine.sanitizeKeywordPayload(keywords, 'gemini');
+  }
   return keywords;
 }
 
@@ -895,11 +905,22 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
 
   const expAnalysis = RAGEngine.analyzeExperienceEligibility(jd, resume);
   state.experienceAnalysis = expAnalysis;
+  const jdFit = RAGEngine.analyzeJdSuitability
+    ? RAGEngine.analyzeJdSuitability(jd, resume, primary, secondary, aliasMap)
+    : null;
+  state.jdFit = jdFit;
   const expClass = expAnalysis.status === 'eligible' ? 'sc-green'
     : expAnalysis.status === 'ineligible' ? 'sc-red' : 'sc-yellow';
   const expLabel = expAnalysis.status === 'eligible' ? `Eligible · ~${expAnalysis.candidateYears} yrs`
     : expAnalysis.status === 'ineligible' ? `Not eligible · ${expAnalysis.candidateYears}/${expAnalysis.jdYears} yrs`
     : `~${expAnalysis.candidateYears} yrs (JD req. not detected)`;
+  const fitClass = jdFit?.status === 'suitable' ? 'sc-green'
+    : jdFit?.status === 'unsuitable' ? 'sc-red' : 'sc-yellow';
+  const fitLabel = jdFit
+    ? (jdFit.status === 'suitable' ? `Suitable · ${jdFit.matchPct}% skills`
+      : jdFit.status === 'unsuitable' ? `Not suitable · ${jdFit.matchPct}% skills`
+      : `Partial · ${jdFit.matchPct}% skills`)
+    : '—';
 
   // Score tiles
   const freeScoreEl = document.getElementById('freeAtsScore');
@@ -959,6 +980,7 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
     <div class="scorecard-row"><span class="sc-label">Summary Alignment (5 pts max)</span><span class="sc-value ${summaryPts >= 4 ? 'sc-green' : summaryPts >= 2 ? 'sc-yellow' : 'sc-red'}">${summaryPts} pts</span></div>
     <div class="scorecard-row"><span class="sc-label">Format Compliance (5 pts max)</span><span class="sc-value ${fmtCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts} pts · ${fmtCheck}${fmtIssues.length ? ' — ' + fmtIssues.join('; ') : ''}</span></div>
     <div class="scorecard-row"><span class="sc-label">Section Completeness (5 pts max)</span><span class="sc-value ${missingSections.length === 0 ? 'sc-green' : 'sc-yellow'}">${sectionPts} pts${missingSections.length ? ' · Missing: ' + missingSections.join(', ') : ' · All sections present'}</span></div>
+    <div class="scorecard-row"><span class="sc-label">JD Suitability (first check)</span><span class="sc-value ${fitClass}">${fitLabel}</span></div>
     <div class="scorecard-row"><span class="sc-label">Experience Eligibility</span><span class="sc-value ${expClass}">${expLabel}</span></div>
   `;
 
@@ -978,6 +1000,15 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
     });
   }
 
+  // Suitability is a warning only — AI Tailor is never blocked
+  if (jdFit?.status === 'unsuitable') {
+    gapsDiv.innerHTML = `
+      <div class="gap-item critical" style="margin-bottom:10px;">
+        <strong>⚠️ Weak JD fit — proceed with caution</strong><br>
+        ${jdFit.message}<br>
+        <span style="opacity:0.9;">AI Tailor is still available; it cannot invent missing career-domain experience.</span>
+      </div>` + gapsDiv.innerHTML;
+  }
   if (atsScore < SCORE_TAILOR_THRESHOLD) {
     gapsDiv.innerHTML += `
       <div style="margin-top:16px;padding-top:14px;border-top:1px solid #334155;">
@@ -986,6 +1017,7 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
       </div>`;
   }
 
+  renderJdFit('freeJdFit', jdFit);
   renderExperienceEligibility('freeExpEligibility', expAnalysis);
 
   if (expAnalysis.status === 'ineligible') {
@@ -1000,7 +1032,12 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
   document.getElementById('freeAtsPanel').classList.remove('hidden');
   document.getElementById('freeAtsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  showToast(`✅ ATS Score: ${atsScore}/100 · ${primaryFound.length}/${primary.length} keywords matched`, atsColour);
+  const fitToast = jdFit?.status === 'unsuitable'
+    ? `⛔ Not suitable for this JD · ${jdFit.matchPct}% skill overlap`
+    : jdFit?.status === 'suitable'
+      ? `✅ Suitable for JD · ATS ${atsScore}/100 · ${primaryFound.length}/${primary.length} keywords`
+      : `⚠️ Partial JD fit · ATS ${atsScore}/100 · ${primaryFound.length}/${primary.length} keywords`;
+  showToast(fitToast, jdFit?.status === 'unsuitable' ? '#ef4444' : atsColour);
 }
 // ─── END FREE ATS CHECK / SCORING ENGINE ──────────────────────────
 
@@ -1067,6 +1104,32 @@ function switchTab(name, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
   if (btn) btn.classList.add('active');
+}
+
+function renderJdFit(containerId, fit) {
+  const el = document.getElementById(containerId);
+  if (!el || !fit) { if (el) el.innerHTML = ''; return; }
+
+  const cls = fit.status === 'suitable' ? 'suitable'
+    : fit.status === 'unsuitable' ? 'unsuitable' : 'partial';
+  const icon = fit.status === 'suitable' ? '✅'
+    : fit.status === 'unsuitable' ? '⛔' : '⚠️';
+
+  const missingHint = fit.primaryMissing?.length
+    ? `<br><span style="opacity:0.9;">Missing primary skills: ${fit.primaryMissing.slice(0, 6).map(k => `<strong>${k}</strong>`).join(', ')}${fit.primaryMissing.length > 6 ? '…' : ''}</span>`
+    : '';
+
+  el.innerHTML = `
+    <div class="eligibility-banner ${cls}" style="margin-bottom:12px;">
+      <strong>${icon} JD Fit Check (first): ${fit.title}</strong>
+      Technical overlap: <strong>${fit.primaryFound.length}/${fit.primaryTotal}</strong> primary skills (${fit.matchPct}%)
+      ${fit.experience?.status === 'eligible' ? ' · Experience: eligible' : ''}
+      ${fit.experience?.status === 'ineligible' ? ` · Experience: short (${fit.experience.candidateYears}/${fit.experience.jdYears}+ yrs)` : ''}
+      <br>${fit.message}
+      ${fit.detail ? `<br><span style="opacity:0.9;">${fit.detail}</span>` : ''}
+      ${missingHint}
+      ${fit.status === 'unsuitable' ? '<br><span style="opacity:0.95;">You can still run AI Tailor — results may be limited if core domain skills are missing.</span>' : ''}
+    </div>`;
 }
 
 function renderExperienceEligibility(containerId, analysis) {
@@ -1201,8 +1264,10 @@ function buildAtsCheckKeywordPrompt(jd) {
   return `Extract exactly 20 ATS keywords from this job description for resume scoring.
 
 Rules:
-- primary: top 10 hard skills, tools, technologies, and job title — must-have for the role
-- secondary: next 10 nice-to-have skills, methodologies, platforms
+- primary: top 10 TECHNICAL skills only — languages, frameworks, tools, platforms, libraries, protocols (e.g. Python, REST API, LLM, CI/CD, Kafka, Java)
+- secondary: next 10 technical nice-to-haves — methodologies, adjacent tools, platforms, certifications that are technical
+- NEVER include job titles or roles (e.g. "Software Engineer", "AI Engineer", "Data Scientist", "Developer", "Administrator")
+- NEVER include seniority words alone ("Senior", "Lead", "cross-functional")
 - Skills and tools ONLY — no locations, no soft phrases like "hybrid position", "manual effort", "delivery", "quality outcomes"
 - Use exact spelling/casing from the JD
 - Prefer specific terms (e.g. "LangChain" not "framework", "Python" not "programming")
@@ -1219,20 +1284,23 @@ function buildKeywordPrompt(jd) {
 
 Think step by step:
 1. Read the full job description carefully
-2. Identify the role title, required skills, preferred skills, tools, certifications, and methodologies
-3. Separate must-have (primary) keywords from nice-to-have (secondary) keywords
+2. Identify required TECHNICAL skills, preferred tools, platforms, libraries, protocols, and methodologies
+3. Separate must-have (primary) technical keywords from nice-to-have (secondary) technical keywords
+4. IGNORE the job/role title itself — do not put titles into the keyword lists
 
 Then extract exactly 20 ATS keywords split into two tiers.
 
 Rules:
 - Return ONLY a valid JSON object — no explanation, no markdown
 - Prefer exact multi-word phrases over single generic words (e.g. "data pipeline" not "pipeline")
-- Include job title keywords, hard skills, tools, platforms, certifications, and methodologies
-- Include seniority signals if present (e.g. "senior", "lead", "cross-functional")
+- TECHNICAL skills/tools ONLY — languages, frameworks, libraries, cloud, databases, APIs, DevOps tools, ML stacks, certifications that are technical
+- NEVER include job titles or roles (reject: "Software Engineer", "AI Engineer", "Backend Developer", "Data Scientist", "QA Engineer", "Administrator", etc.)
+- NEVER include seniority-only tokens ("senior", "lead", "cross-functional")
+- Domain phrases like "Data Engineering" or "Cloud Architecture" are OK; role titles like "Data Engineer" or "Cloud Architect" are NOT
 - Include synonyms/variations the JD uses (e.g. "ML" and "machine learning" count as separate entries)
 - Use the exact spelling and casing from the JD
-- primary: top 10 — hiring-decision critical, MUST appear in resume
-- secondary: next 10 — differentiating skills, SHOULD appear where possible
+- primary: top 10 technical must-haves — MUST appear in resume skills
+- secondary: next 10 technical differentiators — SHOULD appear where possible
 
 Job Description:
 ${jd}
@@ -1781,19 +1849,17 @@ async function runAnalysis() {
   document.getElementById('scoreSection').classList.add('hidden');
   document.getElementById('resultsSection').classList.add('hidden');
   document.getElementById('progressSection').classList.remove('hidden');
-  setLoading('Calling Gemini AI...');
+  setLoading('Checking JD suitability...');
   setStep(2);
 
   try {
-    // ── STEP 1: KEYWORD EXTRACTION (RAG — no API) ─────────────────
-    setProgress(10, 'Extracting keywords via local RAG...', 'BM25 retrieval from skill knowledge base...');
-    setLoading('RAG keyword extraction...');
-
+    // ── STEP 0: SUITABILITY GATE (before rewrite) ─────────────────
+    setProgress(5, 'Checking if resume is suitable for this JD...', 'Skill overlap + experience gate...');
     let keywords;
     if (USE_RAG) {
       keywords = await RAGEngine.getKeywords(jd, state.keywords);
       if (GEMINI_KEYWORD_FALLBACK && keywords.primary.length < 3) {
-        setProgress(15, 'RAG low confidence — Gemini fallback...', '');
+        setProgress(12, 'RAG low confidence — Gemini fallback...', '');
         const kwRaw = await callClaude(buildKeywordPrompt(jd), 0.3, 512);
         keywords = parseKeywordJson(kwRaw);
       }
@@ -1802,7 +1868,29 @@ async function runAnalysis() {
       keywords = parseKeywordJson(kwRaw);
     }
     state.keywords = keywords;
-    setProgress(30, `✓ RAG extracted ${keywords.primary.length} primary + ${keywords.secondary.length} secondary keywords: ${keywords.primary.slice(0,3).join(', ')}...`, 'Keywords ready — zero API cost');
+
+    const jdFit = RAGEngine.analyzeJdSuitability
+      ? RAGEngine.analyzeJdSuitability(jd, resume, keywords.primary, keywords.secondary, keywords.aliasMap)
+      : { status: 'suitable', allowTailor: true, message: '', matchPct: 100, primaryFound: [], primaryTotal: keywords.primary.length };
+    state.jdFit = jdFit;
+    state.experienceAnalysis = jdFit.experience || RAGEngine.analyzeExperienceEligibility(jd, resume);
+
+    // Show fit banner early (warning only — never blocks tailor)
+    document.getElementById('freeAtsPanel').classList.remove('hidden');
+    renderJdFit('freeJdFit', jdFit);
+    if (state.experienceAnalysis) renderExperienceEligibility('freeExpEligibility', state.experienceAnalysis);
+    if (jdFit.status === 'unsuitable' || jdFit.status === 'partial') {
+      showToast(
+        jdFit.status === 'unsuitable'
+          ? `⚠️ Weak JD fit (${jdFit.matchPct}%) — continuing AI Tailor`
+          : `⚠️ Partial JD fit (${jdFit.matchPct}%) — continuing AI Tailor`,
+        '#fbbf24'
+      );
+    }
+
+    // ── STEP 1: KEYWORD EXTRACTION DONE ───────────────────────────
+    setLoading('Calling Gemini AI...');
+    setProgress(30, `✓ JD fit: ${jdFit.status} · ${keywords.primary.length} primary + ${keywords.secondary.length} secondary keywords: ${keywords.primary.slice(0,3).join(', ')}...`, 'Keywords ready — zero API cost');
 
     // ── STEP 2: RESUME REWRITE ────────────────────────────────
     // Pre-extract role count so we can show it in the progress bar and validate output
@@ -1875,6 +1963,11 @@ async function runAnalysis() {
 
     const expAnalysis = RAGEngine.analyzeExperienceEligibility(jd, resume);
     state.experienceAnalysis = expAnalysis;
+    const postFit = RAGEngine.analyzeJdSuitability
+      ? RAGEngine.analyzeJdSuitability(jd, tailoredResume, keywords.primary, keywords.secondary || [], aliasMap)
+      : state.jdFit;
+    state.jdFit = postFit;
+    renderJdFit('resultsJdFit', postFit);
     renderExperienceEligibility('resultsExpEligibility', expAnalysis);
 
     const skillsCmp = RAGEngine.compareSkills(resume, tailoredResume);
@@ -2118,6 +2211,11 @@ function resetAndRun() {
   document.getElementById('gapsContent').innerHTML = '';
   document.getElementById('freeExpEligibility').innerHTML = '';
   document.getElementById('resultsExpEligibility').innerHTML = '';
+  const freeFit = document.getElementById('freeJdFit');
+  if (freeFit) freeFit.innerHTML = '';
+  const resultsFit = document.getElementById('resultsJdFit');
+  if (resultsFit) resultsFit.innerHTML = '';
+  state.jdFit = null;
   renderSkillsCompare(null);
   document.getElementById('suggestedFilename').textContent = '';
   document.getElementById('filenameReason').textContent = '';

@@ -297,22 +297,81 @@
 
   const KEYWORD_EXPANSIONS = {
     'retrieval augmented generation': ['RAG'],
+    'rag': ['retrieval augmented generation', 'retrieval-augmented generation'],
     'large language model': ['LLM', 'LLMs'],
     'llms': ['LLM', 'Large Language Model'],
-    'llm': ['LLMs', 'Large Language Model'],
+    'llm': ['LLMs', 'Large Language Model', 'large language models'],
     'natural language processing': ['NLP'],
-    'ci/cd': ['CI/CD', 'CICD', 'continuous integration'],
-    'rest apis': ['REST API', 'RESTful'],
-    'rest api': ['REST APIs', 'RESTful'],
+    'nlp': ['natural language processing'],
+    'machine learning': ['ML', 'ML models'],
+    'ml': ['machine learning'],
+    'deep learning': ['neural networks', 'neural network'],
+    'ci/cd': ['CI/CD', 'CICD', 'CI-CD', 'continuous integration', 'continuous delivery', 'continuous deployment'],
+    'cicd': ['CI/CD', 'CI-CD', 'continuous integration'],
+    'rest apis': ['REST API', 'RESTful', 'RESTful APIs', 'REST'],
+    'rest api': ['REST APIs', 'RESTful', 'RESTful API', 'REST'],
+    'restful': ['REST', 'REST API', 'REST APIs'],
+    'html/css': ['HTML', 'CSS', 'HTML5', 'CSS3', 'HTML / CSS'],
+    'html': ['HTML5', 'HTML/CSS'],
+    'css': ['CSS3', 'HTML/CSS'],
+    'javascript': ['JS', 'ECMAScript', 'ES6', 'TypeScript'],
+    'typescript': ['TS', 'JavaScript'],
+    'node.js': ['NodeJS', 'Node', 'nodejs'],
+    'nodejs': ['Node.js', 'Node'],
+    'react': ['React.js', 'ReactJS', 'React.js'],
+    'react.js': ['React', 'ReactJS'],
+    'next.js': ['NextJS', 'Next'],
+    'vue': ['Vue.js', 'VueJS'],
+    'angular': ['AngularJS', 'Angular.js'],
+    '.net': ['dotnet', 'ASP.NET', 'C#'],
+    'c#': ['CSharp', 'C Sharp', '.NET'],
+    'c++': ['CPP', 'C plus plus'],
+    'postgresql': ['Postgres', 'Postgre SQL'],
+    'postgres': ['PostgreSQL'],
+    'mongodb': ['Mongo', 'Mongo DB'],
+    'kubernetes': ['K8s', 'K8S'],
+    'k8s': ['Kubernetes'],
+    'aws': ['Amazon Web Services', 'Amazon AWS'],
+    'amazon web services': ['AWS'],
+    'gcp': ['Google Cloud', 'Google Cloud Platform'],
+    'google cloud': ['GCP', 'Google Cloud Platform'],
+    'azure': ['Microsoft Azure'],
+    'docker': ['containers', 'containerization', 'Dockerfile'],
+    'terraform': ['IaC', 'Infrastructure as Code'],
+    'infrastructure as code': ['IaC', 'Terraform'],
+    'kafka': ['Apache Kafka', 'event streaming'],
+    'apache kafka': ['Kafka'],
+    'spark': ['Apache Spark'],
+    'apache spark': ['Spark'],
+    'airflow': ['Apache Airflow'],
+    'pytorch': ['PyTorch', 'Torch'],
+    'tensorflow': ['TF', 'Tensor Flow'],
+    'scikit-learn': ['sklearn', 'scikit learn'],
+    'sklearn': ['scikit-learn'],
     'qa automation': ['test automation', 'automated testing', 'QA'],
-    'ai engineer': ['AI Engineer', 'ML Engineer', 'machine learning engineer'],
+    'test automation': ['QA automation', 'automated testing'],
     'langchain': ['LangChain', 'LangGraph'],
-    'langgraph': ['LangGraph'],
-    'openai': ['OpenAI', 'GPT', 'ChatGPT'],
+    'langgraph': ['LangGraph', 'LangChain'],
+    'autogen': ['AutoGen', 'Microsoft AutoGen', 'multi-agent'],
+    'openai': ['OpenAI', 'GPT', 'ChatGPT', 'OpenAI API'],
+    'openai api': ['OpenAI', 'GPT'],
     'databricks': ['Databricks', 'Apache Spark'],
-    'embeddings': ['embedding', 'vector embedding'],
-    'software engineering': ['software development', 'software engineer'],
-    'code generation': ['generative AI', 'GitHub Copilot'],
+    'embeddings': ['embedding', 'vector embedding', 'vector embeddings'],
+    'vector database': ['vector db', 'vector store', 'embeddings'],
+    'software engineering': ['software development'],
+    'code generation': ['generative AI', 'GitHub Copilot', 'Copilot'],
+    'github actions': ['GH Actions', 'CI/CD'],
+    'power bi': ['PowerBI', 'Power Bi'],
+    'powerbi': ['Power BI'],
+    'sql': ['T-SQL', 'PL/SQL', 'PostgreSQL', 'MySQL'],
+    'pl/sql': ['PLSQL', 'Oracle PL/SQL', 'SQL'],
+    'plsql': ['PL/SQL'],
+    'oracle': ['Oracle DB', 'Oracle Database'],
+    'microservices': ['micro-services', 'microservice architecture'],
+    'graphql': ['Graph QL'],
+    'fastapi': ['Fast API'],
+    'spring boot': ['SpringBoot', 'Spring'],
+    'unit testing': ['unit tests', 'unittest', 'Jest', 'JUnit', 'pytest'],
   };
 
   const STOP_TERMS = new Set([
@@ -438,12 +497,58 @@
     return t;
   }
 
+  /**
+   * Job titles / roles must NOT enter primary/secondary keyword lists.
+   * Keep technical domains ("Data Engineering", "Cloud Architecture") — drop role titles ("Data Engineer", "AI Engineer").
+   */
+  function isJobRoleKeyword(term) {
+    const t = (term || '').trim();
+    if (!t) return true;
+    const lower = t.toLowerCase().replace(/\s+/g, ' ');
+    if (lower.length < 2) return true;
+    if (/^(senior|junior|staff|principal|lead|mid-level|entry[- ]level|cross-functional|we|our|us|soft|hard|new|old|ai|ml)$/i.test(lower)) return true;
+    // Domain phrases (keep) — e.g. Data Engineering, Cloud Architecture
+    if (/\b(engineering|architecture|management|analysis|administration|development)\b/.test(lower) &&
+        !/\b(engineers?|developers?|architects?|managers?|analysts?|administrators?|admins?)\b/.test(lower)) {
+      return false;
+    }
+    // Role / job-title nouns (drop)
+    if (/\b(engineers?|developers?|architects?|analysts?|managers?|scientists?|administrators?|admins?|consultants?|specialists?|directors?|coordinators?|owners?|associates?|interns?|writers?|recruiters?|teachers?|nurses?|designers?)\b/.test(lower)) {
+      return true;
+    }
+    // Known role labels from KB that are titles, not tools
+    if (/^(software engineer|qa engineer|ai engineer|business analyst|product manager|scrum master|data scientist|data analyst|program management|technical writer|research scientist)$/i.test(lower)) {
+      return true;
+    }
+    return false;
+  }
+
+  function filterTechnicalKeywords(list, limit = 10) {
+    const out = [];
+    for (const kw of list || []) {
+      if (!kw || typeof kw !== 'string') continue;
+      const cleaned = kw.trim();
+      if (!cleaned || cleaned.length < 2) continue;
+      if (STOP_TERMS.has(cleaned.toLowerCase())) continue;
+      if (isJobRoleKeyword(cleaned)) continue;
+      // Drop soft/generic non-tech fluff that sometimes leaks from JD prose
+      if (/^(communication|leadership|teamwork|collaboration|problem solving|critical thinking)$/i.test(cleaned)) continue;
+      if (/^(hiring|experience|experiences?|requirements?|responsibilities|qualifications?|about|overview)$/i.test(cleaned)) continue;
+      if (/[.!?]$/.test(cleaned) && cleaned.split(/\s+/).length <= 2) continue;
+      if (out.some(u => u.toLowerCase() === cleaned.toLowerCase())) continue;
+      out.push(cleaned);
+      if (out.length >= limit) break;
+    }
+    return out;
+  }
+
   function extractDirectTerms(jd) {
     const found = new Map();
     const add = (term, weight) => {
       const t = term.trim();
       if (t.length < 2 || t.length > 50) return;
       if (STOP_TERMS.has(t.toLowerCase())) return;
+      if (isJobRoleKeyword(t)) return;
       const key = t.toLowerCase();
       found.set(key, { term: t, weight: (found.get(key)?.weight || 0) + weight });
     };
@@ -519,13 +624,13 @@
       }
     }
 
-    // Job title as high-priority keyword
+    // Keep JD title for summary scoring only — never as a primary/secondary keyword
     const title = extractJdTitle(jd);
-    if (title) scored.set(title, (scored.get(title) || 0) + 20);
 
     const ranked = [...scored.entries()]
       .sort((a, b) => b[1] - a[1])
-      .map(([label]) => label);
+      .map(([label]) => label)
+      .filter(label => !isJobRoleKeyword(label));
 
     // Dedupe similar
     const unique = [];
@@ -535,18 +640,19 @@
       unique.push(kw);
     }
 
-    const primary = unique.slice(0, 10);
-    const secondary = unique.slice(10, 20);
+    let primary = filterTechnicalKeywords(unique, 10);
+    let secondary = filterTechnicalKeywords(unique.filter(k => !primary.some(p => p.toLowerCase() === k.toLowerCase())), 10);
 
     // Pad from direct terms if short
     if (primary.length < 8) {
       for (const { term } of extractDirectTerms(jd)) {
         if (primary.length >= 10) break;
+        if (isJobRoleKeyword(term)) continue;
         if (!primary.some(p => p.toLowerCase() === term.toLowerCase())) primary.push(term);
       }
     }
 
-    const aliasMap = Object.fromEntries([...primary, ...secondary].map(k => [k, [k]]));
+    const aliasMap = buildAliasMap([...primary, ...secondary]);
 
     return {
       primary,
@@ -560,32 +666,101 @@
   }
 
   // ─── KEYWORD MATCHING (shared with ATS score) ───────────────────
+  function normalizeResumeForMatch(text) {
+    return String(text || '')
+      .replace(/[\u2018\u2019\u201A\u201B]/g, "'")
+      .replace(/[\u201C\u201D\u201E\u2033]/g, '"')
+      .replace(/[\u2013\u2014\u2212]/g, '-')
+      .replace(/[\u00A0\u200B\u200C\u200D\uFEFF\u202F]/g, ' ')
+      // Normalize fancy bullets so paste-from-Word still looks like skill/bullet text
+      .replace(/[\u2022\u2023\u25E6\u2043\u2219\u25AA\u25CF\u25C6●•‣▸▶►○◦]/g, '- ')
+      .replace(/[\/\\|]+/g, '/') // collapse odd separators toward slash form
+      .replace(/\s+/g, ' ');
+  }
+
   function kwInText(kw, text) {
-    const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    return new RegExp('(?<![a-zA-Z0-9])' + escaped + '(?![a-zA-Z0-9])', 'i').test(text);
+    const escaped = String(kw).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Allow flexible whitespace / hyphen / slash between tokens (Node.js ~ Node js)
+    const flexible = escaped
+      .replace(/\\\//g, '[\\\\/\\s.-]+')
+      .replace(/\\-/g, '[\\\\/\\s.-]+')
+      .replace(/\\\s+/g, '[\\\\s./-]+');
+    return new RegExp('(?<![a-zA-Z0-9])' + flexible + '(?![a-zA-Z0-9])', 'i').test(text);
   }
 
   function expandKeyword(kw) {
-    const forms = [kw];
-    const k = kw.trim();
+    const forms = new Set();
+    const add = (v) => {
+      const t = String(v || '').trim();
+      if (t.length >= 2) forms.add(t);
+    };
+    const k = String(kw || '').trim();
+    add(k);
+    add(k.replace(/\./g, ''));           // Node.js → Nodejs
+    add(k.replace(/[/-]/g, ' '));        // CI/CD → CI CD
+    add(k.replace(/[/-]/g, ''));         // CI/CD → CICD
+    add(k.replace(/\s+/g, ''));          // Power BI → PowerBI
+
     const trailingWords = /\s+(pipelines?|models?|tools?|frameworks?|systems?|apis?|services?|techniques?|methods?|practices?|processes?|solutions?|platforms?|technologies?|stacks?)$/i;
     const stripped = k.replace(trailingWords, '').trim();
-    if (stripped !== k && stripped.length > 1) {
-      forms.push(stripped);
-      const sl = stripped.toLowerCase();
-      if (KEYWORD_EXPANSIONS[sl]) forms.push(...KEYWORD_EXPANSIONS[sl]);
+    if (stripped !== k) add(stripped);
+
+    if (/s$/i.test(k) && k.length > 3 && !/ss$/i.test(k)) add(k.slice(0, -1));
+    if (!/s$/i.test(k) && k.length > 2) add(k + 's');
+
+    // Slash compounds: HTML/CSS → also try HTML + CSS (both must appear)
+    if (k.includes('/')) {
+      k.split('/').map(p => p.trim()).filter(Boolean).forEach(add);
     }
-    if (/s$/i.test(k) && k.length > 3) forms.push(k.slice(0, -1));
-    const lower = k.toLowerCase();
-    if (KEYWORD_EXPANSIONS[lower]) forms.push(...KEYWORD_EXPANSIONS[lower]);
-    return forms;
+
+    const seed = [...forms];
+    for (const form of seed) {
+      const lower = form.toLowerCase();
+      if (KEYWORD_EXPANSIONS[lower]) KEYWORD_EXPANSIONS[lower].forEach(add);
+      // Also lookup compacted / spaced variants
+      const compact = lower.replace(/[\s./-]+/g, '');
+      for (const [key, vals] of Object.entries(KEYWORD_EXPANSIONS)) {
+        if (key.replace(/[\s./-]+/g, '') === compact) vals.forEach(add);
+      }
+    }
+    return [...forms];
+  }
+
+  function slashPartsPresent(kw, text) {
+    if (!kw.includes('/')) return false;
+    const parts = kw.split('/').map(p => p.trim()).filter(p => p.length >= 2);
+    if (parts.length < 2) return false;
+    // Count compound keyword as found when every part appears somewhere (common in Skills lists)
+    return parts.every(p => kwInText(p, text) || expandKeyword(p).some(f => kwInText(f, text)));
   }
 
   function kwOrAliasInText(canonical, text, aliasMap) {
-    const aliases = aliasMap[canonical] || [canonical];
+    const normalized = normalizeResumeForMatch(text);
+    const aliases = aliasMap?.[canonical] || [canonical];
     const allForms = [];
     aliases.forEach(a => allForms.push(...expandKeyword(a)));
-    return allForms.some(form => kwInText(form, text));
+    if (allForms.some(form => kwInText(form, normalized) || kwInText(form, text))) return true;
+    // Compound skills like HTML/CSS, CI/CD already handled via expansions; also accept split skills
+    if (slashPartsPresent(canonical, normalized) || slashPartsPresent(canonical, text)) return true;
+    return false;
+  }
+
+  /** Attach SKILL_KB term aliases so resume phrasing matches JD labels more often. */
+  function buildAliasMap(keywords) {
+    const map = {};
+    for (const kw of keywords || []) {
+      const forms = new Set(expandKeyword(kw));
+      const kl = String(kw).toLowerCase();
+      for (const skill of SKILL_KB) {
+        const labelL = skill.label.toLowerCase();
+        if (labelL === kl || skill.terms.some(t => t.toLowerCase() === kl || kl.includes(t.toLowerCase()) || t.toLowerCase().includes(kl))) {
+          forms.add(skill.label);
+          skill.terms.forEach(t => forms.add(t));
+        }
+      }
+      map[kw] = [...forms];
+    }
+    return map;
   }
 
   // ─── ATS SCORING ────────────────────────────────────────────────
@@ -822,21 +997,37 @@
     } catch { /* storage unavailable */ }
   }
 
+  function sanitizeKeywordPayload(payload, source) {
+    const primary = filterTechnicalKeywords(payload?.primary || [], 10);
+    const secondary = filterTechnicalKeywords(
+      (payload?.secondary || []).filter(k => !primary.some(p => p.toLowerCase() === String(k).toLowerCase())),
+      10
+    );
+    const aliasMap = buildAliasMap([...primary, ...secondary]);
+    return {
+      ...payload,
+      primary,
+      secondary,
+      aliasMap,
+      source,
+    };
+  }
+
   async function getKeywords(jd, sessionKeywords) {
     if (sessionKeywords?.primary?.length) {
-      return { ...sessionKeywords, source: 'session' };
+      return sanitizeKeywordPayload(sessionKeywords, 'session');
     }
 
-    const key = 'ats_kw_' + jdHash(jd);
+    const key = 'ats_kw_v2_' + jdHash(jd);
     const cached = await cacheGet(key);
     if (cached?.primary?.length) {
-      return { ...cached, source: 'cache' };
+      return sanitizeKeywordPayload(cached, 'cache');
     }
 
     // localStorage fallback (legacy)
     try {
       const ls = JSON.parse(localStorage.getItem(key) || 'null');
-      if (ls?.primary?.length) return { ...ls, source: 'cache' };
+      if (ls?.primary?.length) return sanitizeKeywordPayload(ls, 'cache');
     } catch { /* ignore */ }
 
     const extracted = extractKeywordsRAG(jd);
@@ -1117,6 +1308,96 @@
     };
   }
 
+  /**
+   * First-pass gate: is this resume a reasonable fit for the JD?
+   * Combines technical keyword overlap + years-of-experience eligibility.
+   * Tailoring cannot invent a career domain — unsuitable resumes should be warned early.
+   */
+  function analyzeJdSuitability(jd, resume, primary, secondary, aliasMap) {
+    const prim = Array.isArray(primary) ? primary : [];
+    const sec = Array.isArray(secondary) ? secondary : [];
+    const map = aliasMap || Object.fromEntries([...prim, ...sec].map(k => [k, [k]]));
+    const resumeText = resume || '';
+
+    const primaryFound = prim.filter(k => kwOrAliasInText(k, resumeText, map));
+    const primaryMissing = prim.filter(k => !kwOrAliasInText(k, resumeText, map));
+    const secFound = sec.filter(k => kwOrAliasInText(k, resumeText, map));
+
+    const primaryTotal = Math.max(prim.length, 1);
+    const matchRatio = prim.length === 0 ? 0 : primaryFound.length / prim.length;
+    const matchPct = Math.round(matchRatio * 100);
+
+    let skillLevel = 'poor';
+    if (matchRatio >= 0.4 || primaryFound.length >= 4) skillLevel = 'strong';
+    else if (matchRatio >= 0.2 || primaryFound.length >= 2) skillLevel = 'weak';
+
+    const experience = analyzeExperienceEligibility(jd, resume);
+
+    // Overall suitability
+    let status = 'partial';
+    let suitable = null;
+    let title = 'Partial fit — tailor with care';
+    let message = '';
+    let detail = '';
+
+    if (skillLevel === 'poor') {
+      status = 'unsuitable';
+      suitable = false;
+      title = 'Not suitable for this JD';
+      message = `Resume matches only ${primaryFound.length}/${prim.length || 0} primary technical skills (${matchPct}%). Domain overlap is too low — AI tailor cannot invent missing career skills.`;
+      detail = 'Choose a JD closer to the candidate’s stack, or use a resume that already covers the core technologies.';
+    } else if (experience.status === 'ineligible' && skillLevel !== 'strong') {
+      status = 'unsuitable';
+      suitable = false;
+      title = 'Not suitable — experience + skills gap';
+      message = `Years shortfall (${experience.candidateYears}/${experience.jdYears}+) and weak skill overlap (${primaryFound.length}/${prim.length} primary).`;
+      detail = experience.detail;
+    } else if (skillLevel === 'strong' && experience.status !== 'ineligible') {
+      status = 'suitable';
+      suitable = true;
+      title = 'Suitable for this JD';
+      message = `Strong technical overlap — ${primaryFound.length}/${prim.length} primary skills found (${matchPct}%).` +
+        (experience.status === 'eligible'
+          ? ` Experience also meets the ${experience.jdYears}+ year requirement.`
+          : experience.status === 'unknown'
+            ? ' Years requirement not clearly stated in the JD.'
+            : '');
+      detail = 'Proceed with ATS scoring and AI tailor to close remaining keyword gaps.';
+    } else if (experience.status === 'ineligible' && skillLevel === 'strong') {
+      status = 'partial';
+      suitable = null;
+      title = 'Skills fit, but experience may block';
+      message = `Technical skills look aligned (${primaryFound.length}/${prim.length}), but JD requires ${experience.jdYears}+ years and candidate has ~${experience.candidateYears}.`;
+      detail = 'Tailoring can add keywords but cannot replace required tenure — apply only if the employer is flexible.';
+    } else {
+      status = 'partial';
+      suitable = null;
+      title = 'Partial fit — some skill gaps';
+      message = `Resume matches ${primaryFound.length}/${prim.length} primary technical skills (${matchPct}%). Tailoring can help if the missing skills are truthful stretch/adjacent skills.`;
+      detail = primaryMissing.length
+        ? `Missing primaries: ${primaryMissing.slice(0, 5).join(', ')}${primaryMissing.length > 5 ? '…' : ''}`
+        : 'Close remaining gaps carefully without inventing experience.';
+    }
+
+    return {
+      suitable,
+      status, // suitable | partial | unsuitable
+      title,
+      message,
+      detail,
+      skillLevel,
+      matchPct,
+      primaryFound,
+      primaryMissing,
+      primaryTotal: prim.length,
+      secondaryFoundCount: secFound.length,
+      secondaryTotal: sec.length,
+      experience,
+      allowTailor: true, // never block AI Tailor — fit is advisory only
+      recommendTailor: status === 'suitable' || status === 'partial',
+    };
+  }
+
   // ─── SKILLS EXTRACTION & COMPARE ────────────────────────────────
   const SKILL_SECTION_HEADERS = [
     'SKILLS', 'TECHNICAL SKILLS', 'CORE COMPETENCIES', 'KEY SKILLS',
@@ -1387,11 +1668,15 @@
     SKILL_KB,
     SKILL_FAMILIES,
     analyzeExperienceEligibility,
+    analyzeJdSuitability,
     extractSkillsFromResume,
     compareSkills,
     preserveRelatedSkills,
     sanitizeSummaryFluff,
     familiesForSkill,
+    isJobRoleKeyword,
+    filterTechnicalKeywords,
+    sanitizeKeywordPayload,
   };
 
   global.RAGEngine = RAGEngine;
