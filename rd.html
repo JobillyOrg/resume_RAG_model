@@ -1607,15 +1607,17 @@ SUMMARY (3-5 short sentences — human, HR-friendly career overview):
 - NEVER name the hiring company (HermanMiller, MillerKnoll, etc.) in the Summary
 - NEVER paste JD preamble into the Summary — analyse skills + experience and write that only
 
-SKILLS — use EXACTLY these 4 sub-labels, no others:
-   Technical Skills: comma-separated — LEAD with EVERY primary JD keyword, then secondary JD keywords, then matching original hard skills
-   Tools & Platforms: comma-separated software, cloud, databases, devtools from JD + resume overlap
-   Methodologies: comma-separated methods such as Agile, Scrum, SDLC, ITIL, CI/CD when in original OR required by JD
-   Core Competencies: exactly 3-4 concise items most relevant to the JD and supported by the experience bullets
-   Keep each sub-label on its own single line in this exact label format
-   DO NOT use "Soft Skills", "Key Skills", "Competencies" or any other label — ONLY the 4 above
-   CRITICAL: Missing a primary keyword from Skills is a failed first pass.
-   SKILL FAMILY PRESERVE: If the original resume has Python, KEEP related Python-ecosystem skills (Flask, Django, FastAPI, NumPy, Pandas, PyTorch, TensorFlow, Pytest). If Java is present, KEEP Spring Boot, Spring MVC, Spring Security, Hibernate, JPA, JUnit. If AI/ML/LLM is present, KEEP OpenAI API, LangChain, RAG, NLP, BERT, Transformers, PyTorch, TensorFlow. Do NOT strip an entire related family when the anchor skill remains.
+SKILLS — PRESERVE the candidate's original skill structure (do NOT collapse to only 4 labels):
+   - Keep EVERY skill category "window" from the master resume (e.g. Technical Skills, Tools & Platforms, Methodologies, Core Competencies, Soft Skills, Databases, Languages, Cloud, Frameworks, or ANY other Label: group the original uses)
+   - If the original uses hyphen/bullet lists under a skill category, KEEP those bullets — do NOT convert them into one comma line and do NOT delete them
+   - If the original uses comma-separated values on one line after a label, keep that same line style
+   - You MAY add new category windows when the JD needs them (still as Label: + same style as nearby skill groups)
+   - You MAY add missing primary/secondary JD keywords into the best-matching existing category window (or a new one) — never drop an existing window to make room
+   - Do NOT merge multiple original categories into one line
+   - Do NOT remove Soft Skills / Key Skills / Competencies / or any other original skill label just because it is outside Technical/Tools/Methodologies/Core
+   - Skill bullets are skill lists — they do NOT need metrics/numbers (metrics apply only to EXPERIENCE bullets)
+   - CRITICAL: Missing a primary keyword from Skills is a failed first pass.
+   - SKILL FAMILY PRESERVE: If the original resume has Python, KEEP related Python-ecosystem skills (Flask, Django, FastAPI, NumPy, Pandas, PyTorch, TensorFlow, Pytest). If Java is present, KEEP Spring Boot, Spring MVC, Spring Security, Hibernate, JPA, JUnit. If AI/ML/LLM is present, KEEP OpenAI API, LangChain, RAG, NLP, BERT, Transformers, PyTorch, TensorFlow. Do NOT strip an entire related family when the anchor skill remains.
 
 EXPERIENCE (MANDATORY — include ALL roles):
 - COUNT the number of roles in the original resume before writing. Output the EXACT same number of roles.
@@ -1667,9 +1669,10 @@ ABSOLUTE OUTPUT RULES — violations will disqualify the output
 5. DO NOT add a timestamp, watermark, version label, or any metadata
 6. DO NOT split the resume into "Original vs Tailored" columns or sections
 7. The output must be ready to submit to a job application with zero editing required
-8. Every bullet point MUST end with a period (full stop). No exceptions.
-9. Every bullet point MUST contain at least one measurable metric — counts, percentages, time saved, scale, or dollar amounts all qualify. A bullet with no number is a weak bullet.
+8. Every EXPERIENCE bullet point MUST end with a period (full stop). No exceptions. Skill-section bullets/lists are exempt.
+9. Every EXPERIENCE bullet point MUST contain at least one measurable metric — counts, percentages, time saved, scale, or dollar amounts all qualify. SKILLS-section bullets/category lines do NOT need metrics — never delete them for lacking numbers.
 10. Every single line must be content a real recruiter expects to read — nothing else
+11. Never delete or collapse skill category windows or skill bullets that existed on the master resume
 
 =======================================================
 FINAL SILENT CHECK — verify before outputting:
@@ -1682,9 +1685,10 @@ FINAL SILENT CHECK — verify before outputting:
 [ ] EXPERIENCE COMPANY NAMES: every company name copied exactly — no abbreviations or expansions
 [ ] CONTACT CHECK: email in output EXACTLY matches the locked email value "${cf.email || 'from original'}" · phone EXACTLY matches "${cf.phone || 'from original'}" — check character by character
 [ ] LinkedIn check: master resume LinkedIn is "${cf.linkedin || 'NOT PRESENT'}" — if NOT PRESENT, the contact header must contain NO LinkedIn URL whatsoever; do not construct or infer one
-[ ] KEYWORD AUDIT: go through all 10 primary keywords one by one — confirm EACH appears in the SKILLS section AND at least once in Summary or Experience; if missing from SKILLS, add it to the correct sub-label NOW before outputting
-[ ] SECONDARY KEYWORD AUDIT: go through all 10 secondary keywords — each must appear at least once anywhere in the resume; add missing ones to SKILLS or weave into a bullet
-[ ] METRICS AUDIT: count bullets with a number/metric vs total bullets — aim for 100%; any bullet without a metric must be rewritten to include one before outputting
+[ ] KEYWORD AUDIT: go through all 10 primary keywords one by one — confirm EACH appears in the SKILLS section AND at least once in Summary or Experience; if missing from SKILLS, add it into the best-matching existing category window (or a new one) — do NOT delete other windows
+[ ] SECONDARY KEYWORD AUDIT: go through all 10 secondary keywords — each must appear at least once anywhere in the resume; add missing ones to SKILLS or weave into an EXPERIENCE bullet
+[ ] SKILLS STRUCTURE AUDIT: every original skill category window and every original skill bullet still present (enriched OK, removed NOT OK)
+[ ] METRICS AUDIT: count EXPERIENCE bullets with a number/metric vs total EXPERIENCE bullets — aim for 100%; do NOT apply this to SKILLS bullets
 [ ] Location check — CONTACT HEADER: master resume location is "${cf.location || 'NOT PRESENT'}" — if NOT PRESENT, the contact header line must have NO location token at all; do not copy location from experience lines into the contact header
 [ ] Location check — EXPERIENCE LINES: every role line copies location token-for-token from master resume — no added cities, no added states, no added countries, no removed tokens
 [ ] GPA check: if master resume has a GPA, it appears in the output exactly as written — if master has no GPA, output has no GPA
@@ -1727,7 +1731,7 @@ SCORING RUBRIC (total 100 points):
 - Secondary keyword match  (10 pts): 1 pt per secondary keyword found (fuzzy match). Max 10.
 - Quantified achievements  (20 pts): % of bullets with a measurable result — counts, percentages (e.g. "30%"), dollar amounts, time saved, scale, ratios (e.g. "3x"), ranges (e.g. "from 2s to 200ms") ALL count. Be generous. Scale to 20.
 - Summary alignment        (15 pts): Does S1 reference the JD role title and key skills? Exact match not required — close variation scores full marks.
-- Format compliance        (10 pts): Plain text, ALL-CAPS section headers, hyphen bullets, no tables/columns/icons? NOTE: Skills sub-labels ("Technical Skills:", "Tools & Platforms:", etc.) are NEVER a format violation when they appear as single lines under SKILLS.
+- Format compliance        (10 pts): Plain text, ALL-CAPS section headers, hyphen bullets, no tables/columns/icons? NOTE: Any Skills category windows ("Technical Skills:", "Tools & Platforms:", "Soft Skills:", "Databases:", etc.) and skill bullets under SKILLS are NEVER format violations.
 - Section completeness     ( 5 pts): SUMMARY, SKILLS, EXPERIENCE, EDUCATION all present?
 
 SCORING CONSISTENCY RULES:
@@ -2156,7 +2160,8 @@ function buildBoostPrompt(jd, sc, currentScore) {
 Fix every gap below so the resume scores ${SCORE_TAILOR_THRESHOLD}+.
 
 DO NOT invent companies, titles, dates, education, or certifications.
-DO add every missing JD keyword into Skills and weave into bullets.
+DO add every missing JD keyword into Skills and weave into EXPERIENCE bullets.
+PRESERVE SKILLS STRUCTURE: keep every skill category window (not only four labels) and every skill bullet from the current resume — enrich categories with missing keywords, but NEVER delete, merge away, or strip skill bullets because they lack metrics.
 
 EXACT GAPS:
 ${missingPrimary.length > 0   ? `MISSING PRIMARY — add each to SKILLS and at least one bullet:\n${missingPrimary.map(k => `  - "${k}"`).join('\n')}` : 'PRIMARY: all present.'}
@@ -2462,6 +2467,12 @@ function parseResumeToHtml(text) {
     'PROJECTS','KEY PROJECTS','NOTABLE PROJECTS','AWARDS','PUBLICATIONS'
   ]);
 
+  const inSkillsSection = () =>
+    /^(SKILLS|TECHNICAL SKILLS|CORE COMPETENCIES|KEY SKILLS|TECHNOLOGIES)\b/.test(currentSection);
+
+  // Any skill category window: "Tools & Platforms: …", optional leading "- "
+  const skillWindowRe = /^(?:[-•]\s*)?([A-Za-z][A-Za-z0-9 &\/\+]{1,45}):\s*(.*)$/;
+
   // Remaining body lines
   for (let i = lineIndex; i < lines.length; i++) {
     const l = lines[i].trim();
@@ -2470,19 +2481,19 @@ function parseResumeToHtml(text) {
     } else if (isSectionHeader(l)) {
       currentSection = l.trim().toUpperCase();
       html += `<div class="r-section">${l}</div>`;
-    } else if (/^-\s+\S/.test(l)) {
-      // Bullet point — starts with "- " followed by content
-      const bulletText = l.replace(/^-\s+/, '');
-      html += `<div class="r-bullet"><span class="r-bullet-dot">•</span>${bulletText}</div>`;
-    } else if (
-      currentSection === 'SKILLS' &&
-      /^[A-Za-z][A-Za-z &\/\-]{1,40}:\s*\S/.test(l)
-    ) {
-      // Skill sub-label line e.g. "Technical Skills: Python, SQL"
-      const colonIdx = l.indexOf(':');
-      const label = l.slice(0, colonIdx).trim();
-      const value = l.slice(colonIdx + 1).trim();
-      html += `<div class="r-skill-line"><span class="r-skill-label">${label}:</span> ${value}</div>`;
+    } else if (inSkillsSection() && skillWindowRe.test(l)) {
+      // Skill category window (any label — not limited to four) ± inline values
+      const m = l.match(skillWindowRe);
+      const label = (m[1] || '').trim();
+      const value = (m[2] || '').trim();
+      html += value
+        ? `<div class="r-skill-line"><span class="r-skill-label">${label}:</span> ${value}</div>`
+        : `<div class="r-skill-line"><span class="r-skill-label">${label}:</span></div>`;
+    } else if (/^[-•]\s+\S/.test(l)) {
+      // Bullet — keep skill bullets under SKILLS; experience bullets elsewhere
+      const bulletText = l.replace(/^[-•]\s+/, '');
+      const cls = inSkillsSection() ? 'r-bullet r-skill-bullet' : 'r-bullet';
+      html += `<div class="${cls}"><span class="r-bullet-dot">•</span>${bulletText}</div>`;
     } else if (
       /^[A-Za-z].+\|.+/.test(l) &&
       !/[@]/.test(l) &&
@@ -2593,6 +2604,7 @@ function downloadDocx() {
     }
     .r-skill-line { margin: 0 0 2pt 0; color: #222222; line-height: 1.45; font-family: Calibri, Arial, sans-serif; font-size: 10.5pt; }
     .r-skill-label { color: #111111; font-weight: bold; }
+    .r-skill-bullet { margin-left: 8pt; }
   </style>
 </head>
 <body><div class="WordSection1">${resumeHtml}</div></body>
@@ -2720,6 +2732,7 @@ function printResume() {
     .r-spacer { height: 4px; }
     .r-skill-line { margin: 0 0 4px 0; color: #222222; line-height: 1.5; font-family: Calibri, Arial, sans-serif; font-size: 10.5pt; }
     .r-skill-label { color: #111111; font-weight: 700; }
+    .r-skill-bullet { margin-left: 12px; }
 
     /* ── PRINT STYLES ── */
     @media print {

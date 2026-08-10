@@ -610,15 +610,30 @@
       ? 15
       : Math.round((secFound.length / secondary.length) * 15);
 
-    const bulletLines = resumeLines.filter(l => {
-      if (!l || l.length < 10) return false;
-      if (/^[\u2022\u2023\u25E6\u2043\u2219\u25AA\u25AB\u25CF\u25C6\u2012\u2013\u2014\u00B7\u00BB\u2192\u2794\u27A4●•·‣▸▶►○◦\*]/.test(l)) return true;
-      if (/^-\s+\S/.test(l)) return true;
-      if (/^\d{1,2}[.)]\s+\S/.test(l)) return true;
+    // Metric scoring uses EXPERIENCE bullets only — skill-category bullets/windows are exempt
+    const SKILL_SECTION_RE = /^(SKILLS|TECHNICAL SKILLS|CORE COMPETENCIES|KEY SKILLS|TECHNOLOGIES)\b/i;
+    const MAIN_SECTION_RE = /^(SUMMARY|PROFESSIONAL SUMMARY|OBJECTIVE|PROFILE|EXPERIENCE|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|EDUCATION|ACADEMIC|CERTIFICATIONS?|LICENSES|PROJECTS|PUBLICATIONS|AWARDS|VOLUNTEER|LANGUAGES?|INTERESTS?|REFERENCES)\b/i;
+    let scanSection = '';
+    const bulletLines = [];
+    for (const raw of resumeLines) {
+      const l = (raw || '').trim();
+      if (!l) continue;
+      const upper = l.toUpperCase();
+      if (/^[A-Z][A-Z\s\/&\-]{2,44}$/.test(upper) && upper.length < 55 && (SKILL_SECTION_RE.test(upper) || MAIN_SECTION_RE.test(upper))) {
+        scanSection = upper;
+        continue;
+      }
+      const inSkills = SKILL_SECTION_RE.test(scanSection);
+      if (inSkills) continue; // skill windows/bullets never count toward metric ratio
+      if (l.length < 10) continue;
+      let isBullet = false;
+      if (/^[\u2022\u2023\u25E6\u2043\u2219\u25AA\u25AB\u25CF\u25C6\u2012\u2013\u2014\u00B7\u00BB\u2192\u2794\u27A4●•·‣▸▶►○◦\*]/.test(l)) isBullet = true;
+      else if (/^-\s+\S/.test(l)) isBullet = true;
+      else if (/^\d{1,2}[.)]\s+\S/.test(l)) isBullet = true;
       // Plain-text achievement lines (common when pasting from Word/PDF)
-      if (/^(led|built|designed|developed|managed|created|implemented|improved|reduced|increased|delivered|owned|drove|optimized|automated|migrated|launched|scaled)\b/i.test(l) && l.length > 40) return true;
-      return false;
-    });
+      else if (/^(led|built|designed|developed|managed|created|implemented|improved|reduced|increased|delivered|owned|drove|optimized|automated|migrated|launched|scaled)\b/i.test(l) && l.length > 40) isBullet = true;
+      if (isBullet) bulletLines.push(l);
+    }
     const bulletsWithNum = bulletLines.filter(l => /\d/.test(l));
     let metricPts;
     if (bulletLines.length > 0) {
@@ -682,13 +697,13 @@
       ...fmtIssues.map(i => `Format: ${i}`),
       ...missingSections.map(s => `Missing section: ${s}`),
       ...(bulletLines.length > 0 && bulletsWithNum.length < bulletLines.length
-        ? [`${bulletLines.length - bulletsWithNum.length} bullet(s) have no measurable metric — add counts, %, time saved, or dollar impact.`]
+        ? [`${bulletLines.length - bulletsWithNum.length} EXPERIENCE bullet(s) have no measurable metric — add counts, %, time saved, or dollar impact. (Skill-section bullets are exempt.)`]
         : []),
     ];
 
     const improvementSuggestions = [];
     if (primaryMissing.length) improvementSuggestions.push(`Add missing primary keywords to SKILLS: ${primaryMissing.slice(0, 3).join(', ')}`);
-    if (bulletLines.length > 0 && bulletsWithNum.length < bulletLines.length) improvementSuggestions.push('Add metrics to bullets without numbers');
+    if (bulletLines.length > 0 && bulletsWithNum.length < bulletLines.length) improvementSuggestions.push('Add metrics to EXPERIENCE bullets without numbers (keep skill bullets as-is)');
     if (summaryPts < 5) improvementSuggestions.push('Rewrite summary as a clear HR-friendly overview of full experience — no percentages');
     if (missingSections.length) improvementSuggestions.push(`Add missing sections: ${missingSections.join(', ')}`);
 
@@ -1136,8 +1151,11 @@
 
       if (isHeader && !SKILL_SECTION_HEADERS.some(h => upper.startsWith(h.replace(':', '')))) break;
 
-      if (/^(technical skills|tools\s*&\s*platforms|methodologies|core competencies)\s*:/i.test(line)) {
-        parseSkillLine(line.replace(/^[^:]+:\s*/i, ''), skills);
+      // Any skill category window — not limited to four fixed labels
+      const windowMatch = line.match(/^(?:[-•]\s*)?([A-Za-z][A-Za-z0-9 &\/\+]{1,45}):\s*(.*)$/);
+      if (windowMatch) {
+        const afterColon = (windowMatch[2] || '').trim();
+        if (afterColon) parseSkillLine(afterColon, skills);
         continue;
       }
 
@@ -1153,7 +1171,8 @@
     line.split(/[,;|•·]/).forEach(part => {
       let s = part.trim()
         .replace(/^[-•*]\s*/, '')
-        .replace(/^(technical skills|tools\s*&\s*platforms|methodologies|core competencies)\s*:\s*/i, '');
+        // Strip any "Category:" prefix so Soft Skills / Databases / etc. don't become fake skills
+        .replace(/^[A-Za-z][A-Za-z0-9 &\/\+]{1,45}:\s*/i, '');
       if (s.length < 2 || s.length > 60) return;
       if (/^\d+$/.test(s)) return;
       const key = normalizeSkill(s);
@@ -1291,10 +1310,11 @@
     for (let i = 0; i < lines.length; i++) {
       const raw = lines[i].trim();
       const u = raw.toUpperCase();
-      const isSkillSubLabel = /^(technical skills|tools\s*&\s*platforms|methodologies|core competencies)\s*:/i.test(raw);
+      const isSkillSubLabel = /^(?:[-•]\s*)?[A-Za-z][A-Za-z0-9 &\/\+]{1,45}:\s*/.test(raw)
+        && !/^(summary|experience|education|projects|certifications)\s*:/i.test(raw);
 
       if (skillsIdx >= 0 && isSkillSubLabel) {
-        if (/^technical skills\s*:/i.test(raw)) techLineIdx = i;
+        if (/^(?:[-•]\s*)?technical skills\s*:/i.test(raw)) techLineIdx = i;
         insertAfter = i;
         continue;
       }
