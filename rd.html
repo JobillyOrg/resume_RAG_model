@@ -1389,7 +1389,7 @@
     <span class="jb-nav-label">ATS Resume Tailoring</span>
   </div>
   <div style="flex:1"></div>
-  <div class="api-badge" id="apiBadge"><div class="api-dot" id="apiDot"></div> <span id="apiBadgeText">Checking API…</span></div>
+  <div class="api-badge" id="apiBadge"><div class="api-dot" id="apiDot"></div> <span id="apiBadgeText">Checking…</span></div>
 </header>
 
 <main class="jb-main">
@@ -1562,7 +1562,7 @@
     <div class="card-title" style="margin-bottom:12px;">AI Processing Pipeline</div>
     <div id="progressLabel" style="font-size:13px;color:#94a3b8;margin-bottom:6px;">Initializing...</div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
-    <div style="font-size:11px;color:#475569;margin-top:6px;" id="progressSub">Sending to gemini-flash-lite-latest...</div>
+    <div style="font-size:11px;color:#475569;margin-top:6px;" id="progressSub">Starting…</div>
   </div>
 
   <!-- SCORE CARDS -->
@@ -1769,7 +1769,7 @@ async function runFreeAtsCheck() {
 
       // Optional Gemini fallback only when RAG confidence is very low
       if (GEMINI_KEYWORD_FALLBACK && primary.length < 3) {
-        freeBtn.textContent = '⏳ RAG low confidence — Gemini fallback…';
+        freeBtn.textContent = '⏳ RAG low confidence — online fallback…';
         const kwRaw = await callClaude(buildAtsCheckKeywordPrompt(jd), 0.1, 350);
         const parsed = parseKeywordJson(kwRaw);
         if (parsed.primary.length > primary.length) {
@@ -1808,8 +1808,8 @@ async function runFreeAtsCheck() {
     rag: 'Jobilly readiness · Keywords from <strong style="color:#4ade80;">local RAG</strong> · Zero API cost',
     cache: 'Jobilly readiness · Keywords from <strong style="color:#4ade80;">RAG cache</strong>',
     session: 'Jobilly readiness · Keywords from session',
-    api: 'Jobilly readiness · Keywords from Gemini',
-    'gemini-fallback': 'Jobilly readiness · RAG + Gemini fallback keywords',
+    api: 'Jobilly readiness · Keywords from online',
+    'gemini-fallback': 'Jobilly readiness · RAG + online fallback keywords',
   };
   document.getElementById('freeAtsSourceLabel').innerHTML = srcLabels[kwSource] || srcLabels.rag;
 
@@ -2642,14 +2642,12 @@ function renderSkillsCompare(compare) {
   }
 }
 
-// ─── GEMINI API CALL (via Vercel serverless proxy) ────────────────
+// ─── AI API CALL (via Vercel serverless proxy) ────────────────
 async function callClaude(prompt, temperature = 0.3, maxTokens = 4096) {
   const apiUrl = getGeminiApiUrl();
 
   if (!apiUrl) {
-    throw new Error(
-      'Cannot reach /api/gemini from a local file. Open your Vercel deployed URL, or run: vercel dev'
-    );
+    throw new Error('Offline — open the deployed site to rewrite.');
   }
 
   let res;
@@ -2661,9 +2659,7 @@ async function callClaude(prompt, temperature = 0.3, maxTokens = 4096) {
     });
   } catch (err) {
     if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
-      throw new Error(
-        `Cannot reach ${apiUrl}. If deployed on Vercel: (1) add GEMINI_API_KEY in Environment Variables, (2) redeploy, (3) test ${apiUrl.replace('/gemini', '/health')}`
-      );
+      throw new Error('Offline — cannot reach the rewrite service. Check your connection and try again.');
     }
     throw err;
   }
@@ -2671,7 +2667,9 @@ async function callClaude(prompt, temperature = 0.3, maxTokens = 4096) {
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    throw new Error(data?.error || `API error ${res.status}`);
+    let msg = data?.error || `Offline / rewrite error (${res.status})`;
+    if (/gemini|GEMINI/i.test(msg)) msg = 'Offline — rewrite service is not available right now.';
+    throw new Error(msg);
   }
 
   return data.text || '';
@@ -2679,19 +2677,19 @@ async function callClaude(prompt, temperature = 0.3, maxTokens = 4096) {
 
 async function checkApiConnection() {
   if (window.location.protocol === 'file:') {
-    return { ok: false, message: 'Local file — use Vercel URL or vercel dev' };
+    return { ok: false, message: 'Offline' };
   }
   try {
     const healthUrl = new URL('/api/health', window.location.origin).href;
     const res = await fetch(healthUrl);
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) return { ok: false, message: data.error || 'API health check failed' };
+    if (!res.ok) return { ok: false, message: 'Offline' };
     if (!data.geminiKeyConfigured) {
-      return { ok: false, message: 'GEMINI_API_KEY not set in Vercel — add it and redeploy' };
+      return { ok: false, message: 'Offline' };
     }
-    return { ok: true, message: 'API connected' };
+    return { ok: true, message: 'Online' };
   } catch {
-    return { ok: false, message: 'API unreachable — redeploy with api/ folder on Vercel' };
+    return { ok: false, message: 'Offline' };
   }
 }
 
@@ -3311,7 +3309,7 @@ async function runAnalysis() {
     if (USE_RAG) {
       keywords = await RAGEngine.getKeywords(jd, state.keywords);
       if (GEMINI_KEYWORD_FALLBACK && keywords.primary.length < 3) {
-        setProgress(12, 'RAG low confidence — Gemini fallback...', '');
+        setProgress(12, 'RAG low confidence — online fallback...', '');
         const kwRaw = await callClaude(buildKeywordPrompt(jd), 0.3, 512);
         keywords = parseKeywordJson(kwRaw);
       }
@@ -3341,7 +3339,7 @@ async function runAnalysis() {
     }
 
     // ── STEP 1: KEYWORD EXTRACTION DONE ───────────────────────────
-    setLoading('Calling Gemini AI...');
+    setLoading('Rewriting resume...');
     setProgress(30, `✓ JD fit: ${jdFit.status} · ${keywords.primary.length} primary + ${keywords.secondary.length} secondary keywords: ${keywords.primary.slice(0,3).join(', ')}...`, 'Keywords ready — zero API cost');
 
     // ── STEP 2: RESUME REWRITE ────────────────────────────────
@@ -3627,15 +3625,13 @@ async function runAnalysis() {
     document.getElementById('resultsSection').classList.remove('hidden');
     document.getElementById('outputArea').innerHTML = `
       <div class="error-box">
-        <strong>⚠️ Gemini API Error</strong><br><br>
+        <strong>⚠️ Offline / rewrite failed</strong><br><br>
         ${err.message}<br><br>
         <strong>Common fixes:</strong><br>
-        • <strong>Not opening as a local file?</strong> Use your Vercel URL (not file://)<br>
-        • Test API: <a href="/api/health" target="_blank" style="color:#60a5fa;">/api/health</a> — should show <code>geminiKeyConfigured: true</code><br>
-        • Ensure <code>GEMINI_API_KEY</code> is set in Vercel Environment Variables, then <strong>Redeploy</strong><br>
-        • Get a key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#60a5fa;">aistudio.google.com</a><br>
+        • Open the deployed site (not a local file)<br>
+        • Check the status badge shows <strong>Online</strong><br>
         • Ensure your JD and Resume are not empty<br>
-        • Try again in a few seconds (rate limit)<br>
+        • Try again in a few seconds<br>
         • Make sure you have internet access
       </div>`;
     stopLoading();
@@ -4377,24 +4373,24 @@ function copyFilename() {
   navigator.clipboard.writeText(state.filename).then(() => showToast('📋 Filename copied!'));
 }
 
-// API status on load (Vercel / vercel dev only)
+// Online / Offline status on load
 (async function initApiBadge() {
   const badge = document.getElementById('apiBadge');
   const text = document.getElementById('apiBadgeText');
   if (!badge || !text) return;
 
   if (window.location.protocol === 'file:') {
-    badge.classList.add('warn');
-    text.textContent = 'Local file — deploy or vercel dev for AI';
+    badge.classList.add('error');
+    text.textContent = 'Offline';
     return;
   }
 
   const status = await checkApiConnection();
   if (status.ok) {
-    text.textContent = 'Gemini API connected';
+    text.textContent = 'Online';
   } else {
     badge.classList.add('error');
-    text.textContent = status.message;
+    text.textContent = 'Offline';
   }
 })();
 </script>
