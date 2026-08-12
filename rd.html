@@ -5,52 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ATS Resume Tailoring | Jobilly.AI</title>
   <link rel="icon" href="brand/logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet" />
   <style>
-/* Jobilly mark — minimalist monochrome neumorphism */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
+/* Jobilly.AI — original Plus Jakarta Sans + modern workspace layout */
     :root {
-      --jb-canvas: #e9ecf1;
-      --jb-surface: #e9ecf1;
-      --jb-surface-muted: #e2e6ed;
-      --jb-card: #e9ecf1;
-      --jb-card-highlight: #e9ecf1;
-      --neo-dark: #c5cad3;
-      --neo-light: #ffffff;
-      --neo-raised: 7px 7px 16px var(--neo-dark), -7px -7px 16px var(--neo-light);
-      --neo-raised-sm: 4px 4px 10px var(--neo-dark), -4px -4px 10px var(--neo-light);
-      --neo-inset: inset 5px 5px 12px var(--neo-dark), inset -5px -5px 12px var(--neo-light);
-      --jb-ink: #111111;
-      --jb-ink-secondary: #2b2b2b;
-      --jb-ink-muted: #5c5c5c;
-      --jb-ink-subtle: #8a8a8a;
-      --jb-brand: #111111;
-      --jb-brand-hover: #000000;
-      --jb-brand-soft: rgba(17, 17, 17, 0.06);
-      --jb-brand-border: rgba(17, 17, 17, 0.14);
-      --jb-brand-glow: rgba(17, 17, 17, 0.12);
-      --jb-border: rgba(17, 17, 17, 0.08);
-      --jb-border-strong: rgba(17, 17, 17, 0.14);
-      --jb-success: #166534;
-      --jb-success-soft: rgba(22, 101, 52, 0.1);
-      --jb-success-border: rgba(22, 101, 52, 0.22);
-      --jb-success-text: #166534;
-      --jb-warning: #92400e;
-      --jb-warning-soft: rgba(146, 64, 14, 0.1);
-      --jb-danger: #991b1b;
-      --jb-danger-soft: rgba(153, 27, 27, 0.08);
-      --jb-danger-border: rgba(153, 27, 27, 0.2);
-      --jb-btn-primary-bg: #111111;
-      --jb-btn-primary-fg: #ffffff;
-      --jb-btn-primary-hover: #000000;
-      --jb-radius-sm: 12px;
+      --jb-canvas: #edf1f4;
+      --jb-surface: #f5f7f9;
+      --jb-surface-muted: #e8eef2;
+      --jb-card: #fbfcfd;
+      --jb-card-highlight: #ffffff;
+      --jb-ink: #0f1720;
+      --jb-ink-secondary: #243041;
+      --jb-ink-muted: #5b6b7c;
+      --jb-ink-subtle: #8494a6;
+      --jb-brand: #0f1720;
+      --jb-brand-hover: #060a0f;
+      --jb-brand-soft: rgba(15, 118, 110, 0.1);
+      --jb-brand-border: rgba(15, 118, 110, 0.28);
+      --jb-slate: #0f766e;
+      --jb-accent: #0f766e;
+      --jb-accent-2: #1d4ed8;
+      --jb-accent-3: #c2410c;
+      --jb-accent-4: #047857;
+      --jb-accent-5: #a16207;
+      --jb-border: rgba(15, 23, 32, 0.09);
+      --jb-border-strong: rgba(15, 23, 32, 0.16);
+      --jb-success: #047857;
+      --jb-success-soft: rgba(4, 120, 87, 0.1);
+      --jb-success-border: rgba(4, 120, 87, 0.28);
+      --jb-success-text: #047857;
+      --jb-warning: #a16207;
+      --jb-warning-soft: rgba(161, 98, 7, 0.12);
+      --jb-danger: #b91c1c;
+      --jb-danger-soft: rgba(185, 28, 28, 0.1);
+      --jb-danger-border: rgba(185, 28, 28, 0.24);
+      --jb-btn-primary-bg: #0f1720;
+      --jb-btn-primary-fg: #f7fafb;
+      --jb-btn-primary-hover: #060a0f;
+      --jb-radius-sm: 10px;
       --jb-radius-md: 16px;
       --jb-radius-lg: 22px;
-      --jb-shadow-sm: var(--neo-raised-sm);
-      --jb-shadow-md: var(--neo-raised);
-      --jb-shadow-portal: var(--neo-raised);
-      --jb-font-sans: "Inter", system-ui, sans-serif;
-      --jb-font-display: "Inter", system-ui, sans-serif;
+      --jb-shadow-sm: 0 1px 2px rgba(15, 23, 32, 0.04);
+      --jb-shadow-md: 0 12px 36px rgba(15, 23, 32, 0.07);
+      --jb-font-sans: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+      --jb-font-display: "Plus Jakarta Sans", "Segoe UI", sans-serif;
       --bg: var(--jb-canvas);
       --surface: var(--jb-card);
       --surface-alt: var(--jb-surface-muted);
@@ -87,7 +87,23 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    .jb-mesh { display: none; }
+    .jb-mesh {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(900px 520px at 12% -8%, rgba(15, 118, 110, 0.12), transparent 58%),
+        radial-gradient(780px 480px at 92% 4%, rgba(29, 78, 216, 0.08), transparent 55%),
+        linear-gradient(180deg, #f3f6f8 0%, var(--jb-canvas) 40%, #e6ecef 100%);
+    }
+    .jb-mesh::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
 
     .jb-nav {
       position: sticky;
@@ -96,10 +112,10 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      padding: 14px clamp(16px, 4vw, 32px);
-      background: var(--jb-canvas);
-      border-bottom: none;
-      box-shadow: 0 1px 0 rgba(255,255,255,0.7), 0 4px 20px rgba(197, 202, 211, 0.45);
+      padding: 14px clamp(16px, 4vw, 36px);
+      background: rgba(251, 252, 253, 0.9);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--jb-border);
     }
     .jb-brand {
       display: flex;
@@ -109,123 +125,229 @@
       flex-shrink: 0;
     }
     .jb-logo-mark {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       object-fit: contain;
       display: block;
     }
     .jb-logo-text {
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: -0.03em;
+      font-family: var(--jb-font-display);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
       color: var(--jb-ink);
+      line-height: 1;
     }
-    .jb-logo-ai { font-weight: 500; color: var(--jb-ink-muted); }
-    .jb-nav-meta { display: flex; flex-direction: column; gap: 2px; padding-left: 16px; border-left: 1px solid var(--jb-border-strong); }
+    .jb-logo-ai {
+      font-family: var(--jb-font-sans);
+      font-weight: 700;
+      font-size: 0.72em;
+      color: var(--jb-slate);
+      letter-spacing: 0.02em;
+    }
+    .jb-nav-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-left: 18px;
+      border-left: 1px solid var(--jb-border-strong);
+    }
     .jb-nav-eyebrow {
       font-size: 10px;
       font-weight: 600;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--jb-ink-subtle);
     }
     .jb-nav-label { font-size: 13px; font-weight: 600; color: var(--jb-ink-secondary); }
 
     .jb-main { position: relative; z-index: 1; }
-    .container { max-width: 1140px; margin: 0 auto; padding: 28px clamp(16px, 4vw, 32px) 56px; }
+    .container { max-width: 1240px; margin: 0 auto; padding: 24px clamp(16px, 3vw, 32px) 72px; }
 
     .jb-hero {
-      margin-bottom: 28px;
-      padding: 32px;
-      border-radius: var(--jb-radius-lg);
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: end;
+      margin-bottom: 22px;
+      padding: clamp(18px, 3vw, 28px) 0 6px;
       border: none;
-      background: var(--jb-card);
-      box-shadow: var(--neo-raised);
+      background: transparent;
+      animation: heroIn 0.7s ease both;
     }
-    .jb-eyebrow {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
+    @media (max-width: 840px) {
+      .jb-hero { grid-template-columns: 1fr; gap: 12px; }
+    }
+    .jb-hero-brand {
+      font-family: var(--jb-font-display);
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.045em;
+      line-height: 0.98;
+      color: var(--jb-ink);
+      margin-bottom: 0;
+    }
+    .jb-hero-brand span {
+      display: block;
+      font-family: var(--jb-font-sans);
+      font-size: 0.28em;
+      font-weight: 700;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--jb-ink-subtle);
-      margin-bottom: 10px;
+      color: var(--jb-slate);
+      margin-bottom: 12px;
     }
+    .jb-eyebrow { display: none; }
+    .jb-hero-side { padding-bottom: 6px; }
     .jb-hero-title {
       font-family: var(--jb-font-display);
-      font-size: clamp(1.65rem, 4vw, 2.2rem);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      line-height: 1.2;
-      color: var(--jb-ink);
-      margin-bottom: 10px;
-      max-width: 24ch;
+      font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.3;
+      color: var(--jb-ink-secondary);
+      margin-bottom: 8px;
+      max-width: 28ch;
     }
-    .jb-hero-copy { font-size: 15px; color: var(--jb-ink-muted); max-width: 50ch; }
+    .jb-hero-copy {
+      font-size: 15px;
+      color: var(--jb-ink-muted);
+      max-width: 42ch;
+      border-left: 3px solid var(--jb-slate);
+      padding-left: 14px;
+      line-height: 1.5;
+    }
+
+    /* Workspace: inputs left, actions right */
+    .jb-workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 960px) {
+      .jb-workspace { grid-template-columns: 1fr; }
+    }
+    .jb-workspace-main { min-width: 0; }
+    .jb-action-rail {
+      position: sticky;
+      top: 78px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px;
+      background: var(--jb-card-highlight);
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-md);
+      box-shadow: var(--jb-shadow-sm);
+    }
+    .jb-action-rail .action-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--jb-ink-muted);
+      margin-bottom: 4px;
+    }
+    .jb-action-rail button { width: 100%; justify-content: center; }
+    .jb-action-rail #loadingIndicator { justify-content: center; padding: 6px 0; }
+    @media (max-width: 960px) {
+      .jb-action-rail {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .jb-action-rail .action-label { width: 100%; }
+      .jb-action-rail button { width: auto; flex: 1 1 auto; }
+    }
 
     .steps {
       display: flex;
-      gap: 6px;
-      margin-bottom: 24px;
+      gap: 4px;
+      margin-bottom: 18px;
       flex-wrap: wrap;
-      padding: 8px;
-      background: var(--jb-surface-muted);
-      border: none;
-      border-radius: var(--jb-radius-lg);
-      box-shadow: var(--neo-inset);
+      padding: 0 0 2px;
+      background: transparent;
+      border-bottom: 1px solid var(--jb-border);
     }
     .step {
+      position: relative;
       display: flex;
       align-items: center;
       gap: 8px;
       background: transparent;
       border: none;
-      border-radius: var(--jb-radius-md);
-      padding: 10px 14px;
+      border-radius: 0;
+      padding: 12px 14px 14px;
       font-size: 13px;
       font-weight: 500;
       color: var(--jb-ink-muted);
-      transition: box-shadow 0.2s, color 0.2s;
+      transition: color 0.2s;
     }
-    .step.active { background: var(--jb-card); color: var(--jb-ink); box-shadow: var(--neo-raised-sm); }
+    .step::after {
+      content: "";
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: -1px;
+      height: 2px;
+      background: var(--jb-ink);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.28s ease;
+    }
+    .step.active { color: var(--jb-ink); }
+    .step.active::after { transform: scaleX(1); }
     .step.done { color: var(--jb-success-text); }
     .step-num {
       width: 22px; height: 22px;
-      border-radius: 50%;
-      background: var(--jb-surface-muted);
-      box-shadow: var(--neo-inset);
+      border-radius: 4px;
+      background: var(--jb-surface);
+      border: 1px solid var(--jb-border-strong);
       display: flex; align-items: center; justify-content: center;
       font-size: 11px; font-weight: 700;
       color: var(--jb-ink-muted);
-      border: none;
     }
-    .step.active .step-num { background: var(--jb-brand); color: #fff; box-shadow: var(--neo-raised-sm); }
-    .step.done .step-num { background: var(--jb-success); border: none; color: #fff; }
+    .step.active .step-num { background: var(--jb-brand); color: #fff; border-color: var(--jb-brand); }
+    .step.done .step-num { background: var(--jb-success); border-color: var(--jb-success); color: #fff; }
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
-    @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .jb-nav-meta { display: none; }
+    }
 
     .card {
       background: var(--jb-card);
-      border: none;
+      border: 1px solid var(--jb-border);
       border-radius: var(--jb-radius-md);
       padding: 22px;
-      box-shadow: var(--neo-raised);
+      box-shadow: var(--jb-shadow-sm);
     }
     .card-title {
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--jb-ink-muted);
       margin-bottom: 12px;
     }
-    #freeAtsPanel.card { box-shadow: var(--neo-raised); }
-    #freeAtsPanel .card-title { color: var(--jb-ink); }
+    #freeAtsPanel.card { box-shadow: var(--jb-shadow-md); }
+    #freeAtsPanel .card-title {
+      font-family: var(--jb-font-display);
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      text-transform: none;
+      font-weight: 600;
+      color: var(--jb-ink);
+    }
 
     textarea {
       width: 100%;
-      background: var(--jb-surface-muted);
-      border: none;
+      background: var(--jb-card-highlight);
+      border: 1px solid var(--jb-border-strong);
       border-radius: var(--jb-radius-sm);
       color: var(--jb-ink);
       font-size: 14px;
@@ -234,16 +356,20 @@
       resize: vertical;
       min-height: 240px;
       font-family: inherit;
-      box-shadow: var(--neo-inset);
-      transition: box-shadow 0.2s;
+      box-shadow: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
-    textarea:focus { outline: none; box-shadow: var(--neo-inset), 0 0 0 2px var(--jb-brand-border); }
+    textarea:focus {
+      outline: none;
+      border-color: var(--jb-slate);
+      box-shadow: 0 0 0 3px rgba(61, 79, 95, 0.12);
+    }
     textarea::placeholder { color: var(--jb-ink-subtle); }
 
     .action-bar { display: flex; gap: 10px; align-items: center; margin-bottom: 24px; flex-wrap: wrap; }
     button {
       cursor: pointer;
-      border: none;
+      border: 1px solid var(--jb-border-strong);
       border-radius: var(--jb-radius-sm);
       font-family: inherit;
       font-size: 14px;
@@ -251,81 +377,116 @@
       padding: 11px 18px;
       background: var(--jb-card);
       color: var(--jb-ink-secondary);
-      box-shadow: var(--neo-raised-sm);
-      transition: box-shadow 0.2s, transform 0.15s;
+      box-shadow: none;
+      transition: background 0.15s, border-color 0.15s, transform 0.12s;
     }
-    button:hover:not(:disabled) { box-shadow: var(--neo-raised); }
-    button:active:not(:disabled) { box-shadow: var(--neo-inset); transform: scale(0.99); }
+    button:hover:not(:disabled) { background: var(--jb-surface); border-color: var(--jb-ink-muted); }
+    button:active:not(:disabled) { transform: translateY(1px); }
     button:disabled { opacity: 0.45; cursor: not-allowed; }
 
-    .btn-primary { background: var(--jb-btn-primary-bg); color: var(--jb-btn-primary-fg); box-shadow: 4px 4px 12px rgba(0,0,0,0.18), -2px -2px 8px rgba(255,255,255,0.5); }
-    .btn-primary:hover:not(:disabled) { background: var(--jb-btn-primary-hover); }
+    .btn-primary {
+      background: var(--jb-btn-primary-bg);
+      color: var(--jb-btn-primary-fg);
+      border-color: var(--jb-btn-primary-bg);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--jb-btn-primary-hover);
+      border-color: var(--jb-btn-primary-hover);
+      color: var(--jb-btn-primary-fg);
+    }
     .btn-secondary { background: var(--jb-card); color: var(--jb-ink); }
-    .btn-success { background: var(--jb-success-soft); color: var(--jb-success-text); box-shadow: var(--neo-raised-sm); }
-    .btn-success:hover:not(:disabled) { background: rgba(22, 101, 52, 0.16); }
-    .btn-warning { background: var(--jb-warning-soft); color: var(--jb-warning); }
-    .btn-danger { background: var(--jb-danger-soft); color: var(--jb-danger); }
-    .btn-free { background: var(--jb-brand); color: #fff; box-shadow: 4px 4px 14px rgba(0,0,0,0.2); }
-    .btn-free:hover:not(:disabled) { background: var(--jb-brand-hover); }
+    .btn-success { background: var(--jb-success-soft); color: var(--jb-success-text); border-color: var(--jb-success-border); }
+    .btn-success:hover:not(:disabled) { background: rgba(47, 93, 58, 0.16); }
+    .btn-warning { background: var(--jb-warning-soft); color: var(--jb-warning); border-color: rgba(122, 90, 30, 0.28); }
+    .btn-danger { background: var(--jb-danger-soft); color: var(--jb-danger); border-color: var(--jb-danger-border); }
+    .btn-free {
+      background: var(--jb-slate);
+      color: #f7f8f4;
+      border-color: var(--jb-slate);
+    }
+    .btn-free:hover:not(:disabled) {
+      background: #324252;
+      border-color: #324252;
+      color: #f7f8f4;
+    }
 
     .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
     @media (max-width: 768px) { .score-grid { grid-template-columns: repeat(2, 1fr); } }
     .score-card {
-      background: var(--jb-card);
-      border: none;
-      border-radius: var(--jb-radius-md);
+      background: var(--jb-card-highlight);
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-sm);
       padding: 18px 14px;
       text-align: center;
-      box-shadow: var(--neo-raised-sm);
+      box-shadow: none;
     }
     .score-label { font-size: 10px; color: var(--jb-ink-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; font-weight: 600; }
-    .score-value { font-size: 28px; font-weight: 700; color: var(--jb-ink); }
+    .score-value {
+      font-family: var(--jb-font-display);
+      font-size: 30px;
+      font-weight: 600;
+      color: var(--jb-ink);
+      animation: scoreSettle 0.45s ease both;
+    }
     .score-value.green { color: var(--jb-success-text); }
-    .score-value.blue { color: var(--jb-ink); }
+    .score-value.blue { color: var(--jb-slate); }
     .score-value.yellow { color: var(--jb-warning); }
     .score-value.red { color: var(--jb-danger); }
-    #freeAtsScore { color: var(--jb-ink); }
     .score-sub { font-size: 12px; color: var(--jb-ink-subtle); margin-top: 4px; }
+    #freeAtsSourceLabel {
+      border-top: 1px solid var(--jb-border) !important;
+      padding-top: 14px !important;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--jb-ink-subtle) !important;
+    }
 
     .keyword-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-    .kw-tag { font-size: 12px; padding: 5px 11px; border-radius: 999px; font-weight: 600; border: none; background: var(--jb-card); box-shadow: var(--neo-raised-sm); }
-    .kw-match { color: var(--jb-success-text); }
-    .kw-miss { color: var(--jb-danger); }
+    .kw-tag {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: 600;
+      border: 1px solid var(--jb-border);
+      background: var(--jb-card-highlight);
+      box-shadow: none;
+    }
+    .kw-match { color: var(--jb-success-text); border-color: var(--jb-success-border); background: var(--jb-success-soft); }
+    .kw-miss { color: var(--jb-danger); border-color: var(--jb-danger-border); background: var(--jb-danger-soft); }
 
     #outputArea {
       width: 100%;
-      background: var(--jb-surface-muted);
-      border: none;
+      background: #fffcf7;
+      border: 1px solid var(--jb-border-strong);
       border-radius: var(--jb-radius-sm);
       color: var(--jb-ink);
       font-size: 14px;
       line-height: 1.75;
-      padding: 18px;
+      padding: 22px;
       min-height: 420px;
       white-space: pre-wrap;
-      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
+      font-family: "Plus Jakarta Sans", Calibri, "Segoe UI", sans-serif;
       outline: none;
-      box-shadow: var(--neo-inset);
+      box-shadow: var(--jb-shadow-sm);
     }
-    #outputArea:focus { box-shadow: var(--neo-inset), 0 0 0 2px var(--jb-brand-border); }
+    #outputArea:focus { box-shadow: 0 0 0 3px rgba(61, 79, 95, 0.12); border-color: var(--jb-slate); }
 
     .progress-bar-wrap {
       width: 100%;
       background: var(--jb-surface-muted);
-      border-radius: 999px;
-      height: 8px;
+      border-radius: 3px;
+      height: 6px;
       overflow: hidden;
       margin: 8px 0;
-      box-shadow: var(--neo-inset);
-      border: none;
+      border: 1px solid var(--jb-border);
     }
-    .progress-bar { height: 100%; background: var(--jb-brand); border-radius: 999px; transition: width 0.45s ease; }
-    #freeKwBar { background: #333 !important; }
+    .progress-bar { height: 100%; background: var(--jb-ink); border-radius: 2px; transition: width 0.45s ease; }
+    #freeKwBar { background: var(--jb-slate) !important; }
 
     .spinner {
       display: inline-block;
       width: 16px; height: 16px;
-      border: 2px solid var(--neo-dark);
+      border: 2px solid var(--jb-border-strong);
       border-top-color: var(--jb-brand);
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
@@ -333,31 +494,52 @@
       margin-right: 6px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+    @keyframes heroIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scoreSettle {
+      from { opacity: 0.35; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     .hidden { display: none !important; }
 
     .tab-bar {
       display: flex;
-      gap: 4px;
+      gap: 2px;
       margin-bottom: 18px;
       flex-wrap: wrap;
-      padding: 6px;
-      background: var(--jb-surface-muted);
-      border: none;
-      border-radius: var(--jb-radius-md);
-      box-shadow: var(--neo-inset);
+      padding: 0;
+      background: transparent;
+      border-bottom: 1px solid var(--jb-border);
     }
     .tab-btn {
+      position: relative;
       background: transparent;
       border: none;
       color: var(--jb-ink-muted);
-      padding: 9px 14px;
+      padding: 10px 14px 12px;
       font-size: 13px;
       font-weight: 500;
-      border-radius: var(--jb-radius-sm);
+      border-radius: 0;
       box-shadow: none;
     }
-    .tab-btn:hover { color: var(--jb-ink); }
-    .tab-btn.active { color: var(--jb-ink); background: var(--jb-card); box-shadow: var(--neo-raised-sm); }
+    .tab-btn::after {
+      content: "";
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: -1px;
+      height: 2px;
+      background: var(--jb-ink);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .tab-btn:hover { color: var(--jb-ink); background: transparent; }
+    .tab-btn.active { color: var(--jb-ink); background: transparent; font-weight: 600; }
+    .tab-btn.active::after { transform: scaleX(1); }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
@@ -367,72 +549,90 @@
       flex-wrap: wrap;
       margin-top: 18px;
       padding-top: 18px;
-      border-top: none;
-      box-shadow: inset 0 1px 0 rgba(197, 202, 211, 0.6);
+      border-top: 1px solid var(--jb-border);
     }
 
     .gap-item {
       background: var(--jb-surface-muted);
-      border: none;
+      border: 1px solid var(--jb-border);
       border-radius: var(--jb-radius-sm);
       padding: 14px;
       font-size: 13px;
       color: var(--jb-ink-secondary);
       margin-bottom: 8px;
-      box-shadow: var(--neo-inset);
     }
     .gap-item strong { color: var(--jb-ink); }
-    .gap-item.critical { background: var(--jb-danger-soft); color: var(--jb-danger); }
+    .gap-item.critical {
+      background: var(--jb-danger-soft);
+      color: var(--jb-danger);
+      border-color: var(--jb-danger-border);
+    }
 
     .eligibility-banner {
       border-radius: var(--jb-radius-sm);
       padding: 14px 16px;
       margin-bottom: 14px;
       font-size: 13px;
-      border: none;
+      border: 1px solid var(--jb-border);
       background: var(--jb-surface-muted);
       color: var(--jb-ink-secondary);
-      box-shadow: var(--neo-inset);
     }
     .eligibility-banner.eligible,
-    .eligibility-banner.suitable { background: var(--jb-success-soft); color: var(--jb-success-text); }
+    .eligibility-banner.suitable {
+      background: var(--jb-success-soft);
+      color: var(--jb-success-text);
+      border-color: var(--jb-success-border);
+    }
     .eligibility-banner.ineligible,
-    .eligibility-banner.unsuitable { background: var(--jb-danger-soft); color: var(--jb-danger); }
+    .eligibility-banner.unsuitable {
+      background: var(--jb-danger-soft);
+      color: var(--jb-danger);
+      border-color: var(--jb-danger-border);
+    }
     .eligibility-banner.unknown,
-    .eligibility-banner.partial { background: var(--jb-warning-soft, #fff7ed); color: var(--jb-warning, #b45309); }
-    .eligibility-banner strong { display: block; font-size: 14px; margin-bottom: 4px; color: var(--jb-ink); }
+    .eligibility-banner.partial {
+      background: var(--jb-warning-soft);
+      color: var(--jb-warning);
+      border-color: rgba(122, 90, 30, 0.28);
+    }
+    .eligibility-banner strong {
+      display: block;
+      font-family: var(--jb-font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: inherit;
+    }
 
     .skills-compare-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
     @media (max-width: 768px) { .skills-compare-grid { grid-template-columns: 1fr; } }
     .skills-col {
       background: var(--jb-surface-muted);
-      border: none;
+      border: 1px solid var(--jb-border);
       border-radius: var(--jb-radius-sm);
       padding: 14px;
       min-height: 100px;
-      box-shadow: var(--neo-inset);
     }
     .skills-col h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; color: var(--jb-ink-muted); font-weight: 700; }
     .skill-pill {
       display: inline-block;
       font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
+      padding: 4px 9px;
+      border-radius: 4px;
       margin: 0 4px 6px 0;
-      border: none;
-      background: var(--jb-card);
-      box-shadow: var(--neo-raised-sm);
+      border: 1px solid var(--jb-border);
+      background: var(--jb-card-highlight);
       font-weight: 500;
     }
     .skill-pill.before { color: var(--jb-ink-muted); }
-    .skill-pill.added { color: var(--jb-success-text); }
+    .skill-pill.added { color: var(--jb-success-text); border-color: var(--jb-success-border); background: var(--jb-success-soft); }
     .skill-pill.after { color: var(--jb-ink); }
-    .skill-pill.removed { color: var(--jb-danger); text-decoration: line-through; opacity: 0.85; }
+    .skill-pill.removed { color: var(--jb-danger); text-decoration: line-through; opacity: 0.85; border-color: var(--jb-danger-border); }
 
     #toast {
       position: fixed; bottom: 24px; right: 24px;
-      background: var(--jb-card);
-      color: var(--jb-ink);
+      background: var(--jb-ink);
+      color: var(--jb-card);
       padding: 14px 18px;
       border-radius: var(--jb-radius-sm);
       font-size: 13px;
@@ -441,8 +641,8 @@
       transition: opacity 0.3s;
       z-index: 9999;
       max-width: 340px;
-      border: none;
-      box-shadow: var(--neo-raised);
+      border: 1px solid var(--jb-ink);
+      box-shadow: var(--jb-shadow-md);
     }
     #toast.show { opacity: 1; }
 
@@ -453,13 +653,12 @@
       align-items: center;
       gap: 8px;
       background: var(--jb-card);
-      border: none;
-      border-radius: 999px;
-      padding: 7px 14px;
+      border: 1px solid var(--jb-border-strong);
+      border-radius: 4px;
+      padding: 7px 12px;
       font-size: 12px;
       color: var(--jb-success-text);
       font-weight: 600;
-      box-shadow: var(--neo-raised-sm);
     }
     .api-badge.warn { color: var(--jb-warning); }
     .api-badge.warn .api-dot { background: var(--jb-warning); }
@@ -467,63 +666,544 @@
     .api-badge.error .api-dot { background: var(--jb-danger); }
     .api-dot { width: 7px; height: 7px; background: var(--jb-success); border-radius: 50%; }
 
-    .streaming-cursor::after { content: '▋'; animation: blink 1s infinite; color: var(--jb-brand); }
-    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+    .streaming-cursor::after { content: '▋'; animation: blink 1s infinite; color: var(--jb-slate); }
 
     .scorecard {
       background: var(--jb-surface-muted);
-      border: none;
+      border: 1px solid var(--jb-border);
       border-radius: var(--jb-radius-sm);
       padding: 16px;
       font-size: 13px;
-      box-shadow: var(--neo-inset);
     }
-    .scorecard-row { display: flex; justify-content: space-between; border-bottom: 1px solid var(--jb-border); padding: 8px 0; }
+    .scorecard-row { display: flex; justify-content: space-between; border-bottom: 1px solid var(--jb-border); padding: 8px 0; gap: 12px; }
     .scorecard-row:last-child { border-bottom: none; }
     .sc-label { color: var(--jb-ink-muted); }
-    .sc-value { font-weight: 700; color: var(--jb-ink); }
+    .sc-value { font-weight: 700; color: var(--jb-ink); text-align: right; }
     .sc-green { color: var(--jb-success-text); }
-    .sc-blue { color: var(--jb-ink); }
+    .sc-blue { color: var(--jb-slate); }
     .sc-yellow { color: var(--jb-warning); }
     .sc-red { color: var(--jb-danger); }
 
+    /* ── ATS readiness report UI ── */
+    .ats-report {
+      margin: 4px 0 18px;
+      animation: heroIn 0.45s ease both;
+    }
+    .ats-report-hero {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 22px;
+      align-items: center;
+      padding: 20px 22px;
+      margin-bottom: 0;
+      background:
+        linear-gradient(135deg, rgba(15, 118, 110, 0.08), transparent 55%),
+        var(--jb-card-highlight);
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-md);
+    }
+    @media (max-width: 640px) {
+      .ats-report-hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        justify-items: center;
+      }
+    }
+    .ats-ring {
+      --v: 0;
+      --ring: var(--jb-slate);
+      width: 118px;
+      height: 118px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      position: relative;
+      background: conic-gradient(var(--ring) calc(var(--v) * 1%), rgba(20, 24, 28, 0.08) 0);
+      flex-shrink: 0;
+    }
+    .ats-ring::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      background: var(--jb-card-highlight);
+    }
+    .ats-ring-inner {
+      position: relative;
+      text-align: center;
+      z-index: 1;
+    }
+    .ats-ring-score {
+      font-family: var(--jb-font-display);
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--jb-ink);
+    }
+    .ats-ring-score small {
+      display: block;
+      font-family: var(--jb-font-sans);
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--jb-ink-muted);
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+    }
+    .ats-report-meta h3 {
+      font-family: var(--jb-font-display);
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--jb-ink);
+      margin: 0 0 6px;
+    }
+    .ats-report-meta p {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: var(--jb-ink-muted);
+      line-height: 1.5;
+      max-width: 42ch;
+    }
+    .ats-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--jb-border);
+      background: var(--jb-surface-muted);
+      color: var(--jb-ink-secondary);
+    }
+    .ats-badge.is-good {
+      background: var(--jb-success-soft);
+      border-color: var(--jb-success-border);
+      color: var(--jb-success-text);
+    }
+    .ats-badge.is-ok {
+      background: var(--jb-warning-soft);
+      border-color: rgba(122, 90, 30, 0.28);
+      color: var(--jb-warning);
+    }
+    .ats-badge.is-bad {
+      background: var(--jb-danger-soft);
+      border-color: var(--jb-danger-border);
+      color: var(--jb-danger);
+    }
+    .ats-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--jb-ink-muted);
+      margin: 0 0 10px;
+    }
+    .ats-report-cats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin: 0;
+    }
+    @media (max-width: 900px) {
+      .ats-report-cats { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .ats-report-cats { grid-template-columns: repeat(2, 1fr); }
+    }
+    .ats-cat {
+      --cat-color: var(--jb-slate);
+      background: var(--jb-card-highlight);
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-md);
+      padding: 16px 12px 14px;
+      text-align: center;
+      box-shadow: var(--jb-shadow-sm);
+      transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      animation: catPop 0.5s ease both;
+    }
+    .ats-cat:nth-child(2) { animation-delay: 0.05s; }
+    .ats-cat:nth-child(3) { animation-delay: 0.1s; }
+    .ats-cat:nth-child(4) { animation-delay: 0.15s; }
+    .ats-cat:nth-child(5) { animation-delay: 0.2s; }
+    @keyframes catPop {
+      from { opacity: 0; transform: translateY(10px) scale(0.96); }
+      to { opacity: 1; transform: none; }
+    }
+    .ats-cat:hover {
+      border-color: color-mix(in srgb, var(--cat-color) 40%, transparent);
+      transform: translateY(-3px);
+      box-shadow: var(--jb-shadow-md);
+    }
+    .ats-mini-ring {
+      --v: 0;
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      position: relative;
+      background: conic-gradient(var(--cat-color) calc(var(--v) * 1%), rgba(15, 23, 32, 0.08) 0);
+    }
+    .ats-mini-ring::before {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border-radius: 50%;
+      background: var(--jb-card-highlight);
+    }
+    .ats-mini-ring-score {
+      position: relative;
+      z-index: 1;
+      font-family: var(--jb-font-display);
+      font-size: 1.35rem;
+      font-weight: 650;
+      color: var(--jb-ink);
+      line-height: 1;
+    }
+    .ats-cat-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--jb-ink-muted);
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .ats-cat-weight {
+      font-size: 11px;
+      color: var(--jb-ink-subtle);
+    }
+    .ats-cat-flag {
+      font-size: 10px;
+      color: var(--jb-ink-muted);
+      margin-top: 6px;
+      line-height: 1.3;
+    }
+
+    /* Insights: strengths / weaknesses / suggestions / tips */
+    .ats-insights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 0;
+    }
+    @media (max-width: 640px) {
+      .ats-insights { grid-template-columns: 1fr; }
+    }
+    .ats-insight {
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-md);
+      background: var(--jb-card-highlight);
+      padding: 14px 14px 12px;
+      min-height: 140px;
+      box-shadow: var(--jb-shadow-sm);
+      animation: catPop 0.55s ease both;
+    }
+    .ats-insight:nth-child(2) { animation-delay: 0.06s; }
+    .ats-insight:nth-child(3) { animation-delay: 0.12s; }
+    .ats-insight:nth-child(4) { animation-delay: 0.18s; }
+    .ats-insight-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .ats-insight-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .ats-insight h4 {
+      margin: 0;
+      font-family: var(--jb-font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--jb-ink);
+    }
+    .ats-insight ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+    .ats-insight li {
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--jb-ink-secondary);
+      padding-left: 12px;
+      position: relative;
+    }
+    .ats-insight li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.45;
+    }
+    .ats-insight.is-strength { border-top: 3px solid var(--jb-accent-4); }
+    .ats-insight.is-strength .ats-insight-dot { background: var(--jb-accent-4); }
+    .ats-insight.is-weakness { border-top: 3px solid var(--jb-danger); }
+    .ats-insight.is-weakness .ats-insight-dot { background: var(--jb-danger); }
+    .ats-insight.is-suggest { border-top: 3px solid var(--jb-accent-2); }
+    .ats-insight.is-suggest .ats-insight-dot { background: var(--jb-accent-2); }
+    .ats-insight.is-tip { border-top: 3px solid var(--jb-accent-5); }
+    .ats-insight.is-tip .ats-insight-dot { background: var(--jb-accent-5); }
+
+    /* Report board: score strip + two columns */
+    .jb-report-board {
+      display: grid;
+      gap: 16px;
+    }
+    .jb-report-top {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.4fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+    @media (max-width: 900px) {
+      .jb-report-top { grid-template-columns: 1fr; }
+    }
+    .jb-report-gauges {
+      background: var(--jb-card-highlight);
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-md);
+      padding: 16px 14px 14px;
+      box-shadow: var(--jb-shadow-sm);
+    }
+    .jb-report-mid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .jb-report-mid { grid-template-columns: 1fr; }
+    }
+    .jb-report-side {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .jb-report-side .ats-top-fixes { margin: 0; }
+    .jb-report-side .ats-metrics-row { margin: 0; }
+    .jb-report-keywords {
+      margin-top: 2px;
+    }
+    .ats-insight { min-height: 120px; }
+
+    .ats-top-fixes {
+      margin: 0 0 18px;
+      padding: 0;
+      background: transparent;
+      border: none;
+    }
+    .ats-top-fixes .ats-section-label { margin-bottom: 12px; }
+    .ats-fix-list {
+      display: grid;
+      gap: 10px;
+    }
+    .ats-fix-item {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px 16px;
+      background: var(--jb-card-highlight);
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-sm);
+      font-size: 13px;
+      color: var(--jb-ink);
+      animation: scoreSettle 0.4s ease both;
+    }
+    .ats-fix-item:nth-child(2) { animation-delay: 0.06s; }
+    .ats-fix-item:nth-child(3) { animation-delay: 0.12s; }
+    .ats-fix-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: var(--jb-font-display);
+      font-weight: 600;
+      font-size: 1rem;
+      background: var(--jb-surface-muted);
+      border: 1px solid var(--jb-border);
+      color: var(--jb-ink);
+    }
+    .ats-fix-item.is-priority .ats-fix-num {
+      background: var(--jb-ink);
+      border-color: var(--jb-ink);
+      color: var(--jb-card);
+    }
+    .ats-fix-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--jb-ink);
+    }
+    .ats-fix-item span {
+      color: var(--jb-ink-muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .ats-kw-block {
+      margin: 0 0 18px;
+      padding: 16px 18px;
+      background: var(--jb-surface-muted);
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-sm);
+    }
+    .ats-metrics-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 640px) {
+      .ats-metrics-row { grid-template-columns: 1fr; }
+    }
+    .ats-metric {
+      padding: 14px 16px;
+      background: var(--jb-card-highlight);
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-sm);
+    }
+    .ats-metric .score-label { margin-bottom: 4px; }
+    .ats-metric .score-value { font-size: 1.45rem; text-align: left; }
+    .ats-metric .score-sub { text-align: left; margin-top: 2px; }
+    .ats-rewrite-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 18px 20px;
+      margin: 4px 0 16px;
+      background:
+        linear-gradient(90deg, rgba(20, 24, 28, 0.04), transparent 60%),
+        var(--jb-card-highlight);
+      border: 1px solid var(--jb-border-strong);
+      border-radius: var(--jb-radius-md);
+    }
+    .ats-rewrite-cta.hidden { display: none !important; }
+    .ats-rewrite-cta h4 {
+      font-family: var(--jb-font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      color: var(--jb-ink);
+    }
+    .ats-rewrite-cta p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--jb-ink-muted);
+      max-width: 48ch;
+      line-height: 1.45;
+    }
+    .ats-details {
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-sm);
+      background: var(--jb-card-highlight);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .ats-details summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--jb-ink-secondary);
+      user-select: none;
+    }
+    .ats-details summary::-webkit-details-marker { display: none; }
+    .ats-details summary::after {
+      content: "+";
+      float: right;
+      color: var(--jb-ink-muted);
+      font-weight: 700;
+    }
+    .ats-details[open] summary::after { content: "–"; }
+    .ats-details .scorecard {
+      border: none;
+      border-top: 1px solid var(--jb-border);
+      border-radius: 0;
+      margin: 0;
+      background: var(--jb-surface-muted);
+    }
+    .ats-report-tabs {
+      display: flex;
+      gap: 4px;
+      margin: 0 0 14px;
+      flex-wrap: wrap;
+    }
+    .ats-report-tab {
+      font-family: var(--jb-font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--jb-border);
+      background: transparent;
+      color: var(--jb-ink-muted);
+      cursor: pointer;
+    }
+    .ats-report-tab:hover { color: var(--jb-ink); border-color: var(--jb-border-strong); }
+    .ats-report-tab.active {
+      background: var(--jb-ink);
+      border-color: var(--jb-ink);
+      color: var(--jb-card);
+    }
+    .ats-pane { display: none; }
+    .ats-pane.active { display: block; }
+
     .filename-box {
       background: var(--jb-surface-muted);
-      border: none;
+      border: 1px solid var(--jb-border);
       border-radius: var(--jb-radius-sm);
       padding: 18px;
-      box-shadow: var(--neo-inset);
     }
     .filename-value { font-size: 16px; font-weight: 600; color: var(--jb-success-text); word-break: break-all; margin: 8px 0; font-family: ui-monospace, monospace; }
 
     .error-box {
       background: var(--jb-danger-soft);
-      border: none;
+      border: 1px solid var(--jb-danger-border);
       border-radius: var(--jb-radius-sm);
       padding: 16px;
       color: var(--jb-danger);
       font-size: 13px;
       line-height: 1.65;
-      box-shadow: var(--neo-inset);
     }
 
     .tab-content p { color: var(--jb-ink-muted); font-size: 13px; margin-bottom: 12px; }
     .tab-content p strong { color: var(--jb-success-text); }
-    #freeAtsSourceLabel {
-      border-top: none !important;
-      padding-top: 14px !important;
-      font-size: 12px;
-      color: var(--jb-ink-subtle) !important;
-      box-shadow: inset 0 1px 0 rgba(197, 202, 211, 0.6);
-    }
     #loadingText { color: var(--jb-ink-muted) !important; }
+    #progressSection.card .card-title {
+      font-family: var(--jb-font-display);
+      text-transform: none;
+      letter-spacing: -0.02em;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--jb-ink);
+    }
     [style*="color:#94a3b8"], [style*="color:#64748b"], [style*="color:#475569"] { color: var(--jb-ink-muted) !important; }
-    [style*="border-top:1px solid #334155"] { border-top-color: transparent !important; }
+    [style*="border-top:1px solid #334155"] { border-top-color: var(--jb-border) !important; }
     [style*="color:#4ade80"] { color: var(--jb-success-text) !important; }
     [style*="color:#fbbf24"] { color: var(--jb-warning) !important; }
     [style*="color:#f87171"] { color: var(--jb-danger) !important; }
     [style*="color:#d8b4fe"], [style*="color:#a855f7"] { color: var(--jb-ink) !important; }
+    [style*="background:linear-gradient(90deg,#a855f7,#6d28d9)"] { background: var(--jb-slate) !important; }
   </style>
+
 </head>
 <body class="jb-app">
 
@@ -544,100 +1224,162 @@
 <main class="jb-main">
 <div class="container">
   <section class="jb-hero">
-    <p class="jb-eyebrow">Your workspace</p>
-    <h1 class="jb-hero-title">Tailor your resume for every role.</h1>
-    <p class="jb-hero-copy">Free local ATS scoring, AI-powered rewrite, and skills analysis — one calm workspace from Jobilly.AI.</p>
+    <h1 class="jb-hero-brand"><span>ATS Resume Studio</span>Jobilly.AI</h1>
+    <div class="jb-hero-side">
+      <p class="jb-hero-title">Score the gaps. Rewrite to win.</p>
+      <p class="jb-hero-copy">Jobilly readiness scoring with smart keyword match — then AI rewrite from your top fixes.</p>
+    </div>
   </section>
 
   <!-- STEP INDICATORS -->
   <div class="steps">
     <div class="step active" id="step1"><div class="step-num">1</div> Paste Inputs</div>
-    <div class="step" id="step2"><div class="step-num">2</div> AI Keyword Extraction</div>
-    <div class="step" id="step3"><div class="step-num">3</div> AI Resume Rewrite</div>
-    <div class="step" id="step4"><div class="step-num">4</div> ATS Scoring</div>
+    <div class="step" id="step2"><div class="step-num">2</div> ATS Report</div>
+    <div class="step" id="step3"><div class="step-num">3</div> AI Rewrite</div>
+    <div class="step" id="step4"><div class="step-num">4</div> Re-score</div>
     <div class="step" id="step5"><div class="step-num">5</div> Download</div>
   </div>
 
-  <!-- INPUT GRID -->
-  <div class="grid-2" id="inputSection">
-    <div class="card">
-      <div class="card-title">📋 Job Description</div>
-      <textarea id="jdInput" placeholder="Paste the full job description here...&#10;&#10;Include: role title, responsibilities, required skills, preferred skills, tools, certifications..."></textarea>
-      <div class="char-count"><span id="jdCount">0</span> chars · <span id="jdWords">0</span> words</div>
+  <!-- WORKSPACE: inputs + sticky action rail -->
+  <div class="jb-workspace" id="workspaceSection">
+    <div class="jb-workspace-main">
+      <div class="grid-2" id="inputSection">
+        <div class="card">
+          <div class="card-title">Job Description</div>
+          <textarea id="jdInput" placeholder="Paste the full job description here...&#10;&#10;Include: role title, responsibilities, required skills, preferred skills, tools, certifications..."></textarea>
+          <div class="char-count"><span id="jdCount">0</span> chars · <span id="jdWords">0</span> words</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Your Resume</div>
+          <textarea id="resumeInput" placeholder="Paste your resume here as plain text...&#10;&#10;Include: name, contact, all roles, education, certifications, skills, projects..."></textarea>
+          <div class="char-count"><span id="resumeCount">0</span> chars · <span id="resumeWords">0</span> words</div>
+        </div>
+      </div>
     </div>
-    <div class="card">
-      <div class="card-title">👤 Your Resume</div>
-      <textarea id="resumeInput" placeholder="Paste your resume here as plain text...&#10;&#10;Include: name, contact, all roles, education, certifications, skills, projects..."></textarea>
-      <div class="char-count"><span id="resumeCount">0</span> chars · <span id="resumeWords">0</span> words</div>
-    </div>
-  </div>
-
-  <!-- ACTION BAR -->
-  <div class="action-bar">
-    <button class="btn-free" id="freeAtsBtn" onclick="runFreeAtsCheck()">
-      Check ATS Score
-    </button>
-    <button class="btn-primary" id="analyzeBtn" onclick="runAnalysis()">
-      AI Tailor Resume
-    </button>
-    <button class="btn-warning hidden" id="rerunBtn" onclick="resetAndRun()">
-      🔄 Start Over
-    </button>
-    <button class="btn-danger" onclick="clearAll()">🗑 Clear All</button>
-    <div id="loadingIndicator" class="hidden" style="align-items:center;gap:8px;">
-      <span class="spinner"></span>
-      <span id="loadingText" style="font-size:13px;color:#94a3b8;">Processing...</span>
-    </div>
+    <aside class="jb-action-rail" aria-label="Actions">
+      <div class="action-label">Actions</div>
+      <button class="btn-free" id="freeAtsBtn" onclick="runFreeAtsCheck()">
+        Check ATS &amp; Get Report
+      </button>
+      <button class="btn-primary" id="analyzeBtn" onclick="runAnalysis()">
+        AI Rewrite from Report
+      </button>
+      <button class="btn-warning hidden" id="rerunBtn" onclick="resetAndRun()">
+        Start Over
+      </button>
+      <button class="btn-danger" onclick="clearAll()">Clear All</button>
+      <div id="loadingIndicator" class="hidden" style="align-items:center;gap:8px;">
+        <span class="spinner"></span>
+        <span id="loadingText" style="font-size:13px;color:#94a3b8;">Processing...</span>
+      </div>
+    </aside>
   </div>
 
   <!-- FREE ATS RESULT PANEL -->
   <div id="freeAtsPanel" class="hidden card" style="margin-bottom:20px;">
-    <div class="card-title">🔍 ATS Score Analysis</div>
+    <div class="card-title">ATS Readiness Report</div>
     <div id="freeJdFit"></div>
     <div id="freeExpEligibility"></div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;" id="freeScoreGrid">
-      <div class="score-card">
-        <div class="score-label">ATS Score</div>
-        <div class="score-value" id="freeAtsScore">--</div>
-        <div class="score-sub">Target: 100/100</div>
+
+    <div class="ats-report jb-report-board" id="freeAtsReport">
+      <div class="jb-report-top">
+        <div class="ats-report-hero">
+          <div class="ats-ring" id="freeReadinessRing" style="--v:0;">
+            <div class="ats-ring-inner">
+              <div class="ats-ring-score" id="freeReadinessScore">—<small>/100</small></div>
+            </div>
+          </div>
+          <div class="ats-report-meta">
+            <h3 id="freeReadinessTitle">Run a check to see readiness</h3>
+            <p id="freeReadinessCopy">Jobilly scores keywords, content, parseability, structure, and formatting — then AI rewrite from your top fixes.</p>
+            <span class="ats-badge" id="freeReadinessBadge">Awaiting analysis</span>
+          </div>
+        </div>
+        <div class="jb-report-gauges">
+          <div class="ats-section-label">Category gauges</div>
+          <div class="ats-report-cats" id="freeCatGrid"></div>
+        </div>
       </div>
-      <div class="score-card">
-        <div class="score-label">Keywords Matched</div>
-        <div class="score-value blue" id="freeKwMatch">--</div>
-        <div class="score-sub" id="freeKwMatchSub">of extracted keywords</div>
+
+      <div class="jb-report-mid">
+        <div>
+          <div class="ats-section-label">Insights</div>
+          <div class="ats-insights" id="freeInsights">
+            <div class="ats-insight is-strength">
+              <div class="ats-insight-head"><span class="ats-insight-dot"></span><h4>Strengths</h4></div>
+              <ul id="freeStrengths"><li>Run a check to see strengths</li></ul>
+            </div>
+            <div class="ats-insight is-weakness">
+              <div class="ats-insight-head"><span class="ats-insight-dot"></span><h4>Weaknesses</h4></div>
+              <ul id="freeWeaknesses"><li>Run a check to see gaps</li></ul>
+            </div>
+            <div class="ats-insight is-suggest">
+              <div class="ats-insight-head"><span class="ats-insight-dot"></span><h4>Suggestions</h4></div>
+              <ul id="freeSuggestions"><li>Run a check for rewrite suggestions</li></ul>
+            </div>
+            <div class="ats-insight is-tip">
+              <div class="ats-insight-head"><span class="ats-insight-dot"></span><h4>Tips</h4></div>
+              <ul id="freeTips"><li>Keep Summary → Skills → Experience → Education → Certifications</li></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="jb-report-side">
+          <div class="ats-top-fixes" id="freeTopFixesWrap">
+            <div class="ats-section-label">Top fixes · rewrite priority</div>
+            <div class="ats-fix-list" id="freeTopFixes"></div>
+          </div>
+          <div class="ats-metrics-row" id="freeScoreGrid">
+            <div class="ats-metric">
+              <div class="score-label">Keywords matched</div>
+              <div class="score-value blue" id="freeKwMatch">--</div>
+              <div class="score-sub" id="freeKwMatchSub">of extracted keywords</div>
+            </div>
+            <div class="ats-metric">
+              <div class="score-label">Format · Metrics</div>
+              <div class="score-value" id="freeFmtCheck" style="font-size:1.35rem;">--</div>
+              <div class="score-sub"><span id="freeBulletScore">--</span> bullets with numbers</div>
+            </div>
+          </div>
+          <div class="ats-rewrite-cta hidden" id="freeRewriteCta">
+            <div>
+              <h4 id="freeRewriteCtaTitle">Rewrite from this report</h4>
+              <p id="freeRewriteCtaCopy">AI will apply the Top fixes and missing keywords to maximize your ATS score.</p>
+            </div>
+            <button class="btn-primary" id="freeRewriteBtn" onclick="runAnalysis()">AI Rewrite from Report → 95+</button>
+          </div>
+        </div>
       </div>
-      <div class="score-card">
-        <div class="score-label">Format Check</div>
-        <div class="score-value" id="freeFmtCheck" style="font-size:22px;">--</div>
-        <div class="score-sub">ATS-safe formatting</div>
-      </div>
-      <div class="score-card">
-        <div class="score-label">Bullets w/ Metrics</div>
-        <div class="score-value yellow" id="freeBulletScore" style="font-size:22px;">--</div>
-        <div class="score-sub">quantified achievements</div>
+
+      <div class="jb-report-keywords ats-kw-block">
+        <div class="ats-section-label">Keyword match from JD</div>
+        <div id="freeKwGrid" class="keyword-grid"></div>
+        <div style="margin-top:12px;">
+          <div class="progress-bar-wrap" style="height:8px;"><div class="progress-bar" id="freeKwBar" style="width:0%;"></div></div>
+          <div style="font-size:12px;margin-top:6px;" id="freeKwBarLabel"></div>
+        </div>
       </div>
     </div>
-    <!-- keyword tags -->
-    <div style="margin-bottom:12px;">
-      <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Keyword Match (extracted from JD)</div>
-      <div id="freeKwGrid" class="keyword-grid"></div>
-      <div style="margin-top:10px;">
-        <div class="progress-bar-wrap" style="height:10px;"><div class="progress-bar" id="freeKwBar" style="width:0%;background:linear-gradient(90deg,#a855f7,#6d28d9);"></div></div>
-        <div style="font-size:12px;color:#94a3b8;margin-top:5px;" id="freeKwBarLabel"></div>
-      </div>
+
+    <div class="ats-report-tabs" role="tablist">
+      <button type="button" class="ats-report-tab active" data-ats-pane="gaps" onclick="switchAtsPane('gaps', this)">Gaps</button>
+      <button type="button" class="ats-report-tab" data-ats-pane="breakdown" onclick="switchAtsPane('breakdown', this)">Score breakdown</button>
     </div>
-    <!-- scorecard breakdown -->
-    <div class="scorecard" id="freeScorecard" style="margin-bottom:12px;"></div>
-    <!-- gaps -->
-    <div id="freeGaps"></div>
-    <div style="margin-top:14px;padding-top:12px;border-top:1px solid #334155;font-size:12px;color:#64748b;" id="freeAtsSourceLabel">
-      🧠 Local RAG scoring · Zero API cost for ATS check
+    <div class="ats-pane active" id="atsPaneGaps">
+      <div id="freeGaps"></div>
+    </div>
+    <div class="ats-pane" id="atsPaneBreakdown">
+      <div class="scorecard" id="freeScorecard"></div>
+    </div>
+
+    <div id="freeAtsSourceLabel">
+      Local RAG scoring · Zero API cost for ATS check
     </div>
   </div>
 
   <!-- PROGRESS -->
   <div id="progressSection" class="hidden card" style="margin-bottom:20px;">
-    <div class="card-title" style="margin-bottom:12px;">⚙️ AI Processing Pipeline</div>
+    <div class="card-title" style="margin-bottom:12px;">AI Processing Pipeline</div>
     <div id="progressLabel" style="font-size:13px;color:#94a3b8;margin-bottom:6px;">Initializing...</div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
     <div style="font-size:11px;color:#475569;margin-top:6px;" id="progressSub">Sending to gemini-flash-lite-latest...</div>
@@ -647,16 +1389,17 @@
   <div id="scoreSection" class="hidden">
     <div id="resultsJdFit"></div>
     <div id="resultsExpEligibility"></div>
+    <div class="ats-section-label" style="margin-top:4px;">After rewrite</div>
     <div class="score-grid">
       <div class="score-card">
-        <div class="score-label">ATS Score</div>
+        <div class="score-label">ATS Readiness</div>
         <div class="score-value green" id="atsScore">--</div>
-        <div class="score-sub">Target: 100/100</div>
+        <div class="score-sub">Target: 95+/100</div>
       </div>
       <div class="score-card">
         <div class="score-label">Keywords Matched</div>
         <div class="score-value blue" id="kwMatch">--</div>
-        <div class="score-sub" id="kwMatchSub">of 10 primary keywords</div>
+        <div class="score-sub" id="kwMatchSub">of skills extracted from JD</div>
       </div>
       <div class="score-card">
         <div class="score-label">Format Check</div>
@@ -674,23 +1417,23 @@
   <!-- RESULTS TABS -->
   <div id="resultsSection" class="hidden card">
     <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('tailored', this)">📝 Tailored Resume</button>
-      <button class="tab-btn" onclick="switchTab('scorecard', this)">📊 ATS Scorecard</button>
-      <button class="tab-btn" onclick="switchTab('keywords', this)">🔑 Keyword Analysis</button>
-      <button class="tab-btn" onclick="switchTab('skills', this)">🧩 Skills Changes</button>
-      <button class="tab-btn" onclick="switchTab('gaps', this)">⚠️ Gap Analysis</button>
-      <button class="tab-btn" onclick="switchTab('filename', this)">📁 ATS Filename</button>
+      <button class="tab-btn active" onclick="switchTab('tailored', this)">Tailored Resume</button>
+      <button class="tab-btn" onclick="switchTab('scorecard', this)">ATS Scorecard</button>
+      <button class="tab-btn" onclick="switchTab('keywords', this)">Keyword Analysis</button>
+      <button class="tab-btn" onclick="switchTab('skills', this)">Skills Changes</button>
+      <button class="tab-btn" onclick="switchTab('gaps', this)">Gap Analysis</button>
+      <button class="tab-btn" onclick="switchTab('filename', this)">ATS Filename</button>
     </div>
 
     <!-- TAB: TAILORED RESUME -->
     <div class="tab-content active" id="tab-tailored">
       <div id="outputArea" contenteditable="true" spellcheck="false" class="streaming-cursor"></div>
       <div class="dl-strip">
-        <button class="btn-success" onclick="downloadDocx()">⬇ Download .doc (Word)</button>
-        <button class="btn-secondary" onclick="downloadTxt()">⬇ Download .txt</button>
-        <button class="btn-secondary" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
-        <button class="btn-secondary" onclick="printResume()">🖨 Print / Save PDF</button>
-        <button class="btn-warning hidden" id="boostBtn" onclick="boostScore()">🎯 Boost to 95+</button>
+        <button class="btn-success" onclick="downloadDocx()">Download .doc (Word)</button>
+        <button class="btn-secondary" onclick="downloadTxt()">Download .txt</button>
+        <button class="btn-secondary" onclick="copyToClipboard()">Copy to Clipboard</button>
+        <button class="btn-secondary" onclick="printResume()">Print / Save PDF</button>
+        <button class="btn-warning hidden" id="boostBtn" onclick="boostScore()">Boost to 95+</button>
       </div>
     </div>
 
@@ -701,7 +1444,7 @@
 
     <!-- TAB: KEYWORDS -->
     <div class="tab-content" id="tab-keywords">
-      <p style="font-size:13px;color:#94a3b8;margin-bottom:12px;">Top 20 ATS keywords (10 primary + 10 secondary) extracted by Gemini AI from the Job Description and their presence in the tailored resume.</p>
+      <p style="font-size:13px;color:#94a3b8;margin-bottom:12px;">ATS keywords extracted from the Job Description (variable count — only skills actually found in the JD) and their presence in the tailored resume.</p>
       <div class="keyword-grid" id="kwGrid"></div>
       <div style="margin-top:20px;">
         <div class="progress-bar-wrap" style="height:12px;">
@@ -748,7 +1491,7 @@
         <div class="filename-value" id="suggestedFilename"></div>
         <div style="font-size:13px;color:#94a3b8;line-height:1.7;" id="filenameReason"></div>
         <div style="margin-top:12px;">
-          <button class="btn-secondary" onclick="copyFilename()" style="padding:8px 16px;font-size:12px;">📋 Copy Filename</button>
+          <button class="btn-secondary" onclick="copyFilename()" style="padding:8px 16px;font-size:12px;">Copy Filename</button>
         </div>
       </div>
     </div>
@@ -772,8 +1515,8 @@ function getGeminiApiUrl() {
 // RAG: local keyword extraction + ATS scoring (zero API cost). Gemini only for rewrite/boost.
 const USE_RAG = true;
 const GEMINI_KEYWORD_FALLBACK = false;
-const SCORE_TAILOR_THRESHOLD = 95;
-const MAX_BOOST_PASSES = 3; // boost only until score hits 95+
+const SCORE_TAILOR_THRESHOLD = 95; // Jobilly readiness target
+const MAX_BOOST_PASSES = 3; // boost only until readiness hits threshold
 
 // ─── STATE ────────────────────────────────────────────────────────
 let state = {
@@ -781,6 +1524,7 @@ let state = {
   tailoredResume: '',
   originalResume: '',
   scorecard: null,
+  atsReport: null,
   gaps: [],
   filename: '',
   experienceAnalysis: null,
@@ -847,20 +1591,20 @@ async function runFreeAtsCheck() {
     }
   } catch (err) {
     freeBtn.disabled = false;
-    freeBtn.textContent = 'Check ATS Score';
+    freeBtn.textContent = 'Check ATS & Get Report';
     showToast('❌ ATS check failed: ' + err.message.slice(0, 60), '#ef4444');
     return;
   }
 
   freeBtn.disabled = false;
-  freeBtn.textContent = 'Check ATS Score';
+  freeBtn.textContent = 'Check ATS & Get Report';
 
   const srcLabels = {
-    rag: '🧠 Keywords from <strong style="color:#4ade80;">local RAG</strong> · Zero API cost · Pre-tailoring baseline',
-    cache: '⚡ Keywords from <strong style="color:#4ade80;">RAG cache</strong> · Zero API cost',
-    session: '⚡ Keywords from session · Pre-tailoring baseline',
-    api: '🤖 Keywords from Gemini · Pre-tailoring baseline',
-    'gemini-fallback': '🤖 RAG + Gemini fallback keywords',
+    rag: 'Jobilly readiness · Keywords from <strong style="color:#4ade80;">local RAG</strong> · Zero API cost',
+    cache: 'Jobilly readiness · Keywords from <strong style="color:#4ade80;">RAG cache</strong>',
+    session: 'Jobilly readiness · Keywords from session',
+    api: 'Jobilly readiness · Keywords from Gemini',
+    'gemini-fallback': 'Jobilly readiness · RAG + Gemini fallback keywords',
   };
   document.getElementById('freeAtsSourceLabel').innerHTML = srcLabels[kwSource] || srcLabels.rag;
 
@@ -872,17 +1616,17 @@ function parseKeywordJson(kwRaw) {
   try {
     const match = kwRaw.match(/\{[\s\S]*\}/);
     const parsed = match ? JSON.parse(match[0]) : {};
-    keywords.primary   = Array.isArray(parsed.primary)   ? parsed.primary.slice(0, 10)   : [];
-    keywords.secondary = Array.isArray(parsed.secondary) ? parsed.secondary.slice(0, 10) : [];
+    keywords.primary   = Array.isArray(parsed.primary)   ? parsed.primary.slice(0, 15)  : [];
+    keywords.secondary = Array.isArray(parsed.secondary) ? parsed.secondary.slice(0, 12) : [];
     if (keywords.primary.length === 0) throw new Error('bad parse');
   } catch {
     const flat = kwRaw.replace(/[\[\]{}'"]/g, '').split(',').map(k => k.trim()).filter(Boolean);
-    keywords.primary   = flat.slice(0, 10);
-    keywords.secondary = flat.slice(10, 20);
+    keywords.primary   = flat.slice(0, 15);
+    keywords.secondary = flat.slice(15, 27);
   }
   // Drop job titles/roles — primary/secondary must be technical skills only
   if (RAGEngine.sanitizeKeywordPayload) {
-    return RAGEngine.sanitizeKeywordPayload(keywords, 'gemini');
+    return RAGEngine.sanitizeKeywordPayload(keywords, 'gemini', document.getElementById('jdInput')?.value || '');
   }
   return keywords;
 }
@@ -893,10 +1637,14 @@ function parseKeywordJson(kwRaw) {
 function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
   const r = RAGEngine.computeAtsScore(jd, resume, primary, secondary, aliasMap);
   const {
-    atsScore, atsColour, kwPts, secPts, metricPts, summaryPts, fmtPts, sectionPts,
-    primaryFound, primaryMissing, secFound, secMissing,
-    bulletLines, bulletsWithNum, fmtCheck, fmtIssues, missingSections, gaps: ragGaps,
+    atsScore, atsColour, primaryFound, primaryMissing, secFound, secMissing,
+    bulletLines, bulletsWithNum, fmtCheck, fmtIssues, gaps: ragGaps,
+    report,
   } = r;
+
+  state.atsReport = report || null;
+  state.scorecard = r.scorecard || null;
+  state.gaps = ragGaps || [];
 
   function kwFound(kw) {
     return primaryFound.some(f => f.toLowerCase() === kw.toLowerCase())
@@ -923,21 +1671,19 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
     : '—';
 
   // Score tiles
-  const freeScoreEl = document.getElementById('freeAtsScore');
-  freeScoreEl.textContent = atsScore + '/100';
-  freeScoreEl.style.color = atsColour;
-
   document.getElementById('freeKwMatch').textContent  = primaryFound.length + '/' + primary.length;
-  document.getElementById('freeKwMatchSub').textContent = 'of top JD keywords';
-
-  const fmtEl = document.getElementById('freeFmtCheck');
-  fmtEl.textContent = fmtCheck + (fmtCheck === 'PASS' ? ' ✓' : ' ⚠');
-  fmtEl.style.color = fmtCheck === 'PASS' ? '#4ade80' : '#fbbf24';
+  document.getElementById('freeKwMatchSub').textContent =
+    'of ' + primary.length + ' skills extracted from JD';
 
   const bulletEl = document.getElementById('freeBulletScore');
   bulletEl.textContent = bulletLines.length > 0
     ? bulletsWithNum.length + '/' + bulletLines.length
-    : '0 bullets';
+    : '0';
+
+  const fmtEl = document.getElementById('freeFmtCheck');
+  fmtEl.textContent = fmtCheck + (fmtCheck === 'PASS' ? ' ✓' : ' ⚠');
+  fmtEl.style.color = '';
+  fmtEl.className = 'score-value ' + (fmtCheck === 'PASS' ? 'green' : 'yellow');
 
   // Keyword tags
   const grid = document.getElementById('freeKwGrid');
@@ -966,21 +1712,26 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
   const kwPct = Math.round(primaryFound.length / Math.max(primary.length, 1) * 100);
   document.getElementById('freeKwBar').style.width = kwPct + '%';
   document.getElementById('freeKwBarLabel').textContent =
-    primaryFound.length + ' of ' + primary.length + ' primary keywords found' +
-    (secondary.length > 0 ? ' · ' + secFound.length + ' of ' + secondary.length + ' secondary keywords found' : '');
+    primaryFound.length + ' of ' + primary.length + ' JD-extracted primary skills matched (' + kwPct + '%)' +
+    (secondary.length > 0 ? ' · ' + secFound.length + ' of ' + secondary.length + ' secondary' : '');
+
+  renderAtsReadinessReport(report);
 
   // Scorecard breakdown
-  const atsClass = atsScore >= 80 ? 'sc-green' : atsScore >= 60 ? 'sc-yellow' : 'sc-red';
+  const readiness = report?.overallReadiness;
+  const readinessClass = readiness >= 75 ? 'sc-green' : readiness >= 50 ? 'sc-yellow' : 'sc-red';
   document.getElementById('freeScorecard').innerHTML = `
-    <div class="scorecard-row"><span class="sc-label">ATS Score</span><span class="sc-value ${atsClass}" style="font-size:26px;">${atsScore} / 100</span></div>
-    <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:8px 0 4px;">Score Breakdown</div>
-    <div class="scorecard-row"><span class="sc-label">Primary Keywords (60 pts max)</span><span class="sc-value sc-blue">${kwPts} pts · ${primaryFound.length}/${primary.length} found</span></div>
-    <div class="scorecard-row"><span class="sc-label">Secondary Keywords (15 pts max)</span><span class="sc-value sc-blue">${secPts} pts · ${secFound.length}/${secondary.length || 0} found</span></div>
-    <div class="scorecard-row"><span class="sc-label">Quantified Bullets (10 pts max)</span><span class="sc-value sc-yellow">${metricPts} pts · ${bulletsWithNum.length} of ${bulletLines.length} bullets have metrics</span></div>
-    <div class="scorecard-row"><span class="sc-label">Summary Alignment (5 pts max)</span><span class="sc-value ${summaryPts >= 4 ? 'sc-green' : summaryPts >= 2 ? 'sc-yellow' : 'sc-red'}">${summaryPts} pts</span></div>
-    <div class="scorecard-row"><span class="sc-label">Format Compliance (5 pts max)</span><span class="sc-value ${fmtCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts} pts · ${fmtCheck}${fmtIssues.length ? ' — ' + fmtIssues.join('; ') : ''}</span></div>
-    <div class="scorecard-row"><span class="sc-label">Section Completeness (5 pts max)</span><span class="sc-value ${missingSections.length === 0 ? 'sc-green' : 'sc-yellow'}">${sectionPts} pts${missingSections.length ? ' · Missing: ' + missingSections.join(', ') : ' · All sections present'}</span></div>
-    <div class="scorecard-row"><span class="sc-label">JD Suitability (first check)</span><span class="sc-value ${fitClass}">${fitLabel}</span></div>
+    <div class="scorecard-row"><span class="sc-label">Overall readiness</span><span class="sc-value ${readinessClass}" style="font-size:26px;">${readiness ?? '—'} / 100</span></div>
+    <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:8px 0 4px;">Weighted categories</div>
+    <div class="scorecard-row"><span class="sc-label">Keywords (30%)</span><span class="sc-value sc-blue">${report?.categories?.keywords?.score ?? '—'} pts · ${primaryFound.length}/${primary.length} primary</span></div>
+    <div class="scorecard-row"><span class="sc-label">Content (25%)</span><span class="sc-value sc-yellow">${report?.categories?.content?.score ?? '—'} pts · ${bulletsWithNum.length}/${bulletLines.length} metrics</span></div>
+    <div class="scorecard-row"><span class="sc-label">Parseability (20%)</span><span class="sc-value sc-blue">${report?.categories?.parseability?.score ?? '—'} pts</span></div>
+    <div class="scorecard-row"><span class="sc-label">Structure (15%)</span><span class="sc-value sc-blue">${report?.categories?.structure?.score ?? '—'} pts</span></div>
+    <div class="scorecard-row"><span class="sc-label">Formatting (10%)</span><span class="sc-value ${fmtCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${report?.categories?.formatting?.score ?? '—'} pts · ${fmtCheck}${fmtIssues.length ? ' — ' + fmtIssues.join('; ') : ''}</span></div>
+    <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:8px 0 4px;">Fit checks</div>
+    <div class="scorecard-row"><span class="sc-label">JD Domain</span><span class="sc-value sc-blue">${jdFit?.domains?.jd?.label || '—'}</span></div>
+    <div class="scorecard-row"><span class="sc-label">Resume Domain</span><span class="sc-value ${jdFit?.domains?.relation === 'different' ? 'sc-red' : (jdFit?.domains?.relation === 'same' ? 'sc-green' : 'sc-yellow')}">${jdFit?.domains?.resume?.label || '—'}${jdFit?.domains?.relation === 'different' ? ' · Different domains' : ''}</span></div>
+    <div class="scorecard-row"><span class="sc-label">JD Suitability</span><span class="sc-value ${fitClass}">${fitLabel}</span></div>
     <div class="scorecard-row"><span class="sc-label">Experience Eligibility</span><span class="sc-value ${expClass}">${expLabel}</span></div>
   `;
 
@@ -1000,21 +1751,35 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
     });
   }
 
-  // Suitability is a warning only — AI Tailor is never blocked
   if (jdFit?.status === 'unsuitable') {
     gapsDiv.innerHTML = `
       <div class="gap-item critical" style="margin-bottom:10px;">
         <strong>⚠️ Weak JD fit — proceed with caution</strong><br>
         ${jdFit.message}<br>
-        <span style="opacity:0.9;">AI Tailor is still available; it cannot invent missing career-domain experience.</span>
+        <span style="opacity:0.9;">AI Rewrite is still available; it cannot invent missing career-domain experience.</span>
       </div>` + gapsDiv.innerHTML;
   }
-  if (atsScore < SCORE_TAILOR_THRESHOLD) {
-    gapsDiv.innerHTML += `
-      <div style="margin-top:16px;padding-top:14px;border-top:1px solid #334155;">
-        <div style="font-size:13px;color:#fbbf24;margin-bottom:10px;">Score ${atsScore}/100 is below target (${SCORE_TAILOR_THRESHOLD}). Tailor your resume to close keyword gaps.</div>
-        <button class="btn-primary" onclick="runAnalysis()">🚀 AI Tailor to ${SCORE_TAILOR_THRESHOLD}+</button>
-      </div>`;
+
+  const cta = document.getElementById('freeRewriteCta');
+  const ctaTitle = document.getElementById('freeRewriteCtaTitle');
+  const ctaCopy = document.getElementById('freeRewriteCtaCopy');
+  const ctaBtn = document.getElementById('freeRewriteBtn');
+  const readinessScore = report?.overallReadiness;
+  if (cta && ctaTitle && ctaCopy && ctaBtn) {
+    cta.classList.remove('hidden');
+    if (readinessScore != null && readinessScore < SCORE_TAILOR_THRESHOLD) {
+      ctaTitle.textContent = `Raise readiness ${readinessScore}/100 → ${SCORE_TAILOR_THRESHOLD}+`;
+      ctaCopy.textContent = 'AI applies Top Fixes + missing JD keywords to maximize readiness.';
+      ctaBtn.textContent = `AI Rewrite from Report → ${SCORE_TAILOR_THRESHOLD}+`;
+    } else if (primaryMissing.length || (report?.topFixes || []).length) {
+      ctaTitle.textContent = readinessScore != null ? `Readiness ${readinessScore}/100` : 'Rewrite from this report';
+      ctaCopy.textContent = 'Polish keyword coverage and Top fixes with AI rewrite.';
+      ctaBtn.textContent = 'AI Rewrite from Report';
+    } else {
+      ctaTitle.textContent = readinessScore != null ? `Strong readiness · ${readinessScore}/100` : 'Rewrite from this report';
+      ctaCopy.textContent = 'You can still rewrite to polish language and tighten JD alignment.';
+      ctaBtn.textContent = 'Polish with AI Rewrite';
+    }
   }
 
   renderJdFit('freeJdFit', jdFit);
@@ -1028,16 +1793,178 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
       </div>` + gapsDiv.innerHTML;
   }
 
+  setStep(2);
+  switchAtsPane('gaps', document.querySelector('.ats-report-tab[data-ats-pane="gaps"]'));
+
   // Show panel
   document.getElementById('freeAtsPanel').classList.remove('hidden');
   document.getElementById('freeAtsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  const fitToast = jdFit?.status === 'unsuitable'
+  const fitToast = jdFit?.domains?.relation === 'different'
+    ? `⛔ Different domains — JD: ${jdFit.domains.jd.label} · Resume: ${jdFit.domains.resume.label}`
+    : jdFit?.status === 'unsuitable'
     ? `⛔ Not suitable for this JD · ${jdFit.matchPct}% skill overlap`
     : jdFit?.status === 'suitable'
-      ? `✅ Suitable for JD · ATS ${atsScore}/100 · ${primaryFound.length}/${primary.length} keywords`
-      : `⚠️ Partial JD fit · ATS ${atsScore}/100 · ${primaryFound.length}/${primary.length} keywords`;
-  showToast(fitToast, jdFit?.status === 'unsuitable' ? '#ef4444' : atsColour);
+      ? `✅ Suitable for JD · readiness ${report?.overallReadiness ?? '—'}/100 · ${primaryFound.length}/${primary.length} keywords`
+      : `⚠️ Partial JD fit · readiness ${report?.overallReadiness ?? '—'}/100 · ${primaryFound.length}/${primary.length} keywords`;
+  showToast(fitToast, (jdFit?.domains?.relation === 'different' || jdFit?.status === 'unsuitable') ? '#ef4444' : (report?.readinessColour || atsColour));
+}
+
+function catClass(score) {
+  return score >= 75 ? 'is-good' : score >= 50 ? 'is-ok' : 'is-bad';
+}
+
+function switchAtsPane(name, btn) {
+  document.querySelectorAll('.ats-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ats-report-tab').forEach(b => b.classList.remove('active'));
+  const pane = document.getElementById(name === 'breakdown' ? 'atsPaneBreakdown' : 'atsPaneGaps');
+  if (pane) pane.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function buildAtsInsights(report) {
+  const cats = report?.categories || {};
+  const strengths = [];
+  const weaknesses = [];
+  const suggestions = [...(report?.topFixes || []).map(f => f.title + (f.detail ? ' — ' + f.detail : ''))];
+  const tips = [
+    'Keep order: PROFESSIONAL SUMMARY → TECHNICAL SKILLS → PROFESSIONAL EXPERIENCE → EDUCATION → CERTIFICATIONS (if any)',
+    'Put every primary JD skill in TECHNICAL SKILLS and prove it in Experience bullets',
+    'Use hyphen bullets with real metrics (%, counts, time saved) in Experience only',
+  ];
+
+  const labels = {
+    keywords: 'Keywords',
+    content: 'Content',
+    parseability: 'Parseability',
+    structure: 'Structure',
+    formatting: 'Formatting',
+  };
+  Object.entries(labels).forEach(([key, label]) => {
+    const score = cats[key]?.score ?? 0;
+    const flags = cats[key]?.flags || [];
+    if (score >= 75) strengths.push(`${label} is strong (${score}/100)`);
+    else if (score < 55) {
+      weaknesses.push(`${label} needs work (${score}/100)`);
+      if (flags[0]) suggestions.push(flags[0]);
+    } else if (flags[0]) {
+      tips.push(flags[0]);
+    }
+  });
+
+  if ((cats.keywords?.score ?? 0) < 70) {
+    tips.push('Mirror exact JD tool names (e.g. MSSQL not just SQL) for better ATS match');
+  }
+  if ((cats.content?.score ?? 0) < 70) {
+    tips.push('Aim for 50%+ of Experience bullets to include a number or measurable outcome');
+  }
+  if (!strengths.length) strengths.push('Clean text layout — good foundation to build on');
+  if (!weaknesses.length) weaknesses.push('No major category weaknesses detected');
+  if (!suggestions.length) suggestions.push('Polish wording with AI rewrite to tighten JD alignment');
+
+  const uniq = (arr) => [...new Set(arr.filter(Boolean))].slice(0, 4);
+  return {
+    strengths: uniq(strengths),
+    weaknesses: uniq(weaknesses),
+    suggestions: uniq(suggestions),
+    tips: uniq(tips),
+  };
+}
+
+function renderInsightList(elId, items) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = (items || []).map(t => `<li>${t}</li>`).join('') || '<li>—</li>';
+}
+
+function renderAtsReadinessReport(report) {
+  const ring = document.getElementById('freeReadinessRing');
+  const scoreEl = document.getElementById('freeReadinessScore');
+  const titleEl = document.getElementById('freeReadinessTitle');
+  const copyEl = document.getElementById('freeReadinessCopy');
+  const badgeEl = document.getElementById('freeReadinessBadge');
+  const catGrid = document.getElementById('freeCatGrid');
+  const fixesEl = document.getElementById('freeTopFixes');
+  if (!ring || !scoreEl || !catGrid || !fixesEl) return;
+
+  if (!report) {
+    ring.style.setProperty('--v', 0);
+    ring.style.setProperty('--ring', 'var(--jb-slate)');
+    scoreEl.innerHTML = '—<small>/100</small>';
+    if (titleEl) titleEl.textContent = 'Run a check to see readiness';
+    if (copyEl) copyEl.textContent = 'Jobilly scores keywords, content, parseability, structure, and formatting — then AI rewrite from your top fixes.';
+    if (badgeEl) {
+      badgeEl.className = 'ats-badge';
+      badgeEl.textContent = 'Awaiting analysis';
+    }
+    catGrid.innerHTML = '';
+    fixesEl.innerHTML = '';
+    renderInsightList('freeStrengths', ['Run a check to see strengths']);
+    renderInsightList('freeWeaknesses', ['Run a check to see gaps']);
+    renderInsightList('freeSuggestions', ['Run a check for rewrite suggestions']);
+    renderInsightList('freeTips', ['Keep Summary → Skills → Experience → Education → Certifications']);
+    return;
+  }
+
+  const v = Math.max(0, Math.min(100, report.overallReadiness || 0));
+  const band = catClass(v);
+  const ringColor = band === 'is-good' ? 'var(--jb-success)'
+    : band === 'is-ok' ? 'var(--jb-warning)'
+    : 'var(--jb-danger)';
+  ring.style.setProperty('--v', v);
+  ring.style.setProperty('--ring', ringColor);
+  scoreEl.innerHTML = `${v}<small>/100</small>`;
+
+  if (titleEl) titleEl.textContent = `${report.readinessLabel} readiness`;
+  if (copyEl) {
+    copyEl.textContent = 'Circular gauges show each category. Fix weaknesses first — Keywords and Content carry the most weight.';
+  }
+  if (badgeEl) {
+    badgeEl.className = 'ats-badge ' + band;
+    badgeEl.textContent = report.readinessLabel;
+  }
+
+  const order = [
+    ['keywords', 'Keywords', '30%', 'var(--jb-accent)'],
+    ['content', 'Content', '25%', 'var(--jb-accent-3)'],
+    ['parseability', 'Parseability', '20%', 'var(--jb-accent-2)'],
+    ['structure', 'Structure', '15%', 'var(--jb-accent-4)'],
+    ['formatting', 'Formatting', '10%', 'var(--jb-accent-5)'],
+  ];
+  catGrid.innerHTML = order.map(([key, label, weight, color]) => {
+    const cat = report.categories?.[key] || { score: 0 };
+    const score = Math.max(0, Math.min(100, cat.score || 0));
+    const flagHint = (key === 'structure' && (cat.flags || []).length)
+      ? `<div class="ats-cat-flag">${(cat.flags[0] || '').slice(0, 70)}</div>`
+      : '';
+    return `<div class="ats-cat" style="--cat-color:${color}">
+      <div class="ats-mini-ring" style="--v:${score}">
+        <div class="ats-mini-ring-score">${score}</div>
+      </div>
+      <div class="ats-cat-label">${label}</div>
+      <div class="ats-cat-weight">${weight} weight</div>
+      ${flagHint}
+    </div>`;
+  }).join('');
+
+  const insights = buildAtsInsights(report);
+  renderInsightList('freeStrengths', insights.strengths);
+  renderInsightList('freeWeaknesses', insights.weaknesses);
+  renderInsightList('freeSuggestions', insights.suggestions);
+  renderInsightList('freeTips', insights.tips);
+
+  const fixes = report.topFixes || [];
+  if (!fixes.length) {
+    fixesEl.innerHTML = `<div class="ats-fix-item">
+      <div class="ats-fix-num">✓</div>
+      <div><strong>No critical fixes</strong><span>Resume is in good shape — AI rewrite can still polish keyword coverage and metrics.</span></div>
+    </div>`;
+  } else {
+    fixesEl.innerHTML = fixes.map((f, i) => `<div class="ats-fix-item ${i === 0 ? 'is-priority' : ''}">
+      <div class="ats-fix-num">${i + 1}</div>
+      <div><strong>${f.title}</strong><span>${f.detail}</span></div>
+    </div>`).join('');
+  }
 }
 // ─── END FREE ATS CHECK / SCORING ENGINE ──────────────────────────
 
@@ -1119,12 +2046,26 @@ function renderJdFit(containerId, fit) {
     ? `<br><span style="opacity:0.9;">Missing primary skills: ${fit.primaryMissing.slice(0, 6).map(k => `<strong>${k}</strong>`).join(', ')}${fit.primaryMissing.length > 6 ? '…' : ''}</span>`
     : '';
 
+  const d = fit.domains;
+  const domainLine = d
+    ? `<br><span style="opacity:0.95;">JD domain: <strong>${d.jd.label}</strong> · Resume domain: <strong>${d.resume.label}</strong>` +
+      (d.relation === 'different' ? ' · <strong>Different domains</strong>'
+        : d.relation === 'same' ? ' · Same domain'
+        : d.relation === 'adjacent' ? ' · Adjacent domains'
+        : '') + '</span>'
+    : '';
+
+  const extractedN = fit.primaryTotal || 0;
+  const foundN = fit.primaryFound?.length || 0;
+  const scorePct = fit.matchPct ?? 0;
+
   el.innerHTML = `
     <div class="eligibility-banner ${cls}" style="margin-bottom:12px;">
       <strong>${icon} JD Fit Check (first): ${fit.title}</strong>
-      Technical overlap: <strong>${fit.primaryFound.length}/${fit.primaryTotal}</strong> primary skills (${fit.matchPct}%)
+      Skill match score: <strong>${foundN}/${extractedN}</strong> (${scorePct}%) — denominator is skills extracted from this JD (not a fixed 10)
       ${fit.experience?.status === 'eligible' ? ' · Experience: eligible' : ''}
       ${fit.experience?.status === 'ineligible' ? ` · Experience: short (${fit.experience.candidateYears}/${fit.experience.jdYears}+ yrs)` : ''}
+      ${domainLine}
       <br>${fit.message}
       ${fit.detail ? `<br><span style="opacity:0.9;">${fit.detail}</span>` : ''}
       ${missingHint}
@@ -1261,22 +2202,23 @@ async function checkApiConnection() {
 // ~50% cheaper than buildKeywordPrompt: no chain-of-thought, tighter rules,
 // output capped at 300 tokens. Full JD sent so no mid-word truncation.
 function buildAtsCheckKeywordPrompt(jd) {
-  return `Extract exactly 20 ATS keywords from this job description for resume scoring.
+  return `Extract ATS keywords from this job description for resume scoring.
 
 Rules:
-- primary: top 10 TECHNICAL skills only — languages, frameworks, tools, platforms, libraries, protocols (e.g. Python, REST API, LLM, CI/CD, Kafka, Java)
-- secondary: next 10 technical nice-to-haves — methodologies, adjacent tools, platforms, certifications that are technical
-- NEVER include job titles or roles (e.g. "Software Engineer", "AI Engineer", "Data Scientist", "Developer", "Administrator")
+- primary: EVERY concrete TECHNICAL skill clearly required or listed in the JD — languages, frameworks, tools, platforms, libraries, protocols (e.g. Python, MSSQL, MongoDB, PowerShell, AWS)
+- secondary: soft/domain labels or nice-to-haves only when the JD actually mentions them
+- Do NOT invent skills to fill a quota. If the JD only has 6 real tools, return 6 primary — never pad to 10
+- Cap primary at 15 and secondary at 12 maximum
+- NEVER include job titles or roles (e.g. "Software Engineer", "DBA" as a title keyword, "Administrator")
 - NEVER include seniority words alone ("Senior", "Lead", "cross-functional")
-- Skills and tools ONLY — no locations, no soft phrases like "hybrid position", "manual effort", "delivery", "quality outcomes"
-- Use exact spelling/casing from the JD
-- Prefer specific terms (e.g. "LangChain" not "framework", "Python" not "programming")
+- Skills and tools ONLY — no prose fragments, no soft phrases
+- Use exact spelling/casing from the JD when possible
 - Return ONLY valid JSON, no explanation, no markdown
 
 Job Description:
 ${jd}
 
-{"primary":["...10 items..."],"secondary":["...10 items..."]}`;
+{"primary":["...only skills found in JD..."],"secondary":["...optional..."]}`;
 }
 
 function buildKeywordPrompt(jd) {
@@ -1284,31 +2226,29 @@ function buildKeywordPrompt(jd) {
 
 Think step by step:
 1. Read the full job description carefully
-2. Identify required TECHNICAL skills, preferred tools, platforms, libraries, protocols, and methodologies
-3. Separate must-have (primary) technical keywords from nice-to-have (secondary) technical keywords
+2. Identify EVERY concrete TECHNICAL skill the JD actually requires or lists
+3. Separate must-have (primary) technical keywords from nice-to-have (secondary)
 4. IGNORE the job/role title itself — do not put titles into the keyword lists
-
-Then extract exactly 20 ATS keywords split into two tiers.
+5. Do NOT invent skills to fill a quota — if the JD only lists 7 tools, return 7 primary
 
 Rules:
 - Return ONLY a valid JSON object — no explanation, no markdown
 - Prefer exact multi-word phrases over single generic words (e.g. "data pipeline" not "pipeline")
-- TECHNICAL skills/tools ONLY — languages, frameworks, libraries, cloud, databases, APIs, DevOps tools, ML stacks, certifications that are technical
+- TECHNICAL skills/tools ONLY — languages, frameworks, libraries, cloud, databases, APIs, DevOps tools, ML stacks
 - NEVER include job titles or roles (reject: "Software Engineer", "AI Engineer", "Backend Developer", "Data Scientist", "QA Engineer", "Administrator", etc.)
 - NEVER include seniority-only tokens ("senior", "lead", "cross-functional")
-- Domain phrases like "Data Engineering" or "Cloud Architecture" are OK; role titles like "Data Engineer" or "Cloud Architect" are NOT
-- Include synonyms/variations the JD uses (e.g. "ML" and "machine learning" count as separate entries)
+- Domain phrases like "Data Engineering" or "Cloud Architecture" are OK as secondary; role titles are NOT
 - Use the exact spelling and casing from the JD
-- primary: top 10 technical must-haves — MUST appear in resume skills
-- secondary: next 10 technical differentiators — SHOULD appear where possible
+- primary: all concrete must-have tools/skills found in the JD (max 15 — never pad)
+- secondary: nice-to-haves / domain labels actually mentioned (max 12 — never pad)
 
 Job Description:
 ${jd}
 
 Return format:
 {
-  "primary": ["keyword1", "keyword2", ..., "keyword10"],
-  "secondary": ["keyword11", "keyword12", ..., "keyword20"]
+  "primary": ["...only skills found in JD..."],
+  "secondary": ["...optional..."]
 }`;
 }
 
@@ -1492,7 +2432,7 @@ function extractContactFields(resumeText) {
   return { email, phone, linkedin, location };
 }
 
-function buildRewritePrompt(jd, resume, keywords, ragContext) {
+function buildRewritePrompt(jd, resume, keywords, ragContext, atsReport) {
   const primary   = keywords.primary   || keywords;
   const secondary = keywords.secondary || [];
 
@@ -1514,9 +2454,13 @@ function buildRewritePrompt(jd, resume, keywords, ragContext) {
     cf.location ? `  Location: ${cf.location}` : `  Location: [NONE — the master resume contact header contains NO location field. Do NOT add any city, state, or country to the contact header line. Do NOT use location tokens from experience role lines.]`,
   ].join('\n');
 
-  return `You are an AGGRESSIVE ATS resume writer. Your ONLY success metric for this first rewrite is an ATS score of ${SCORE_TAILOR_THRESHOLD}+ / 100.
+    const reportBlock = (atsReport && atsReport.reportPromptBlock)
+    ? `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nRULE 0 — FOLLOW THE ATS REPORT (highest priority after integrity)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${atsReport.reportPromptBlock}\n\nApply every Top Fix above in this rewrite. Raise Jobilly readiness (Keywords/Content/Parse/Structure/Format) to ${SCORE_TAILOR_THRESHOLD}+. Keywords come from our RAG extract — embed every missing primary/secondary term.\n`
+    : '';
 
-MISSION — hit ${SCORE_TAILOR_THRESHOLD}+ on the FIRST tailor pass:
+  return `You are an AGGRESSIVE ATS resume writer. Your ONLY success metric for this first rewrite is an ATS readiness score of ${SCORE_TAILOR_THRESHOLD}+ / 100 (Jobilly weighted readiness).
+${reportBlock}
+MISSION — hit ${SCORE_TAILOR_THRESHOLD}+ readiness on the FIRST tailor pass:
 1. Embed EVERY primary keyword in SKILLS and at least once in Summary/Experience (2+ times total).
 2. Embed EVERY secondary keyword at least once.
 3. Rewrite bullets to mirror JD responsibilities using the candidate's real employers.
@@ -1638,8 +2582,15 @@ LINKEDIN INTEGRITY RULE (critical — mirror master exactly):
 - If the master resume contains NO LinkedIn at all (locked value says NONE) → omit LinkedIn from the contact header entirely. Do NOT construct, guess, or infer a URL.
 - NEVER add a LinkedIn field that does not exist in the master resume
 
-SECTION HEADERS — ALL CAPS, in this exact order:
-   SUMMARY → SKILLS → EXPERIENCE → PROJECTS → EDUCATION → CERTIFICATIONS
+SECTION HEADERS — ALL CAPS, in this exact order (canonical template):
+   PROFESSIONAL SUMMARY → TECHNICAL SKILLS → PROFESSIONAL EXPERIENCE → EDUCATION → CERTIFICATIONS (if any)
+   - CERTIFICATIONS is optional — include ONLY if the master resume has certifications, and place it LAST
+   - Optional PROJECTS (only if in master) go after EDUCATION and before CERTIFICATIONS
+
+CONTACT HEADER (first 3 lines — match template):
+   Line 1: Full Name
+   Line 2: Professional Title (e.g. Data Analyst)
+   Line 3: email | phone | LinkedIn
 
 FORMATTING:
 - Bullet marker: hyphen (-)
@@ -1660,7 +2611,7 @@ RULE 7 — KEYWORD EMBEDDING (mandatory for first-pass ${SCORE_TAILOR_THRESHOLD}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 8 — SECTION QUALITY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SUMMARY (3-5 short sentences — human, HR-friendly career overview):
+PROFESSIONAL SUMMARY (3-5 short sentences — human, HR-friendly career overview):
 - Audience: a recruiter or HR partner scanning in 10 seconds — write so a non-engineer can understand it easily
 - Purpose: SUMMARISE the candidate's FULL work history into a clear story (what they do, domains they've worked in, how they've grown) — not one flashy metric
 - Write ONLY from real skills, tools, years, and roles on the original resume
@@ -1675,8 +2626,8 @@ SUMMARY (3-5 short sentences — human, HR-friendly career overview):
 - NEVER name the hiring company (HermanMiller, MillerKnoll, etc.) in the Summary
 - NEVER paste JD preamble into the Summary — analyse skills + experience and write that only
 
-SKILLS — PRESERVE the candidate's original skill structure (do NOT collapse to only 4 labels):
-   - Keep EVERY skill category "window" from the master resume (e.g. Technical Skills, Tools & Platforms, Methodologies, Core Competencies, Soft Skills, Databases, Languages, Cloud, Frameworks, or ANY other Label: group the original uses)
+TECHNICAL SKILLS (comes RIGHT AFTER Professional Summary — before Experience):
+   - Keep EVERY skill category "window" from the master resume (e.g. Languages/Packages:, Artificial Intelligence & Machine Learning:, Visualization Tools/Database:, Database:, Management:, Tools and Services:, Other Skills:)
    - If the original uses hyphen/bullet lists under a skill category, KEEP those bullets — do NOT convert them into one comma line and do NOT delete them
    - If the original uses comma-separated values on one line after a label, keep that same line style
    - You MAY add new category windows when the JD needs them (still as Label: + same style as nearby skill groups)
@@ -1687,16 +2638,17 @@ SKILLS — PRESERVE the candidate's original skill structure (do NOT collapse to
    - CRITICAL: Missing a primary keyword from Skills is a failed first pass.
    - SKILL FAMILY PRESERVE: If the original resume has Python, KEEP related Python-ecosystem skills (Flask, Django, FastAPI, NumPy, Pandas, PyTorch, TensorFlow, Pytest). If Java is present, KEEP Spring Boot, Spring MVC, Spring Security, Hibernate, JPA, JUnit. If AI/ML/LLM is present, KEEP OpenAI API, LangChain, RAG, NLP, BERT, Transformers, PyTorch, TensorFlow. Do NOT strip an entire related family when the anchor skill remains.
 
-EXPERIENCE (MANDATORY — include ALL roles):
+PROFESSIONAL EXPERIENCE (MANDATORY — include ALL roles; comes AFTER Technical Skills):
 - COUNT the number of roles in the original resume before writing. Output the EXACT same number of roles.
 - If the original has 4 roles → output 4 roles. If it has 6 → output 6. No exceptions.
 - DO NOT drop any role to save space or improve narrative flow
 
-For each role, use this exact format:
-   Company Name | Job Title | MMM YYYY - MMM YYYY | [location]
-   (copy location token-for-token from the original resume for that role: City only / State only / City+State / City+State+Country — whatever the master has, nothing more, nothing less)
+For each role, use this exact format (template style):
+   Company Name | Location | Job Title
+   MMM YYYY - MMM YYYY
    - [bullet]
    - [bullet]
+   (If the master uses a single pipe line with dates, you may keep: Company | Location | Title | MMM YYYY - MMM YYYY)
 
 EXPERIENCE INTEGRITY — these fields are READ-ONLY, copy token-for-token from the master resume:
 - Company Name: copy EXACTLY — do NOT abbreviate, expand, or rename
@@ -1715,8 +2667,9 @@ EDUCATION:
 - Do NOT reformat, abbreviate, or drop any part of the education date
 - GPA: if present in the original resume, copy it EXACTLY (e.g. "GPA: 3.8 / 4.0") — do NOT omit, round, or alter it; if NOT present, do NOT add it
 
-CERTIFICATIONS:
+CERTIFICATIONS (LAST SECTION — only if present in master resume):
 - Include ONLY certifications that exist in the original resume
+- Place CERTIFICATIONS at the very end of the resume (after EDUCATION / PROJECTS)
 - Copy each certification EXACTLY as written in the master resume — including only the fields that are present
 - If the master resume lists a certification WITHOUT a year, copy it WITHOUT a year — do NOT invent or add a year
 - If the master resume lists a certification WITH a year, copy it WITH that exact year
@@ -1725,7 +2678,7 @@ CERTIFICATIONS:
 - DO NOT suggest, recommend, or mention certifications the candidate could pursue
 - DO NOT add placeholder lines like "AWS Certified (recommended)" or "Consider adding..."
 
-PROJECTS — include ONLY if present in the original resume or directly demonstrated in the JD
+PROJECTS — include ONLY if present in the original resume; place after EDUCATION and before CERTIFICATIONS
 
 =======================================================
 ABSOLUTE OUTPUT RULES — violations will disqualify the output
@@ -1800,7 +2753,7 @@ SCORING RUBRIC (total 100 points):
 - Quantified achievements  (20 pts): % of bullets with a measurable result — counts, percentages (e.g. "30%"), dollar amounts, time saved, scale, ratios (e.g. "3x"), ranges (e.g. "from 2s to 200ms") ALL count. Be generous. Scale to 20.
 - Summary alignment        (15 pts): Does S1 reference the JD role title and key skills? Exact match not required — close variation scores full marks.
 - Format compliance        (10 pts): Plain text, ALL-CAPS section headers, hyphen bullets, no tables/columns/icons? NOTE: Any Skills category windows ("Technical Skills:", "Tools & Platforms:", "Soft Skills:", "Databases:", etc.) and skill bullets under SKILLS are NEVER format violations.
-- Section completeness     ( 5 pts): SUMMARY, SKILLS, EXPERIENCE, EDUCATION all present?
+- Section completeness     ( 5 pts): PROFESSIONAL SUMMARY, TECHNICAL SKILLS, PROFESSIONAL EXPERIENCE, EDUCATION in that order, with CERTIFICATIONS last if present?
 
 SCORING CONSISTENCY RULES:
 - Do not deduct points for acceptable skill label formatting or for close keyword variants that clearly match the JD intent.
@@ -1901,11 +2854,25 @@ async function runAnalysis() {
     setProgress(40, `Aggressive first tailor → ${SCORE_TAILOR_THRESHOLD}+ ATS...`, roleCountMsg);
     setStep(3);
     await delay(300);
-    setLoading('Aggressive rewrite for 95+...');
+    setLoading('Aggressive rewrite for 95+ readiness...');
 
-    // Lower temperature → stronger keyword compliance on first pass
+    // Ensure ATS report exists so rewrite is driven by Top Fixes + category gaps
+    if (!state.atsReport || !state.scorecard) {
+      const pre = RAGEngine.computeAtsScore(
+        jd, resume,
+        keywords.primary || [],
+        keywords.secondary || [],
+        keywords.aliasMap || Object.fromEntries([...(keywords.primary || []), ...(keywords.secondary || [])].map(k => [k, [k]]))
+      );
+      state.atsReport = pre.report || null;
+      state.scorecard = pre.scorecard || null;
+    }
     const ragContext = RAGEngine.buildCompactRewriteContext(jd, resume, keywords);
-    let tailoredResume = await callClaude(buildRewritePrompt(jd, resume, keywords, ragContext), 0.35, 6000);
+    let tailoredResume = await callClaude(
+      buildRewritePrompt(jd, resume, keywords, ragContext, state.atsReport),
+      0.35,
+      6000
+    );
     if (RAGEngine.preserveRelatedSkills) {
       tailoredResume = RAGEngine.preserveRelatedSkills(resume, tailoredResume, jd);
     }
@@ -1960,6 +2927,7 @@ async function runAnalysis() {
     const ragScore = RAGEngine.computeAtsScore(jd, tailoredResume, keywords.primary, keywords.secondary || [], aliasMap);
     const sc = ragScore.scorecard;
     state.scorecard = sc;
+    state.atsReport = ragScore.report || null;
 
     const expAnalysis = RAGEngine.analyzeExperienceEligibility(jd, resume);
     state.experienceAnalysis = expAnalysis;
@@ -1977,8 +2945,8 @@ async function runAnalysis() {
     const kwMatch    = sc.keywordMatch != null ? sc.keywordMatch : 0;
     const fmtCheck   = sc.formatCheck  || 'PASS';
     const confidence = sc.confidenceLevel || 'High';
-    const primaryTotal = keywords.primary.length || 10;
-    const secTotalForScore = keywords.secondary.length || 10;
+    const primaryTotal = keywords.primary.length || 0;
+    const secTotalForScore = keywords.secondary.length || 0;
 
     const kwPts       = ragScore.kwPts;
     const secPts      = ragScore.secPts;
@@ -2013,23 +2981,25 @@ async function runAnalysis() {
       ? (bulletsTotal != null ? `${bulletsWithMetrics} of ${bulletsTotal} bullets` : `${bulletsWithMetrics} bullets`)
       : 'N/A';
     const secFound = (sc.secondaryFound || []).length;
-    const secTotal = keywords.secondary.length || 10;
+    const secTotal = keywords.secondary.length || 0;
     // Update header card sub-label to reflect actual keyword count
-    document.getElementById('kwMatchSub').textContent = `of ${primaryTotal} primary keywords`;
+    document.getElementById('kwMatchSub').textContent = `of ${primaryTotal} skills extracted from JD`;
     const atsScoreClass = atsScore >= 90 ? 'sc-green' : atsScore >= 70 ? 'sc-yellow' : 'sc-red';
     scDiv.innerHTML = `
-      <div class="scorecard-row"><span class="sc-label">ATS Score</span><span class="sc-value ${atsScoreClass}" style="font-size:28px;">${atsScore} / 100</span></div>
-      <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:10px 0 4px;">Score Breakdown</div>
-      <div class="scorecard-row"><span class="sc-label">Primary Keywords (60 pts max)</span><span class="sc-value sc-blue">${kwPts} pts &nbsp;·&nbsp; ${kwMatch} of ${primaryTotal} found</span></div>
-      <div class="scorecard-row"><span class="sc-label">Secondary Keywords (15 pts max)</span><span class="sc-value sc-blue">${secPts} pts &nbsp;·&nbsp; ${secFound} of ${secTotal} found</span></div>
-      <div class="scorecard-row"><span class="sc-label">Quantified Bullets (10 pts max)</span><span class="sc-value sc-yellow">${metricPts} pts &nbsp;·&nbsp; ${bulletsScore} have metrics</span></div>
-      <div class="scorecard-row"><span class="sc-label">Summary Alignment (5 pts max)</span><span class="sc-value ${summaryPts >= 4 ? 'sc-green' : summaryPts >= 2 ? 'sc-yellow' : 'sc-red'}">${summaryPts} pts</span></div>
-      <div class="scorecard-row"><span class="sc-label">Format Compliance (5 pts max)</span><span class="sc-value ${fmtCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts} pts &nbsp;·&nbsp; ${fmtCheck}</span></div>
-      <div class="scorecard-row"><span class="sc-label">Section Completeness (5 pts max)</span><span class="sc-value ${sc.sectionCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${secCompPts} pts &nbsp;·&nbsp; ${sc.sectionCheck || 'PASS'}</span></div>
+      <div class="scorecard-row"><span class="sc-label">ATS Readiness (Jobilly)</span><span class="sc-value ${atsScoreClass}" style="font-size:28px;">${atsScore} / 100</span></div>
+      ${ragScore.report ? `<div class="scorecard-row"><span class="sc-label">Band</span><span class="sc-value" style="color:${ragScore.report.readinessColour}">${ragScore.report.readinessLabel}</span></div>
+      <div class="scorecard-row"><span class="sc-label">Parse · Structure · Keywords · Content · Format</span><span class="sc-value sc-blue">${ragScore.report.categories.parseability.score} · ${ragScore.report.categories.structure.score} · ${ragScore.report.categories.keywords.score} · ${ragScore.report.categories.content.score} · ${ragScore.report.categories.formatting.score}</span></div>
+      ${(ragScore.report.topFixes || []).length ? `<div class="scorecard-row"><span class="sc-label">Top fixes</span><span class="sc-value sc-yellow">${ragScore.report.topFixes.map(f => f.title).join(' · ')}</span></div>` : ''}` : ''}
+      <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:10px 0 4px;">Our RAG keyword detail</div>
+      <div class="scorecard-row"><span class="sc-label">Primary Keywords</span><span class="sc-value sc-blue">${kwMatch} of ${primaryTotal} found · ${kwPts} legacy pts</span></div>
+      <div class="scorecard-row"><span class="sc-label">Secondary Keywords</span><span class="sc-value sc-blue">${secFound} of ${secTotal} found · ${secPts} legacy pts</span></div>
+      <div class="scorecard-row"><span class="sc-label">Quantified Bullets</span><span class="sc-value sc-yellow">${metricPts} pts · ${bulletsScore} have metrics</span></div>
+      <div class="scorecard-row"><span class="sc-label">Summary Alignment</span><span class="sc-value ${summaryPts >= 4 ? 'sc-green' : summaryPts >= 2 ? 'sc-yellow' : 'sc-red'}">${summaryPts} pts</span></div>
+      <div class="scorecard-row"><span class="sc-label">Format · Sections</span><span class="sc-value ${fmtCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${fmtPts}+${secCompPts} pts · ${fmtCheck} / ${sc.sectionCheck || 'PASS'}</span></div>
       <div class="scorecard-row"><span class="sc-label">Confidence</span><span class="sc-value ${confidence === 'High' ? 'sc-green' : 'sc-yellow'}">${confidence} — ${sc.confidenceReason || 'All major JD requirements addressed'}</span></div>
       ${sc.formatIssues?.length ? `<div class="scorecard-row"><span class="sc-label">Format Notes</span><span class="sc-value sc-yellow">${sc.formatIssues.join('; ')}</span></div>` : ''}
       ${sc.missingSections?.length ? `<div class="scorecard-row"><span class="sc-label">Missing Sections</span><span class="sc-value sc-red">${sc.missingSections.join(', ')}</span></div>` : ''}
-      ${sc.improvementSuggestions?.length ? `<div class="scorecard-row"><span class="sc-label">To reach 100/100</span><span class="sc-value sc-yellow">${sc.improvementSuggestions.join(' · ')}</span></div>` : ''}
+      ${sc.improvementSuggestions?.length ? `<div class="scorecard-row"><span class="sc-label">Next improvements</span><span class="sc-value sc-yellow">${sc.improvementSuggestions.join(' · ')}</span></div>` : ''}
     `;
 
     // ── KEYWORDS TAB ─────────────────────────────────────────
@@ -2135,7 +3105,7 @@ async function runAnalysis() {
 
     if (atsScore < SCORE_TAILOR_THRESHOLD) {
       document.getElementById('boostBtn').classList.remove('hidden');
-      document.getElementById('boostBtn').textContent = `🎯 Boost to ${SCORE_TAILOR_THRESHOLD}+`;
+      document.getElementById('boostBtn').textContent = `Boost to ${SCORE_TAILOR_THRESHOLD}+`;
       setProgress(92, `First tailor ${atsScore}/100 — boosting until ${SCORE_TAILOR_THRESHOLD}+...`, `Up to ${MAX_BOOST_PASSES} passes · stops at ${SCORE_TAILOR_THRESHOLD}+`);
       showToast(`First tailor ${atsScore}/100 — boosting to ${SCORE_TAILOR_THRESHOLD}+...`, '#fbbf24');
       await boostScore({ auto: true });
@@ -2182,10 +3152,12 @@ function resetAndRun() {
     tailoredResume: '',
     originalResume: '',
     scorecard: null,
+    atsReport: null,
     gaps: [],
     filename: '',
     experienceAnalysis: null,
     skillsCompare: null,
+    jdFit: null,
   };
 
   // Hide result panels
@@ -2193,6 +3165,9 @@ function resetAndRun() {
   document.getElementById('resultsSection').classList.add('hidden');
   document.getElementById('progressSection').classList.add('hidden');
   document.getElementById('freeAtsPanel').classList.add('hidden');
+  const freeCta = document.getElementById('freeRewriteCta');
+  if (freeCta) freeCta.classList.add('hidden');
+  renderAtsReadinessReport(null);
 
   // Swap buttons
   document.getElementById('analyzeBtn').classList.remove('hidden');
@@ -2252,6 +3227,9 @@ function buildBoostPrompt(jd, sc, currentScore) {
   const bulletsTotal     = sc.bulletsTotal      || 0;
   const bulletsMetrics   = sc.bulletsWithMetrics|| 0;
   const bulletsNeedFix   = Math.max(0, bulletsTotal - bulletsMetrics);
+  const reportBlock      = sc.reportPromptBlock
+    || (state.atsReport && state.atsReport.reportPromptBlock)
+    || '';
 
   return `You are an AGGRESSIVE ATS resume editor. Current score: ${currentScore}/100. Target: ${SCORE_TAILOR_THRESHOLD}+ ONLY — stop once that bar is cleared (do not chase 100).
 
@@ -2261,6 +3239,7 @@ DO NOT invent companies, titles, dates, education, or certifications.
 DO add every missing JD keyword into Skills and weave into EXPERIENCE bullets.
 PRESERVE SKILLS STRUCTURE: keep every skill category window (not only four labels) and every skill bullet from the current resume — enrich categories with missing keywords, but NEVER delete, merge away, or strip skill bullets because they lack metrics.
 
+${reportBlock ? `ATS READINESS REPORT (apply Top Fixes first):\n${reportBlock}\n` : ''}
 EXACT GAPS:
 ${missingPrimary.length > 0   ? `MISSING PRIMARY — add each to SKILLS and at least one bullet:\n${missingPrimary.map(k => `  - "${k}"`).join('\n')}` : 'PRIMARY: all present.'}
 
@@ -2291,8 +3270,8 @@ function applyBoostScoreUi(keywords, ragScore2) {
   const kwMatch2 = sc2.keywordMatch != null ? sc2.keywordMatch : 0;
   const fmtCheck2 = sc2.formatCheck || 'PASS';
   const confidence2 = sc2.confidenceLevel || 'High';
-  const primaryTotal = primary.length || 10;
-  const secTotal2 = secondary.length || 10;
+  const primaryTotal = primary.length || 0;
+  const secTotal2 = secondary.length || 0;
   const atsScore2 = ragScore2.atsScore;
   const kwPts2 = ragScore2.kwPts;
   const secPts2 = ragScore2.secPts;
@@ -2320,8 +3299,8 @@ function applyBoostScoreUi(keywords, ragScore2) {
     ? (sc2.bulletsTotal != null ? `${sc2.bulletsWithMetrics} of ${sc2.bulletsTotal} bullets` : `${sc2.bulletsWithMetrics} bullets`)
     : 'N/A';
   document.getElementById('scorecardContent').innerHTML = `
-      <div class="scorecard-row"><span class="sc-label">ATS Score (after boost)</span><span class="sc-value ${atsScoreClass2}" style="font-size:28px;">${atsScore2} / 100</span></div>
-      <div class="scorecard-row"><span class="sc-label">Pass Threshold</span><span class="sc-value ${atsScore2 >= SCORE_TAILOR_THRESHOLD ? 'sc-green' : 'sc-yellow'}">${atsScore2 >= SCORE_TAILOR_THRESHOLD ? 'PASS (95+)' : 'Needs 95+'}</span></div>
+      <div class="scorecard-row"><span class="sc-label">ATS Readiness (after boost)</span><span class="sc-value ${atsScoreClass2}" style="font-size:28px;">${atsScore2} / 100</span></div>
+      <div class="scorecard-row"><span class="sc-label">Pass Threshold</span><span class="sc-value ${atsScore2 >= SCORE_TAILOR_THRESHOLD ? 'sc-green' : 'sc-yellow'}">${atsScore2 >= SCORE_TAILOR_THRESHOLD ? 'PASS (95+ readiness)' : 'Needs 95+ readiness'}</span></div>
       <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:10px 0 4px;">Score Breakdown</div>
       <div class="scorecard-row"><span class="sc-label">Primary Keywords (60 pts max)</span><span class="sc-value sc-blue">${kwPts2} pts &nbsp;·&nbsp; ${kwMatch2} of ${primaryTotal} found</span></div>
       <div class="scorecard-row"><span class="sc-label">Secondary Keywords (15 pts max)</span><span class="sc-value sc-blue">${secPts2} pts &nbsp;·&nbsp; ${secFound2} of ${secTotal2} found</span></div>
@@ -2419,14 +3398,14 @@ async function boostScore(opts = {}) {
   try {
     let pass = 0;
     let kwMatch2 = state.scorecard?.keywordMatch || 0;
-    const primaryTotal = primary.length || 10;
+    const primaryTotal = primary.length || 0;
 
     while (atsScore2 < SCORE_TAILOR_THRESHOLD && pass < MAX_BOOST_PASSES) {
       pass++;
       const sc = state.scorecard || {};
       setProgress(
         20 + pass * 20,
-        `🎯 Boost pass ${pass}/${MAX_BOOST_PASSES} — ${atsScore2}/100 → ${SCORE_TAILOR_THRESHOLD}+`,
+        `Boost pass ${pass}/${MAX_BOOST_PASSES} — ${atsScore2}/100 → ${SCORE_TAILOR_THRESHOLD}+`,
         `Missing: ${(sc.keywordsMissing || []).length} primary, ${(sc.secondaryMissing || []).length} secondary`
       );
       boostBtn.textContent = `⏳ Boost ${pass}/${MAX_BOOST_PASSES}...`;
@@ -2448,6 +3427,7 @@ async function boostScore(opts = {}) {
 
       const ragScore2 = RAGEngine.computeAtsScore(jd, state.tailoredResume, primary, secondary, aliasMap);
       state.scorecard = ragScore2.scorecard;
+      state.atsReport = ragScore2.report || null;
       const ui = applyBoostScoreUi(keywords, ragScore2);
       atsScore2 = ui.atsScore2;
       kwMatch2 = ui.kwMatch2;
@@ -2468,11 +3448,11 @@ async function boostScore(opts = {}) {
     if (atsScore2 >= SCORE_TAILOR_THRESHOLD) boostBtn.classList.add('hidden');
     else boostBtn.classList.remove('hidden');
     boostBtn.disabled = false;
-    boostBtn.textContent = `🎯 Boost to ${SCORE_TAILOR_THRESHOLD}+`;
+    boostBtn.textContent = `Boost to ${SCORE_TAILOR_THRESHOLD}+`;
 
     showToast(
       atsScore2 >= SCORE_TAILOR_THRESHOLD
-        ? `🎯 Passed ${SCORE_TAILOR_THRESHOLD}+! ATS Score: ${atsScore2}/100 · ${kwMatch2}/${primaryTotal} keywords`
+        ? `Passed ${SCORE_TAILOR_THRESHOLD}+! ATS Score: ${atsScore2}/100 · ${kwMatch2}/${primaryTotal} keywords`
         : `Boost ended at ${atsScore2}/100 — still below ${SCORE_TAILOR_THRESHOLD}. Click Boost to retry.`,
       atsScore2 >= SCORE_TAILOR_THRESHOLD ? undefined : '#fbbf24'
     );
@@ -2480,7 +3460,7 @@ async function boostScore(opts = {}) {
     stopLoading();
     document.getElementById('progressSection').classList.add('hidden');
     boostBtn.disabled = false;
-    boostBtn.textContent = `🎯 Boost to ${SCORE_TAILOR_THRESHOLD}+`;
+    boostBtn.textContent = `Boost to ${SCORE_TAILOR_THRESHOLD}+`;
     showToast('❌ Boost failed: ' + err.message.slice(0, 60), '#ef4444');
   }
 }

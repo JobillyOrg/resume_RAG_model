@@ -1,3 +1,6 @@
+const { loadLocalEnv } = require('./load-local-env');
+loadLocalEnv();
+
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-flash-lite-latest';
 const GEMINI_BASE = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 

@@ -4,10 +4,10 @@ Local RAG-powered ATS resume tailoring dashboard.
 
 ## Features
 
-- **Free ATS check** — local keyword extraction + scoring (no API calls)
-- **RAG engine** — BM25 retrieval over a skill knowledge base (`rag-engine.js`)
-- **AI tailor** — Gemini rewrite with compact RAG context (~60% fewer API calls)
-- **Boost to 95+** — targeted gap fixes with local re-scoring
+- **Jobilly ATS readiness** — Keywords 30% · Content 25% · Parse 20% · Structure 15% · Format 10% + Top 3 fixes
+- **Our RAG keywords** — BM25 skill KB extract (grounded) powers the Keywords category + rewrite gaps
+- **AI rewrite from report** — Gemini applies Top Fixes to raise readiness to 95+
+- **Boost loop** — re-score with the same Jobilly+RAG rubric until threshold
 - **Secure API** — Gemini key stays server-side via Vercel serverless function
 
 ## Files
@@ -15,7 +15,7 @@ Local RAG-powered ATS resume tailoring dashboard.
 | File | Purpose |
 |------|---------|
 | `rd.html` | ATS dashboard UI |
-| `rag-engine.js` | Local RAG: keywords, scoring, caching |
+| `rag-engine.js` | Local RAG keywords + Jobilly readiness scoring |
 | `api/gemini.js` | Vercel serverless proxy for Gemini |
 
 ## Vercel environment variables
@@ -53,5 +53,5 @@ Opening `rd.html` directly as a file will **not** work for tailor/boost — use 
 ```javascript
 const USE_RAG = true;
 const GEMINI_KEYWORD_FALLBACK = false;
-const SCORE_TAILOR_THRESHOLD = 95;
+const SCORE_TAILOR_THRESHOLD = 95; // Jobilly readiness target
 ```

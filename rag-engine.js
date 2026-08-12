@@ -22,7 +22,12 @@
     { label: 'Kotlin', terms: ['kotlin', 'android kotlin'] },
     { label: 'Swift', terms: ['swift', 'swiftui', 'ios'] },
     { label: 'SQL', terms: ['sql', 'postgresql', 'mysql', 'oracle', 't-sql', 'pl/sql', 'sqlite', 'stored procedures', 'complex sql', 'ssis', 'ssrs'] },
-    { label: 'NoSQL', terms: ['mongodb', 'dynamodb', 'cassandra', 'redis', 'elasticsearch', 'cosmos db', 'neo4j'] },
+    // Also add MongoDB / MSSQL as explicit labels for clearer DBA matching
+    { label: 'MongoDB', terms: ['mongodb', 'mongo db', 'mongo'] },
+    { label: 'MSSQL', terms: ['mssql', 'ms sql', 'microsoft sql server', 'sql server', 't-sql'] },
+    { label: 'PowerShell', terms: ['powershell', 'pwsh', 'windows powershell'] },
+    { label: 'MySQL', terms: ['mysql', 'mariadb'] },
+    { label: 'NoSQL', terms: ['nosql', 'dynamodb', 'cassandra', 'redis', 'elasticsearch', 'cosmos db', 'neo4j'] },
     { label: 'AWS', terms: ['aws', 'amazon web services', 'ec2', 's3', 'lambda', 'rds', 'eks', 'cloudformation', 'serverless', 'sagemaker', 'cloudwatch'] },
     { label: 'Azure', terms: ['azure', 'microsoft azure', 'azure devops', 'azure functions', 'event hubs', 'azure ml', 'bicep', 'aks'] },
     { label: 'GCP', terms: ['gcp', 'google cloud', 'bigquery', 'cloud run', 'gke', 'pubsub'] },
@@ -32,13 +37,13 @@
     { label: 'Terraform', terms: ['terraform', 'infrastructure as code', 'iac', 'azure bicep', 'pulumi', 'ansible', 'chef', 'puppet'] },
     { label: 'Machine Learning', terms: ['machine learning', 'ml', 'deep learning', 'neural network', 'scikit-learn', 'tensorflow', 'pytorch', 'keras', 'xgboost', 'hyperparameter tuning', 'feature engineering', 'computer vision', 'opencv'] },
     { label: 'LLM', terms: ['llm', 'llms', 'large language model', 'gpt', 'chatgpt', 'openai', 'openai api', 'claude', 'gemini', 'prompt engineering'] },
-    { label: 'RAG', terms: ['rag', 'retrieval augmented generation', 'vector database', 'embeddings', 'semantic search', 'vector store', 'pinecone', 'weaviate', 'chroma'] },
+    { label: 'RAG', terms: ['rag', 'retrieval-augmented generation', 'retrieval augmented generation', 'rag pipeline', 'rag architecture', 'vector embeddings for rag'] },
     { label: 'LangChain', terms: ['langchain', 'langgraph', 'llamaindex', 'haystack'] },
     { label: 'NLP', terms: ['nlp', 'natural language processing', 'spacy', 'hugging face', 'transformers', 'bert', 'tokenization', 'named entity recognition'] },
     { label: 'AI Engineer', terms: ['ai engineer', 'ml engineer', 'machine learning engineer', 'ai/ml', 'ai assisted development', 'generative ai'] },
     { label: 'MLOps', terms: ['mlops', 'model deployment', 'model serving', 'feature store', 'model monitoring', 'mlflow', 'kubeflow'] },
     { label: 'AutoGen', terms: ['autogen', 'multi-agent', 'agentic ai', 'ai agents', 'crewai'] },
-    { label: 'Code Generation', terms: ['code generation', 'github copilot', 'copilot', 'generative ai', 'cursor'] },
+    { label: 'Code Generation', terms: ['code generation', 'github copilot', 'copilot', 'ai code assistant', 'cursor ide'] },
     { label: 'Data Engineering', terms: ['data engineering', 'etl', 'elt', 'data pipeline', 'apache spark', 'spark', 'hadoop', 'databricks', 'airflow', 'dbt', 'data modeling', 'kafka streams'] },
     { label: 'Data Scientist', terms: ['data scientist', 'data science', 'statistical modeling', 'shap', 'lime', 'a/b testing', 'experimentation'] },
     { label: 'Data Analyst', terms: ['data analyst', 'data analysis', 'excel', 'pivot tables', 'vlookup', 'power query', 'sql reporting'] },
@@ -60,7 +65,7 @@
     { label: 'Linux', terms: ['linux', 'bash', 'shell scripting', 'unix', 'powershell', 'windows server'] },
     { label: 'Git', terms: ['git', 'github', 'gitlab', 'bitbucket', 'version control', 'svn'] },
     { label: 'Networking', terms: ['networking', 'tcp/ip', 'dns', 'vpn', 'lan', 'wan', 'cisco', 'routing', 'switching', 'firewall', 'load balancer'] },
-    { label: 'IT Support', terms: ['it support', 'help desk', 'desktop support', 'troubleshooting', 'active directory', 'office 365', 'microsoft 365', 'hardware support', 'ticketing', 'service now', 'servicenow'] },
+    { label: 'IT Support', terms: ['it support', 'help desk', 'desktop support', 'active directory', 'office 365', 'microsoft 365', 'hardware support', 'ticketing', 'service now', 'servicenow'] },
     { label: 'ITIL', terms: ['itil', 'service desk', 'incident management', 'change management', 'problem management', 'service management'] },
     { label: 'SAP', terms: ['sap', 's/4hana', 'abap', 'sap mm', 'sap sd', 'sap fi', 'sap hana'] },
     { label: 'SAP Fiori', terms: ['fiori', 'sap ui5'] },
@@ -143,7 +148,7 @@
     { label: 'Civil Engineering', terms: ['civil engineering', 'structural analysis', 'autocad civil', 'revit', 'construction management', 'surveying'] },
     { label: 'Chemical Engineering', terms: ['chemical engineering', 'process engineering', 'piping', 'heat transfer', 'mass balance'] },
     { label: 'Industrial Engineering', terms: ['industrial engineering', 'time study', 'ergonomics', 'facility layout', 'simulation'] },
-    { label: 'Architecture', terms: ['architecture', 'revit', 'bim', 'building design', 'construction documents'] },
+    { label: 'Architecture', terms: ['revit', 'bim', 'building design', 'construction documents', 'autocad architecture'] },
     // ── Trades / Field ──
     { label: 'Electrical Trade', terms: ['electrician', 'wiring', 'conduit', 'nec', 'panel installation', 'troubleshooting electrical'] },
     { label: 'Plumbing', terms: ['plumbing', 'pipefitting', 'hvac', 'refrigeration', 'boiler'] },
@@ -290,9 +295,10 @@
     { id: 'skill-families', text: 'Keep related skill families together across all job categories — tech business healthcare finance trades and more' },
     { id: 'metrics', text: 'Quantified bullets with numbers percentages dollar amounts improve ATS and recruiter scores' },
     { id: 'summary-title', text: 'Summary is a plain human overview of full work experience for HR — no percentages no metric spam no JD marketing fluff' },
-    { id: 'format-headers', text: 'Use ALL CAPS section headers SUMMARY SKILLS EXPERIENCE EDUCATION plain text single column' },
+    { id: 'format-headers', text: 'Use ALL CAPS section headers in this order: PROFESSIONAL SUMMARY then TECHNICAL SKILLS then PROFESSIONAL EXPERIENCE then EDUCATION then CERTIFICATIONS if any' },
     { id: 'format-bullets', text: 'Use hyphen bullets avoid tables columns icons special unicode' },
-    { id: 'sections', text: 'Required sections SUMMARY SKILLS EXPERIENCE EDUCATION must all be present' },
+    { id: 'sections', text: 'Canonical resume structure: Name, Title, Contact, PROFESSIONAL SUMMARY, TECHNICAL SKILLS with category windows, PROFESSIONAL EXPERIENCE, EDUCATION, CERTIFICATIONS if any at the end' },
+    { id: 'skills-windows', text: 'TECHNICAL SKILLS must use labeled category windows like Languages/Packages: Artificial Intelligence & Machine Learning: Visualization Tools/Database: Database:' },
   ];
 
   const KEYWORD_EXPANSIONS = {
@@ -523,18 +529,249 @@
     return false;
   }
 
-  function filterTechnicalKeywords(list, limit = 10) {
+  /**
+   * Ambiguous / overloaded skill labels must be explicitly grounded in the JD.
+   * Prevents BM25 false positives like "Report generation" → RAG (via "generation").
+   */
+  const AMBIGUOUS_SKILL_GROUNDING = {
+    rag: [
+      /\brag\b/i,
+      /retrieval[-\s]?augmented/i,
+      /vector\s+(db|database|store|search|index)/i,
+      /\bembeddings?\b/i,
+      /\bsemantic\s+search\b/i,
+      /\b(pinecone|weaviate|chroma|faiss|milvus)\b/i,
+    ],
+    llm: [
+      /\bllms?\b/i,
+      /large language models?/i,
+      /\bgpt-?\d*\b/i,
+      /\bchatgpt\b/i,
+      /\bopenai\b/i,
+      /\bclaude\b/i,
+      /\bgemini\b/i,
+      /prompt engineering/i,
+    ],
+    'code generation': [
+      /code generation/i,
+      /github copilot/i,
+      /\bcopilot\b/i,
+      /\bcursor\b/i,
+    ],
+    langchain: [/langchain/i, /langgraph/i, /llamaindex/i, /\bhaystack\b/i],
+    autogen: [/\bautogen\b/i, /multi-agent/i, /crewai/i, /agentic ai/i],
+    nlp: [/\bnlp\b/i, /natural language processing/i, /\bspacy\b/i, /hugging face/i, /\bbert\b/i],
+    mlops: [/\bmlops\b/i, /model deployment/i, /model serving/i, /feature store/i, /\bmlflow\b/i, /\bkubeflow\b/i],
+    'machine learning': [
+      /machine learning/i,
+      /\bdeep learning\b/i,
+      /\btensorflow\b/i,
+      /\bpytorch\b/i,
+      /scikit-learn/i,
+      /neural networks?/i,
+      /\bml models?\b/i,
+      /(?<![a-z])ml(?![a-z])/i,
+    ],
+  };
+
+  function skillGroundedInJd(label, jd) {
+    const key = String(label || '').toLowerCase().trim();
+    const rules = AMBIGUOUS_SKILL_GROUNDING[key];
+    if (!rules || !rules.length) return true;
+    const text = String(jd || '');
+    return rules.some(re => re.test(text));
+  }
+
+  function filterGroundedKeywords(list, jd) {
+    return (list || []).filter(kw => skillGroundedInJd(kw, jd));
+  }
+
+  // Tokens too generic to prove a KB skill is actually in the JD
+  // (stops "development"/"design"/"troubleshooting" from pulling unrelated domains).
+  const GENERIC_EVIDENCE_TOKENS = new Set([
+    'development', 'design', 'management', 'training', 'support', 'architecture',
+    'analysis', 'engineering', 'administration', 'service', 'services', 'system',
+    'systems', 'data', 'cloud', 'security', 'quality', 'process', 'processes',
+    'business', 'customer', 'technical', 'software', 'application', 'applications',
+    'database', 'databases', 'reporting', 'report', 'reports', 'documentation',
+    'implementation', 'implement', 'maintain', 'maintenance', 'optimize', 'optimization',
+    'performance', 'availability', 'production', 'environment', 'environments',
+    'integration', 'migration', 'modeling', 'model', 'planning', 'procedures',
+    'procedure', 'functions', 'function', 'jobs', 'job', 'roles', 'role',
+    'permissions', 'auditing', 'backup', 'backups', 'recovery', 'monitoring',
+    'collaborate', 'communication', 'teamwork', 'problem', 'analytical',
+    'experience', 'knowledge', 'skills', 'skill', 'tools', 'tool', 'best',
+    'practices', 'industry', 'trends', 'graduate', 'years', 'minimum',
+    'strong', 'advanced', 'excellent', 'effective', 'required', 'plus',
+    'troubleshooting', // too common in ops JDs — must not unlock IT Support alone
+    'onboarding', 'retention', 'pipeline', 'campaign', 'branding', 'editing',
+  ]);
+
+  // Soft domain labels — never primary; allowed as SECONDARY when JD has lexical evidence
+  const SECONDARY_DOMAIN_LABELS = new Set([
+    'business development', 'game development', 'mobile development', 'customer experience',
+    'customer service', 'learning development', 'graphic design', 'instructional design',
+    'content writing', 'video production', 'sales', 'account management', 'brand marketing',
+    'growth marketing', 'public relations', 'human resources', 'talent acquisition',
+    'diversity inclusion', 'compensation benefits', 'architecture', 'interior design',
+    'operations management', 'supply chain', 'warehouse management', 'transportation',
+    'project management', 'program management', 'product manager', 'scrum master',
+    'technical writer', 'business analyst', 'data scientist', 'data analyst',
+    'ai engineer', 'software engineer', 'qa engineer', 'code generation',
+    'dependency injection', 'embedded systems', 'blockchain', 'it support',
+    'digital marketing', 'marketing analytics', 'ui/ux design', 'agile',
+    'data engineering', 'cloud architecture', 'devops', 'cybersecurity',
+  ]);
+
+  // Back-compat alias used below
+  const DOMAIN_FLUFF_LABELS = SECONDARY_DOMAIN_LABELS;
+
+  const SKILL_BY_LABEL = new Map(SKILL_KB.map(s => [s.label.toLowerCase(), s]));
+
+  // Every known tool/skill string from the KB (labels + terms) for strict matching
+  const KNOWN_SKILL_VOCAB = new Set();
+  SKILL_KB.forEach(s => {
+    KNOWN_SKILL_VOCAB.add(s.label.toLowerCase());
+    (s.terms || []).forEach(t => KNOWN_SKILL_VOCAB.add(String(t).toLowerCase().trim()));
+  });
+  [
+    'mssql', 'mysql', 'mongodb', 'mongo', 'powershell', 'pwsh', 'bash', 'python',
+    'aws', 'azure', 'gcp', 'sql', 'nosql', 'linux', 'unix', 'docker', 'kubernetes',
+    'terraform', 'jenkins', 'git', 'github', 'gitlab', 'java', 'javascript', 'typescript',
+    'react', 'node.js', 'nodejs', 'c#', '.net', 'html', 'css', 'rest', 'api',
+  ].forEach(t => KNOWN_SKILL_VOCAB.add(t));
+
+  function escapeRe(s) {
+    return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function isKnownSkillVocab(term) {
+    const lower = String(term || '').toLowerCase().trim().replace(/[.,;:…]+$/g, '');
+    if (!lower) return false;
+    if (KNOWN_SKILL_VOCAB.has(lower)) return true;
+    if (SECONDARY_DOMAIN_LABELS.has(lower)) return true;
+    if (SKILL_BY_LABEL.has(lower)) return true;
+    return false;
+  }
+
+  /** Single-token tech only (AWS, Python, C#) — never multi-word JD prose. */
+  function isFreeFormTechToken(term) {
+    const t = String(term || '').trim().replace(/[.,;:…]+$/g, '');
+    if (!t || /\s/.test(t)) return false;
+    if (/^(the|and|or|you|will|their|our|for|with|from|this|that|as|to|of|in|on|a|an|by)$/i.test(t)) return false;
+    if (/^(ensuring|including|providing|performing|writing|designing|implementing|maintaining)$/i.test(t)) return false;
+    // Acronyms / tools / languages
+    if (/^[A-Z]{2,12}$/.test(t)) return true;
+    if (/^(C\+\+|C#|\.NET|[A-Za-z][A-Za-z0-9+#.]{1,24})$/.test(t) && t.length <= 24) {
+      // Reject English filler capitalized mid-sentence
+      if (/^(Will|Their|Performance|Availability|Security|Planning|Practices|Reusable|Required|Experience)$/i.test(t)) return false;
+      return isKnownSkillVocab(t) || /^[A-Z]{2,}$/.test(t) || /[#.+]/.test(t);
+    }
+    return false;
+  }
+
+  function tokenIsEvidence(term) {
+    const t = String(term || '').toLowerCase().trim();
+    if (t.length < 2) return false;
+    if (GENERIC_EVIDENCE_TOKENS.has(t)) return false;
+    // Single ultra-short tokens only if tech-ish (sql, aws, gcp, cia…)
+    if (t.length <= 2 && !/^[a-z]{2,3}$/i.test(t)) return false;
+    return true;
+  }
+
+  /** True when JD contains a distinctive tool/skill phrase — not just shared fluff words. */
+  function skillHasLexicalEvidence(label, jd) {
+    const text = String(jd || '').toLowerCase();
+    if (!text.trim()) return false;
+    const skill = SKILL_BY_LABEL.get(String(label || '').toLowerCase());
+    const rawCandidates = skill
+      ? [skill.label, ...skill.terms]
+      : [label];
+    const candidates = rawCandidates
+      .map(t => String(t || '').toLowerCase().trim())
+      .filter(tokenIsEvidence)
+      // Prefer longer / more specific phrases first
+      .sort((a, b) => b.length - a.length);
+
+    for (const term of candidates) {
+      if (term.length <= 3) {
+        if (new RegExp('(?<![a-z0-9])' + escapeRe(term) + '(?![a-z0-9])', 'i').test(text)) return true;
+      } else if (term.includes(' ') || term.includes('/') || term.includes('.') || term.includes('#')) {
+        if (text.includes(term)) return true;
+        const flex = escapeRe(term).replace(/\\\s+/g, '[\\s./-]+');
+        if (new RegExp(flex, 'i').test(text)) return true;
+      } else if (new RegExp('(?<![a-z0-9])' + escapeRe(term) + '(?![a-z0-9])', 'i').test(text)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /** Concrete ATS skills only: known tools/languages — never JD prose fragments. */
+  function isConcreteSkillKeyword(term) {
+    const cleaned = String(term || '').trim().replace(/[.,;:…]+$/g, '').trim();
+    if (!cleaned || cleaned.length < 2 || cleaned.length > 48) return false;
+    const lower = cleaned.toLowerCase();
+    if (STOP_TERMS.has(lower)) return false;
+    if (isJobRoleKeyword(cleaned)) return false;
+    if (DOMAIN_FLUFF_LABELS.has(lower)) return false;
+    // Reject JD prose / section headers / conjunction fragments
+    if (/^(and|or|the|you|will|their|our|ensuring|including|with|from|into|for|as|to|of|by|write|writing|design|implement|ensure|provide|assist|maintain|stay|report|perform|performing)\b/i.test(cleaned)) return false;
+    if (/\b(you will|will…|will\.\.\.|their performance|auditing practices|disaster recovery planning|write reusable)\b/i.test(cleaned)) return false;
+    // Generic nouns
+    if (/^(database|databases|dba|microsoft|server|servers|knowledge|backup|backups|trigger|triggers|jobs?|agent|rds|functions?|procedures?|coding|programming|software|hardware|systems?|tools?|platforms?|frameworks?|technologies|tech|stack|code|scripting|availability|security|performance|practices|planning|reusable|required)$/i.test(cleaned)) return false;
+    if (/^(communication|leadership|teamwork|collaboration|problem solving|critical thinking)$/i.test(cleaned)) return false;
+    if (/^(hiring|experience|experiences?|requirements?|responsibilities|qualifications?|about|overview)$/i.test(cleaned)) return false;
+    if (cleaned.split(/\s+/).length > 3) return false;
+    // Must be a known skill/tool OR a single tech token (AWS, Python) — never free-form Title Case prose
+    if (isKnownSkillVocab(cleaned)) return true;
+    if (isFreeFormTechToken(cleaned)) return true;
+    return false;
+  }
+
+  /** Soft/domain labels — secondary bucket only (not primary hard skills). */
+  function isSecondaryDomainKeyword(term) {
+    const cleaned = String(term || '').trim().replace(/[.,;:]+$/g, '').trim();
+    if (!cleaned) return false;
+    const lower = cleaned.toLowerCase();
+    if (!SECONDARY_DOMAIN_LABELS.has(lower)) return false;
+    if (isJobRoleKeyword(cleaned)) return false;
+    return true;
+  }
+
+  function isKeywordCandidate(term) {
+    return isConcreteSkillKeyword(term) || isSecondaryDomainKeyword(term);
+  }
+
+  function filterSecondaryKeywords(list, limit = 10, jd) {
     const out = [];
     for (const kw of list || []) {
       if (!kw || typeof kw !== 'string') continue;
-      const cleaned = kw.trim();
-      if (!cleaned || cleaned.length < 2) continue;
-      if (STOP_TERMS.has(cleaned.toLowerCase())) continue;
-      if (isJobRoleKeyword(cleaned)) continue;
-      // Drop soft/generic non-tech fluff that sometimes leaks from JD prose
-      if (/^(communication|leadership|teamwork|collaboration|problem solving|critical thinking)$/i.test(cleaned)) continue;
-      if (/^(hiring|experience|experiences?|requirements?|responsibilities|qualifications?|about|overview)$/i.test(cleaned)) continue;
-      if (/[.!?]$/.test(cleaned) && cleaned.split(/\s+/).length <= 2) continue;
+      const cleaned = kw.trim().replace(/[.,;:]+$/g, '').trim();
+      if (!cleaned) continue;
+      // Secondary = leftover concrete skills OR domain labels with JD evidence
+      if (isConcreteSkillKeyword(cleaned)) {
+        // ok
+      } else if (isSecondaryDomainKeyword(cleaned)) {
+        if (jd && !skillHasLexicalEvidence(cleaned, jd)) continue;
+        if (jd && !skillGroundedInJd(cleaned, jd)) continue;
+      } else {
+        continue;
+      }
+      if (out.some(u => u.toLowerCase() === cleaned.toLowerCase())) continue;
+      out.push(cleaned);
+      if (out.length >= limit) break;
+    }
+    return out;
+  }
+
+  /** Primary bucket: hard skills / tools only. Cap is a max, not a target to pad. */
+  function filterTechnicalKeywords(list, limit = 15) {
+    const out = [];
+    for (const kw of list || []) {
+      if (!kw || typeof kw !== 'string') continue;
+      const cleaned = kw.trim().replace(/[.,;:]+$/g, '').trim();
+      if (!isConcreteSkillKeyword(cleaned)) continue;
       if (out.some(u => u.toLowerCase() === cleaned.toLowerCase())) continue;
       out.push(cleaned);
       if (out.length >= limit) break;
@@ -545,36 +782,48 @@
   function extractDirectTerms(jd) {
     const found = new Map();
     const add = (term, weight) => {
-      const t = term.trim();
-      if (t.length < 2 || t.length > 50) return;
-      if (STOP_TERMS.has(t.toLowerCase())) return;
-      if (isJobRoleKeyword(t)) return;
+      let t = term.trim().replace(/[.,;:…]+$/g, '').trim();
+      if (t.length < 2 || t.length > 40) return;
+      // Map aliases to canonical labels when possible
+      const canonMap = {
+        mongo: 'MongoDB', mongodb: 'MongoDB', mssql: 'MSSQL', mysql: 'MySQL',
+        powershell: 'PowerShell', pwsh: 'PowerShell', bash: 'Bash', python: 'Python',
+        aws: 'AWS', azure: 'Azure', 'sql server': 'MSSQL', 'microsoft sql server': 'MSSQL',
+      };
+      t = canonMap[t.toLowerCase()] || t;
+      if (!isConcreteSkillKeyword(t) && !isSecondaryDomainKeyword(t)) return;
+      // Free-form multi-word must be known vocab (blocks "Ensuring Their Performance")
+      if (/\s/.test(t) && !isKnownSkillVocab(t)) return;
       const key = t.toLowerCase();
-      found.set(key, { term: t, weight: (found.get(key)?.weight || 0) + weight });
+      const display = SKILL_BY_LABEL.has(key) ? SKILL_BY_LABEL.get(key).label : t;
+      found.set(key, { term: display, weight: (found.get(key)?.weight || 0) + weight });
     };
 
-    // Comma / bullet lists in requirements sections
-    const listLines = jd.split('\n').filter(l =>
-      /^[\-•*▸]/.test(l.trim()) || /,/.test(l)
-    );
-    for (const line of listLines) {
-      line.replace(/^[\-•*▸]\s*/, '').split(/[,;|]/).forEach(p => add(p.trim(), 3));
+    const text = String(jd || '');
+
+    // 1) Scan JD for known skill vocabulary (most reliable)
+    const vocab = [...KNOWN_SKILL_VOCAB].filter(v => v.length >= 2).sort((a, b) => b.length - a.length);
+    for (const v of vocab) {
+      if (v.length <= 3) {
+        if (new RegExp('(?<![a-z0-9])' + escapeRe(v) + '(?![a-z0-9])', 'i').test(text)) add(v, 5);
+      } else if (new RegExp('(?<![a-z0-9])' + escapeRe(v).replace(/\\\s+/g, '[\\s./-]+') + '(?![a-z0-9])', 'i').test(text)
+        || text.toLowerCase().includes(v)) {
+        add(v, 5);
+      }
     }
 
-    // Capitalized tech tokens (C#, Node.js, AWS)
-    const techMatches = jd.match(/\b(?:[A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,3}|[A-Z]{2,}(?:\/[A-Z]+)?|C#|\.NET)\b/g) || [];
-    techMatches.forEach(t => add(t, 2));
+    // 2) Explicit skill list lines only (Knowledge of: … / Skills: …)
+    const skillListBlocks = text.match(/(?:knowledge of|skills?|tech(?:nical)? skills?|tools?|requirements?)[:\s]+([\s\S]{0,500})/gi) || [];
+    for (const block of skillListBlocks) {
+      block.split(/[,;|•\n]/).forEach(p => {
+        const piece = p.replace(/^(?:knowledge of|skills?|tools?|requirements?)[:\s]*/i, '').trim();
+        if (piece && piece.length < 40) add(piece, 4);
+      });
+    }
 
-    // Quoted terms
-    const quoted = jd.match(/"([^"]{2,40})"|'([^']{2,40})'/g) || [];
-    quoted.forEach(q => add(q.replace(/['"]/g, ''), 4));
-
-    // Years experience patterns nearby skills
-    const yrCtx = jd.match(/(\d+)\+?\s*years?\s+(?:of\s+)?([a-z][a-z\s/+#.]{2,30})/gi) || [];
-    yrCtx.forEach(m => {
-      const skill = m.replace(/^\d+\+?\s*years?\s+(?:of\s+)?/i, '').trim();
-      add(skill, 5);
-    });
+    // 3) Short acronyms / single tech tokens only (no multi-word Title Case sweeps)
+    const acronyms = text.match(/\b(?:[A-Z]{2,12}|C#|\.NET|C\+\+)\b/g) || [];
+    acronyms.forEach(t => add(t, 2));
 
     return [...found.values()].sort((a, b) => b.weight - a.weight);
   }
@@ -601,6 +850,8 @@
       const hits = bm25.search(chunk, 15);
       for (const hit of hits) {
         const label = hit.doc.label;
+        if (!skillHasLexicalEvidence(label, jd)) continue;
+        if (!isKeywordCandidate(label)) continue;
         const prev = scored.get(label) || 0;
         scored.set(label, prev + hit.score * mult);
       }
@@ -609,12 +860,20 @@
     // Full-JD BM25 pass
     bm25.search(jd, 20).forEach(hit => {
       const label = hit.doc.label;
+      if (!skillHasLexicalEvidence(label, jd)) return;
+      if (!isKeywordCandidate(label)) return;
       scored.set(label, (scored.get(label) || 0) + hit.score * 0.5);
     });
 
-    // Direct JD term extraction
+    // Direct JD term extraction — concrete skills for primary; domain phrases skipped here (KB handles them)
     for (const { term, weight } of extractDirectTerms(jd)) {
-      const key = term.replace(/\b\w/g, c => c); // preserve casing for display
+      if (!isConcreteSkillKeyword(term)) continue;
+      if (!skillHasLexicalEvidence(term, jd) && !SKILL_BY_LABEL.has(term.toLowerCase())) {
+        const exact = new RegExp('(?<![a-z0-9])' + escapeRe(term) + '(?![a-z0-9])', 'i');
+        if (!exact.test(jd)) continue;
+      } else if (SKILL_BY_LABEL.has(term.toLowerCase()) && !skillHasLexicalEvidence(term, jd)) {
+        continue;
+      }
       const display = term.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
       const existing = [...scored.keys()].find(k => k.toLowerCase() === term.toLowerCase());
       if (existing) {
@@ -630,7 +889,13 @@
     const ranked = [...scored.entries()]
       .sort((a, b) => b[1] - a[1])
       .map(([label]) => label)
-      .filter(label => !isJobRoleKeyword(label));
+      .filter(label => !isJobRoleKeyword(label))
+      .filter(label => isKeywordCandidate(label))
+      .filter(label => skillGroundedInJd(label, jd))
+      .filter(label => {
+        if (SKILL_BY_LABEL.has(String(label).toLowerCase())) return skillHasLexicalEvidence(label, jd);
+        return true;
+      });
 
     // Dedupe similar
     const unique = [];
@@ -640,15 +905,59 @@
       unique.push(kw);
     }
 
-    let primary = filterTechnicalKeywords(unique, 10);
-    let secondary = filterTechnicalKeywords(unique.filter(k => !primary.some(p => p.toLowerCase() === k.toLowerCase())), 10);
+    // Prefer canonical KB labels for known aliases (Mongo → MongoDB, etc.)
+    const CANONICAL_ALIASES = {
+      mongo: 'MongoDB',
+      mongodb: 'MongoDB',
+      mssql: 'MSSQL',
+      'sql server': 'MSSQL',
+      'microsoft sql server': 'MSSQL',
+      mysql: 'MySQL',
+      powershell: 'PowerShell',
+      pwsh: 'PowerShell',
+      bash: 'Bash',
+      python: 'Python',
+      aws: 'AWS',
+      azure: 'Azure',
+    };
+    const canonicalize = (term) => {
+      const hit = CANONICAL_ALIASES[String(term || '').toLowerCase().trim()];
+      return hit || term;
+    };
 
-    // Pad from direct terms if short
-    if (primary.length < 8) {
+    const canonUnique = unique.map(canonicalize);
+
+    // PRIMARY = hard skills actually present in the JD (variable count, max 15 — never pad)
+    let primary = filterGroundedKeywords(filterTechnicalKeywords(canonUnique, 15), jd);
+
+    // SECONDARY = soft/domain labels first, then leftover hard skills (variable count, max 12)
+    const domainSecondary = filterSecondaryKeywords(
+      canonUnique.filter(k => isSecondaryDomainKeyword(k)),
+      12,
+      jd
+    );
+    const leftoverSkills = filterTechnicalKeywords(
+      canonUnique.filter(k => !primary.some(p => p.toLowerCase() === k.toLowerCase())),
+      12
+    );
+    let secondary = [];
+    for (const k of [...domainSecondary, ...leftoverSkills]) {
+      if (primary.some(p => p.toLowerCase() === k.toLowerCase())) continue;
+      if (secondary.some(s => s.toLowerCase() === k.toLowerCase())) continue;
+      secondary.push(k);
+      if (secondary.length >= 12) break;
+    }
+
+    // Only backfill when extraction is extremely thin — still only JD-grounded skills
+    if (primary.length < 3) {
       for (const { term } of extractDirectTerms(jd)) {
-        if (primary.length >= 10) break;
-        if (isJobRoleKeyword(term)) continue;
-        if (!primary.some(p => p.toLowerCase() === term.toLowerCase())) primary.push(term);
+        if (primary.length >= 15) break;
+        const canon = canonicalize(term);
+        if (!isConcreteSkillKeyword(canon)) continue;
+        if (isJobRoleKeyword(canon)) continue;
+        if (!skillGroundedInJd(canon, jd)) continue;
+        if (SKILL_BY_LABEL.has(canon.toLowerCase()) && !skillHasLexicalEvidence(canon, jd)) continue;
+        if (!primary.some(p => p.toLowerCase() === canon.toLowerCase())) primary.push(canon);
       }
     }
 
@@ -659,6 +968,8 @@
       secondary,
       aliasMap,
       title,
+      jdKeywordCount: primary.length,
+      extractedFromJd: true,
       chunks,
       confidence: primary.length >= 6 ? 'high' : primary.length >= 3 ? 'medium' : 'low',
       source: 'rag',
@@ -763,9 +1074,206 @@
     return map;
   }
 
-  // ─── ATS SCORING ────────────────────────────────────────────────
-  // Rubric (keyword-first, mirrors real ATS weight):
-  //   Primary keywords 60 · Secondary 15 · Metrics 10 · Summary 5 · Format 5 · Sections 5 = 100
+  /**
+   * Canonical resume structure (from template):
+   *   Name
+   *   Professional Title
+   *   email | phone | LinkedIn
+   *   PROFESSIONAL SUMMARY
+   *   PROFESSIONAL EXPERIENCE
+   *   TECHNICAL SKILLS   (Category: skills…)
+   *   EDUCATION
+   *   CERTIFICATIONS (optional — only if present, always last)
+   */
+  const CANONICAL_SECTION_ORDER = ['SUMMARY', 'SKILLS', 'EXPERIENCE', 'EDUCATION'];
+  const CANONICAL_SECTION_ALIASES = {
+    SUMMARY: ['PROFESSIONAL SUMMARY', 'SUMMARY', 'PROFILE', 'OBJECTIVE'],
+    EXPERIENCE: ['PROFESSIONAL EXPERIENCE', 'WORK EXPERIENCE', 'EXPERIENCE', 'EMPLOYMENT HISTORY', 'WORK HISTORY'],
+    SKILLS: ['TECHNICAL SKILLS', 'SKILLS', 'CORE COMPETENCIES', 'TECHNOLOGIES', 'TOOLS & PLATFORMS'],
+    EDUCATION: ['EDUCATION', 'ACADEMIC BACKGROUND', 'ACADEMIC'],
+    CERTIFICATIONS: ['CERTIFICATIONS', 'CERTIFICATION', 'LICENSES', 'LICENCES'],
+  };
+  const PREFERRED_SECTION_HEADERS = {
+    SUMMARY: 'PROFESSIONAL SUMMARY',
+    EXPERIENCE: 'PROFESSIONAL EXPERIENCE',
+    SKILLS: 'TECHNICAL SKILLS',
+    EDUCATION: 'EDUCATION',
+    CERTIFICATIONS: 'CERTIFICATIONS',
+  };
+
+  function findSectionHeaderIndex(lines, aliases) {
+    for (let i = 0; i < lines.length; i++) {
+      const u = String(lines[i] || '').trim().toUpperCase().replace(/:$/, '');
+      if (!u || u.length > 60) continue;
+      if (aliases.some(a => u === a || u.startsWith(a + ' '))) return i;
+    }
+    return -1;
+  }
+
+  function analyzeResumeStructure(resume, resumeLines) {
+    const lines = (resumeLines && resumeLines.length)
+      ? resumeLines
+      : String(resume || '').split(/\r?\n/).map(l => l.trim());
+    const nonEmpty = lines.map((l, i) => ({ l: String(l || '').trim(), i })).filter(x => x.l);
+    const flags = [];
+    const positions = {};
+
+    for (const key of CANONICAL_SECTION_ORDER) {
+      const idx = findSectionHeaderIndex(lines, CANONICAL_SECTION_ALIASES[key]);
+      positions[key] = idx;
+      if (idx < 0) flags.push('Missing section: ' + PREFERRED_SECTION_HEADERS[key]);
+    }
+
+    const first = nonEmpty[0]?.l || '';
+    const second = nonEmpty[1]?.l || '';
+    const headerBlock = nonEmpty.slice(0, 5).map(x => x.l).join('\n');
+    const nameOk = first.length > 1 && first.length <= 60
+      && !/@|http|linkedin|phone|\d{5}/i.test(first)
+      && !/^(resume|curriculum vitae|cv|professional summary|summary)$/i.test(first);
+    const hasEmail = /[\w.+-]+@[\w-]+\.[\w.]+/.test(headerBlock);
+    const hasPhone = /(\+?\d[\d\s().-]{7,}\d)/.test(headerBlock);
+    const hasContactRow = /@/.test(headerBlock) && (/\|/.test(headerBlock) || hasPhone);
+    const titleLineOk = second.length > 1 && second.length <= 80
+      && !/@/.test(second)
+      && !/^(professional summary|summary|professional experience|experience|technical skills|skills|education)$/i.test(second);
+
+    if (!nameOk) flags.push('First line should be the candidate name');
+    if (!titleLineOk) flags.push('Add a professional title line under the name (e.g. Data Analyst)');
+    if (!hasEmail) flags.push('Contact header needs an email');
+    if (!hasPhone) flags.push('Contact header needs a phone number');
+    if (!hasContactRow) flags.push('Contact should be one line: email | phone | LinkedIn');
+
+    const preferredHits = {
+      SUMMARY: /PROFESSIONAL SUMMARY/i.test(resume),
+      EXPERIENCE: /PROFESSIONAL EXPERIENCE/i.test(resume),
+      SKILLS: /TECHNICAL SKILLS/i.test(resume),
+      EDUCATION: /\bEDUCATION\b/i.test(resume),
+    };
+    if (positions.SUMMARY >= 0 && !preferredHits.SUMMARY) {
+      flags.push('Prefer header "PROFESSIONAL SUMMARY" (template style)');
+    }
+    if (positions.EXPERIENCE >= 0 && !preferredHits.EXPERIENCE) {
+      flags.push('Prefer header "PROFESSIONAL EXPERIENCE" (template style)');
+    }
+    if (positions.SKILLS >= 0 && !preferredHits.SKILLS) {
+      flags.push('Prefer header "TECHNICAL SKILLS" (template style)');
+    }
+
+    const presentKeys = CANONICAL_SECTION_ORDER.filter(k => positions[k] >= 0);
+    let orderOk = true;
+    for (let i = 1; i < presentKeys.length; i++) {
+      if (positions[presentKeys[i]] < positions[presentKeys[i - 1]]) {
+        orderOk = false;
+        break;
+      }
+    }
+    if (!orderOk) {
+      flags.push('Section order must be: PROFESSIONAL SUMMARY → TECHNICAL SKILLS → PROFESSIONAL EXPERIENCE → EDUCATION → CERTIFICATIONS (if any)');
+    }
+
+    // CERTIFICATIONS is optional — but if present it must be the last section
+    const certIdx = findSectionHeaderIndex(lines, CANONICAL_SECTION_ALIASES.CERTIFICATIONS);
+    positions.CERTIFICATIONS = certIdx;
+    let certificationsAtEnd = true;
+    if (certIdx >= 0) {
+      const laterCore = CANONICAL_SECTION_ORDER.filter(k => positions[k] > certIdx);
+      if (laterCore.length) {
+        certificationsAtEnd = false;
+        flags.push('CERTIFICATIONS must be at the end (after EDUCATION)');
+      }
+      const afterCert = lines.slice(certIdx + 1).some(l => {
+        const u = String(l || '').trim().toUpperCase().replace(/:$/, '');
+        return /^(PROFESSIONAL SUMMARY|SUMMARY|TECHNICAL SKILLS|SKILLS|PROFESSIONAL EXPERIENCE|WORK EXPERIENCE|EXPERIENCE|EDUCATION|PROJECTS|PUBLICATIONS)$/.test(u);
+      });
+      if (afterCert) {
+        certificationsAtEnd = false;
+        if (!flags.some(f => f.includes('CERTIFICATIONS must be at the end'))) {
+          flags.push('CERTIFICATIONS must be at the end (after EDUCATION)');
+        }
+      }
+      // Certifications should come after Education when both exist
+      if (positions.EDUCATION >= 0 && certIdx < positions.EDUCATION) {
+        certificationsAtEnd = false;
+        if (!flags.some(f => f.includes('CERTIFICATIONS must be at the end'))) {
+          flags.push('CERTIFICATIONS must be at the end (after EDUCATION)');
+        }
+      }
+    }
+
+    let skillWindowCount = 0;
+    if (positions.SKILLS >= 0) {
+      const end = presentKeys.map(k => positions[k]).filter(i => i > positions.SKILLS).sort((a, b) => a - b)[0]
+        ?? lines.length;
+      for (let i = positions.SKILLS + 1; i < end; i++) {
+        const line = String(lines[i] || '').trim();
+        if (/^[A-Za-z][\w\s/&()+.-]{1,40}:\s*\S/.test(line)) skillWindowCount++;
+      }
+    }
+    if (positions.SKILLS >= 0 && skillWindowCount < 2) {
+      flags.push('TECHNICAL SKILLS should use labeled category windows (e.g. Languages/Packages: …, Database: …)');
+    }
+
+    let roleLineCount = 0;
+    if (positions.EXPERIENCE >= 0) {
+      const end = presentKeys.map(k => positions[k]).filter(i => i > positions.EXPERIENCE).sort((a, b) => a - b)[0]
+        ?? lines.length;
+      for (let i = positions.EXPERIENCE + 1; i < end; i++) {
+        const line = String(lines[i] || '').trim();
+        if ((line.match(/\|/g) || []).length >= 1 && !/^[-•*]/.test(line) && line.length < 140) {
+          roleLineCount++;
+        }
+      }
+    }
+    if (positions.EXPERIENCE >= 0 && roleLineCount < 1) {
+      flags.push('EXPERIENCE roles should use: Company | Location | Title (with dates)');
+    }
+
+    const missingCount = CANONICAL_SECTION_ORDER.filter(k => positions[k] < 0).length;
+    let score = 100;
+    score -= missingCount * 15;
+    if (!nameOk) score -= 10;
+    if (!hasEmail) score -= 8;
+    if (!hasPhone) score -= 5;
+    if (!hasContactRow) score -= 5;
+    if (!titleLineOk) score -= 5;
+    if (!orderOk) score -= 20;
+    if (!certificationsAtEnd) score -= 12;
+    if (positions.SKILLS >= 0 && skillWindowCount < 2) score -= 10;
+    if (positions.EXPERIENCE >= 0 && roleLineCount < 1) score -= 8;
+    ['SUMMARY', 'EXPERIENCE', 'SKILLS'].forEach(k => {
+      if (positions[k] >= 0 && !preferredHits[k]) score -= 3;
+    });
+    score = Math.max(0, Math.min(100, score));
+
+    return {
+      score,
+      flags,
+      orderOk: orderOk && certificationsAtEnd,
+      positions,
+      preferredHits,
+      skillWindowCount,
+      roleLineCount,
+      hasCertifications: certIdx >= 0,
+      certificationsAtEnd,
+      contact: { nameOk, titleLineOk, hasEmail, hasPhone, hasContactRow },
+      expectedOrder: [
+        'Name',
+        'Professional Title',
+        'email | phone | LinkedIn',
+        'PROFESSIONAL SUMMARY',
+        'TECHNICAL SKILLS (Category: skills)',
+        'PROFESSIONAL EXPERIENCE',
+        'EDUCATION',
+        'CERTIFICATIONS (if any — always last)',
+      ],
+      templateNote: 'Structure scored against the canonical resume template (Summary → Skills → Experience → Education → Certifications if any).',
+    };
+  }
+
+  // ─── ATS SCORING (Jobilly readiness + RAG keywords) ─────
+  // Primary score = weighted readiness:
+  //   Keywords 30 · Content 25 · Parseability 20 · Structure 15 · Formatting 10 = 100
+  // Keywords category is powered by our RAG primary/secondary extraction + alias match.
   function computeAtsScore(jd, resume, primary, secondary, aliasMap) {
     const resumeLines = resume.split('\n').map(l =>
       l.replace(/^[\s\u00A0\u200B\u200C\u200D\uFEFF\u202F\u2060\u3000]+/, '')
@@ -775,6 +1283,7 @@
 
     const primaryFound = primary.filter(k => kwOrAliasInText(k, resumeText, aliasMap));
     const primaryMissing = primary.filter(k => !kwOrAliasInText(k, resumeText, aliasMap));
+    // Legacy detail points (kept for diagnostics / rewrite prompts — not the primary score)
     const kwPts = primary.length === 0
       ? 60
       : Math.round((primaryFound.length / primary.length) * 60);
@@ -851,20 +1360,18 @@
     const fmtPts = fmtCheck === 'PASS' ? 5 : Math.max(1, 5 - fmtIssues.length * 1);
 
     const REQUIRED_SECTIONS = ['SUMMARY', 'EXPERIENCE', 'SKILLS', 'EDUCATION'];
-    const resumeUpper = resume.toUpperCase();
     const SECTION_ALIASES = {
-      SUMMARY: ['SUMMARY', 'PROFILE', 'OBJECTIVE', 'ABOUT'],
-      EXPERIENCE: ['EXPERIENCE', 'EMPLOYMENT', 'WORK HISTORY', 'PROFESSIONAL EXPERIENCE'],
-      SKILLS: ['SKILLS', 'TECHNICAL SKILLS', 'CORE COMPETENCIES', 'TECHNOLOGIES'],
+      SUMMARY: ['PROFESSIONAL SUMMARY', 'SUMMARY', 'PROFILE', 'OBJECTIVE', 'ABOUT'],
+      EXPERIENCE: ['PROFESSIONAL EXPERIENCE', 'WORK EXPERIENCE', 'EXPERIENCE', 'EMPLOYMENT', 'WORK HISTORY'],
+      SKILLS: ['TECHNICAL SKILLS', 'SKILLS', 'CORE COMPETENCIES', 'TECHNOLOGIES', 'TOOLS & PLATFORMS'],
       EDUCATION: ['EDUCATION', 'ACADEMIC', 'QUALIFICATIONS'],
     };
+    const resumeUpper = resume.toUpperCase();
     const missingSections = REQUIRED_SECTIONS.filter(s =>
       !(SECTION_ALIASES[s] || [s]).some(alias => resumeUpper.includes(alias))
     );
     const sectionPts = missingSections.length === 0 ? 5 : Math.max(1, 5 - missingSections.length);
-
-    const atsScore = Math.min(100, kwPts + secPts + metricPts + summaryPts + fmtPts + sectionPts);
-    const confidence = atsScore >= 85 ? 'High' : atsScore >= 70 ? 'Medium' : 'Low';
+    const structureAnalysis = analyzeResumeStructure(resume, resumeLines);
 
     const gaps = [
       ...primaryMissing.map(k => `Keyword "${k}" from JD not found in resume — add to Skills or weave into a bullet.`),
@@ -882,34 +1389,282 @@
     if (summaryPts < 5) improvementSuggestions.push('Rewrite summary as a clear HR-friendly overview of full experience — no percentages');
     if (missingSections.length) improvementSuggestions.push(`Add missing sections: ${missingSections.join(', ')}`);
 
+    // Jobilly readiness is the PRIMARY ATS score.
+    // Our contribution: RAG keyword extraction + alias matching + JD/experience fit hooks in the UI.
+    const report = buildReadinessReport({
+      resume, resumeLines, resumeText, aliasMap,
+      primary, secondary, primaryFound, primaryMissing, secFound, secMissing,
+      bulletLines, bulletsWithNum, fmtIssues, fmtCheck, missingSections,
+      summaryPts, gaps, improvementSuggestions, structureAnalysis,
+    });
+
+    const atsScore = report.overallReadiness;
+    const confidence = atsScore >= 85 ? 'High' : atsScore >= 70 ? 'Medium' : 'Low';
+
+    const scorecard = {
+      atsScore,
+      scoringModel: 'jobilly-readiness+rag-keywords',
+      keywordMatch: primaryFound.length,
+      keywordsFound: primaryFound,
+      keywordsMissing: primaryMissing,
+      secondaryFound: secFound,
+      secondaryMissing: secMissing,
+      bulletsWithMetrics: bulletsWithNum.length,
+      bulletsTotal: bulletLines.length,
+      summaryScore: summaryPts,
+      formatCheck: fmtCheck,
+      formatIssues: fmtIssues,
+      sectionCheck: missingSections.length === 0 && structureAnalysis.orderOk ? 'PASS' : 'FAIL',
+      missingSections,
+      structureAnalysis,
+      confidenceLevel: confidence,
+      confidenceReason: primaryMissing.length === 0
+        ? 'All major JD keywords addressed'
+        : `${primaryMissing.length} primary keyword(s) still missing`,
+      gaps,
+      improvementSuggestions,
+      categories: report.categories,
+      overallReadiness: report.overallReadiness,
+      readinessLabel: report.readinessLabel,
+      topFixes: report.topFixes,
+      reportPromptBlock: report.reportPromptBlock,
+      // Legacy keyword-first breakdown (diagnostics only)
+      legacyKeywordPts: { kwPts, secPts, metricPts, summaryPts, fmtPts, sectionPts },
+    };
+
     return {
       atsScore,
-      atsColour: atsScore >= 80 ? '#4ade80' : atsScore >= 60 ? '#fbbf24' : '#f87171',
+      atsColour: report.readinessColour,
       kwPts, secPts, metricPts, summaryPts, fmtPts, sectionPts,
       primaryFound, primaryMissing, secFound, secMissing,
       bulletLines, bulletsWithNum, fmtCheck, fmtIssues, missingSections,
       gaps, improvementSuggestions, confidence,
-      scorecard: {
-        atsScore,
-        keywordMatch: primaryFound.length,
-        keywordsFound: primaryFound,
-        keywordsMissing: primaryMissing,
-        secondaryFound: secFound,
-        secondaryMissing: secMissing,
-        bulletsWithMetrics: bulletsWithNum.length,
-        bulletsTotal: bulletLines.length,
-        summaryScore: summaryPts,
-        formatCheck: fmtCheck,
-        formatIssues: fmtIssues,
-        sectionCheck: missingSections.length === 0 ? 'PASS' : 'FAIL',
-        missingSections,
-        confidenceLevel: confidence,
-        confidenceReason: primaryMissing.length === 0
-          ? 'All major JD keywords addressed'
-          : `${primaryMissing.length} primary keyword(s) still missing`,
-        gaps,
-        improvementSuggestions,
-      },
+      report,
+      scorecard,
+    };
+  }
+
+  function clampScore(n, lo, hi) {
+    return Math.max(lo, Math.min(hi, n));
+  }
+
+  /**
+   * Jobilly weighted readiness (PRIMARY ATS score):
+   * Keywords 30% · Content 25% · Parseability 20% · Structure 15% · Formatting 10%
+   * Keywords + Content are weighted higher so JD match and bullet quality drive the score.
+   */
+  function buildReadinessReport(ctx) {
+    const {
+      resume, resumeLines, resumeText, aliasMap,
+      primary, secondary, primaryFound, primaryMissing, secFound, secMissing,
+      bulletLines, bulletsWithNum, fmtIssues, missingSections,
+      summaryPts, gaps, improvementSuggestions, structureAnalysis,
+    } = ctx;
+
+    const strippedLen = (resumeText || '').replace(/\s/g, '').length;
+    const wordCount = (resumeText || '').trim().split(/\s+/).filter(Boolean).length;
+    const parseFlags = [];
+    let parseScore = 100;
+    if (strippedLen < 20) {
+      parseFlags.push('Near-zero extractable text — ATS will not parse this resume');
+      parseScore = 5;
+    } else if (strippedLen < 100) {
+      parseFlags.push('Very little text extracted — parsing may be incomplete');
+      parseScore -= 40;
+    } else if (wordCount < 120) {
+      parseFlags.push('Resume text is thin — expand experience with concrete bullets');
+      parseScore -= 15;
+    }
+    if (fmtIssues.some(i => /table/i.test(i))) {
+      parseFlags.push('Table-like formatting may scramble ATS reading order');
+      parseScore -= 15;
+    }
+    if (fmtIssues.some(i => /column/i.test(i))) {
+      parseFlags.push('Multi-column layout detected — use single column');
+      parseScore -= 12;
+    }
+    const garbage = (resume.match(/[�□]|[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g) || []).length;
+    if (garbage > 3) {
+      parseFlags.push('Garbage/control characters detected in text');
+      parseScore -= 8;
+    }
+    if (wordCount > 900) {
+      parseFlags.push('Long resume (~' + wordCount + ' words) — consider trimming to 1–2 pages');
+      parseScore -= 5;
+    }
+    parseScore = clampScore(parseScore, 0, 100);
+    if (!parseFlags.length) parseFlags.push('Text looks cleanly extractable — good parseability baseline');
+
+    const firstLine = (resumeLines.find(l => l.trim()) || '').trim();
+    const nameOk = firstLine.length > 0 && firstLine.length <= 60
+      && !/@|http|linkedin|phone|\d{5}/i.test(firstLine)
+      && !/^(resume|curriculum vitae|cv)$/i.test(firstLine);
+    const hasEmail = /[\w.+-]+@[\w-]+\.[\w.]+/.test(resumeText);
+    const hasPhone = /(\+?\d[\d\s().-]{7,}\d)/.test(resumeText);
+
+    // Structure scored against canonical template:
+    // Name → Title → Contact → PROFESSIONAL SUMMARY → TECHNICAL SKILLS → PROFESSIONAL EXPERIENCE → EDUCATION → CERTIFICATIONS (if any)
+    const struct = structureAnalysis || analyzeResumeStructure(resume, resumeLines);
+    let structureScore = struct.score;
+    const structureFlags = [...(struct.flags || [])];
+    if (summaryPts < 3) {
+      structureScore = clampScore(structureScore - 5, 0, 100);
+      structureFlags.push('Summary poorly aligned to JD title/role');
+    }
+    // Keep legacy missingSections in flags if analyzer missed an alias edge case
+    missingSections.forEach(s => {
+      const label = PREFERRED_SECTION_HEADERS[s] || s;
+      if (!structureFlags.some(f => f.includes(label) || f.includes(s))) {
+        structureFlags.push('Missing section: ' + label);
+        structureScore = clampScore(structureScore - 5, 0, 100);
+      }
+    });
+    structureScore = clampScore(structureScore, 0, 100);
+
+    const primaryPct = primary.length ? primaryFound.length / primary.length : 1;
+    const secondaryPct = secondary.length ? secFound.length / secondary.length : 1;
+    // Our RAG contribution inside Keywords category (30% of overall):
+    // primary coverage dominates, secondary + body-demo bonus on top.
+    const skillsBlock = (resumeText.match(/(?:skills|technical skills|core competencies)[\s\S]{0,900}/i) || [''])[0];
+    const bodyWithoutSkills = resumeText.toLowerCase().replace(skillsBlock.toLowerCase(), '');
+    const demoPrimary = primaryFound.filter(k => kwOrAliasInText(k, bodyWithoutSkills, aliasMap));
+    const demoRate = primaryFound.length ? demoPrimary.length / primaryFound.length : 0;
+    let kwScore = Math.round(primaryPct * 70 + secondaryPct * 20 + demoRate * 10);
+    kwScore = clampScore(kwScore, 0, 100);
+    const kwFlags = [];
+    if (primaryMissing.length) kwFlags.push('Missing primary: ' + primaryMissing.slice(0, 6).join(', '));
+    if (secMissing.length) kwFlags.push('Missing secondary: ' + secMissing.slice(0, 4).join(', '));
+    if (primaryFound.length && demoRate < 0.5) kwFlags.push('Many keywords appear only in Skills — demonstrate them in Experience bullets');
+
+    const WEAK_OPENERS = /^(helped|assisted|responsible for|worked on|involved in|participated in|duties included)\b/i;
+    const BUZZWORDS = ['synergy', 'go-getter', 'self-starter', 'detail-oriented', 'results-driven', 'passionate', 'team player', 'hard-working', 'fast-paced'];
+    const quantRate = bulletLines.length
+      ? Math.round((bulletsWithNum.length / bulletLines.length) * 100)
+      : 0;
+    const weakOpeners = bulletLines.filter(b => WEAK_OPENERS.test(b.replace(/^[\-•*]\s*/, '')));
+    const buzzFound = BUZZWORDS.filter(b => resumeText.toLowerCase().includes(b));
+    const firstPerson = (resumeText.match(/\b(I|my|me)\b/gi) || []).length;
+    let contentScore = 100;
+    const contentFlags = [];
+    if (bulletLines.length && quantRate < 30) { contentScore -= 20; contentFlags.push('Only ' + quantRate + '% of experience bullets have metrics — aim for 50%+'); }
+    else if (bulletLines.length && quantRate < 50) { contentScore -= 10; contentFlags.push('Quantification rate ' + quantRate + '% — add more numbers to bullets'); }
+    if (weakOpeners.length > 2) { contentScore -= 10; contentFlags.push(weakOpeners.length + ' weak bullet openers (helped / responsible for / worked on)'); }
+    if (firstPerson > 5) { contentScore -= 10; contentFlags.push(firstPerson + ' first-person references — use implied subject'); }
+    if (buzzFound.length > 2) { contentScore -= 10; contentFlags.push('Buzzwords: ' + buzzFound.join(', ')); }
+    if (!bulletLines.length) { contentScore -= 15; contentFlags.push('No clear experience bullets detected'); }
+    contentScore = clampScore(contentScore, 0, 100);
+
+    let formattingScore = 100;
+    const formattingFlags = [...fmtIssues];
+    fmtIssues.forEach(f => {
+      formattingScore -= /table|column/i.test(f) ? 15 : 8;
+    });
+    formattingScore = clampScore(formattingScore, 0, 100);
+
+    const categories = {
+      parseability: { score: parseScore, weight: 0.20, flags: parseFlags },
+      structure: { score: structureScore, weight: 0.15, flags: structureFlags },
+      keywords: { score: kwScore, weight: 0.30, flags: kwFlags },
+      content: { score: contentScore, weight: 0.25, flags: contentFlags, quantRate },
+      formatting: { score: formattingScore, weight: 0.10, flags: formattingFlags },
+    };
+
+    const overallReadiness = Math.round(
+      kwScore * 0.30 +
+      contentScore * 0.25 +
+      parseScore * 0.20 +
+      structureScore * 0.15 +
+      formattingScore * 0.10
+    );
+
+    const readinessLabel = overallReadiness >= 75 ? 'Strong'
+      : overallReadiness >= 50 ? 'Needs improvement'
+      : 'Critical gaps';
+
+    const topFixes = [];
+    if (parseScore < 70) {
+      topFixes.push({
+        priority: 1,
+        title: parseScore <= 5 ? 'Fix parseability — ATS cannot read this resume' : 'Improve text extractability / layout',
+        detail: parseFlags[0] || 'Use single-column plain text with selectable content.',
+      });
+    }
+    if (!hasEmail) {
+      topFixes.push({
+        priority: 2,
+        title: 'Add a professional email in the header',
+        detail: 'ATS and recruiters expect an email on the first screen.',
+      });
+    }
+    if (primaryPct < 0.5) {
+      topFixes.push({
+        priority: 2,
+        title: 'Increase keyword match (' + Math.round(primaryPct * 100) + '%)',
+        detail: 'Missing: ' + primaryMissing.slice(0, 5).join(', ') + '. Mirror JD language naturally in Skills + Experience.',
+      });
+    }
+    if (!struct.orderOk) {
+      topFixes.push({
+        priority: 2,
+        title: 'Fix section order to match template',
+        detail: 'Use: PROFESSIONAL SUMMARY → TECHNICAL SKILLS → PROFESSIONAL EXPERIENCE → EDUCATION → CERTIFICATIONS (if any, last)',
+      });
+    }
+    if (missingSections.length) {
+      topFixes.push({
+        priority: 3,
+        title: 'Add missing sections',
+        detail: missingSections.map(s => PREFERRED_SECTION_HEADERS[s] || s).join(', '),
+      });
+    }
+    if (quantRate < 40 && bulletLines.length) {
+      topFixes.push({
+        priority: 3,
+        title: 'Add metrics to bullet points',
+        detail: 'Only ' + quantRate + '% of experience bullets include numbers. Add scale, %, time saved, or impact.',
+      });
+    }
+    if (structureFlags.length && topFixes.length < 3) {
+      topFixes.push({
+        priority: 3,
+        title: 'Strengthen resume structure',
+        detail: structureFlags[0],
+      });
+    }
+    topFixes.sort((a, b) => a.priority - b.priority);
+    const top3 = topFixes.slice(0, 3);
+
+    const reportPromptBlock = [
+      'ATS READINESS REPORT — Jobilly weighted score (PRIMARY target):',
+      `Overall readiness: ${overallReadiness}/100 (${readinessLabel})`,
+      `Keywords ${kwScore}/100 (30% · our RAG match) · Content ${contentScore}/100 (25%) · Parseability ${parseScore}/100 (20%) · Structure ${structureScore}/100 (15%) · Formatting ${formattingScore}/100 (10%)`,
+      'CANONICAL STRUCTURE (must match): Name → Title → email | phone | LinkedIn → PROFESSIONAL SUMMARY → TECHNICAL SKILLS (Category: skills) → PROFESSIONAL EXPERIENCE → EDUCATION → CERTIFICATIONS (if any, always last)',
+      structureFlags.length ? 'STRUCTURE FLAGS:\n' + structureFlags.slice(0, 6).map(f => `  - ${f}`).join('\n') : 'STRUCTURE: matches canonical template',
+      top3.length
+        ? 'TOP FIXES (do these first):\n' + top3.map((f, i) => `  ${i + 1}. ${f.title} — ${f.detail}`).join('\n')
+        : 'TOP FIXES: none critical',
+      primaryMissing.length ? `MISSING PRIMARY KEYWORDS (our RAG extract): ${primaryMissing.join(', ')}` : 'PRIMARY KEYWORDS: all present',
+      secMissing.length ? `MISSING SECONDARY KEYWORDS: ${secMissing.slice(0, 8).join(', ')}` : 'SECONDARY KEYWORDS: all present',
+      improvementSuggestions.length
+        ? 'SUGGESTIONS:\n' + improvementSuggestions.map(s => `  - ${s}`).join('\n')
+        : '',
+      gaps.length
+        ? 'GAPS:\n' + gaps.slice(0, 12).map(g => `  - ${g}`).join('\n')
+        : '',
+      'Raise Overall readiness by fixing Top Fixes, embedding missing RAG keywords in Skills + Experience, and quantifying bullets.',
+    ].filter(Boolean).join('\n');
+
+    return {
+      overallReadiness,
+      readinessLabel,
+      readinessColour: overallReadiness >= 75 ? '#4ade80' : overallReadiness >= 50 ? '#fbbf24' : '#f87171',
+      categories,
+      topFixes: top3,
+      parseFlags,
+      structureFlags,
+      structureAnalysis: struct,
+      contentFlags,
+      reportPromptBlock,
     };
   }
 
@@ -997,37 +1752,48 @@
     } catch { /* storage unavailable */ }
   }
 
-  function sanitizeKeywordPayload(payload, source) {
-    const primary = filterTechnicalKeywords(payload?.primary || [], 10);
-    const secondary = filterTechnicalKeywords(
-      (payload?.secondary || []).filter(k => !primary.some(p => p.toLowerCase() === String(k).toLowerCase())),
-      10
+  function sanitizeKeywordPayload(payload, source, jd) {
+    // Keep only skills that survive filters — count is JD-driven, not forced to 10
+    let primary = filterTechnicalKeywords(payload?.primary || [], 15);
+    const demoted = (payload?.primary || []).filter(k => isSecondaryDomainKeyword(k));
+    let secondary = filterSecondaryKeywords(
+      [...demoted, ...(payload?.secondary || [])].filter(k => !primary.some(p => p.toLowerCase() === String(k).toLowerCase())),
+      12,
+      jd
     );
+    if (jd) {
+      primary = filterGroundedKeywords(primary, jd).filter(k =>
+        !SKILL_BY_LABEL.has(String(k).toLowerCase()) || skillHasLexicalEvidence(k, jd)
+      );
+      secondary = filterSecondaryKeywords(secondary, 12, jd);
+    }
     const aliasMap = buildAliasMap([...primary, ...secondary]);
     return {
       ...payload,
       primary,
       secondary,
       aliasMap,
+      jdKeywordCount: primary.length,
+      extractedFromJd: true,
       source,
     };
   }
 
   async function getKeywords(jd, sessionKeywords) {
     if (sessionKeywords?.primary?.length) {
-      return sanitizeKeywordPayload(sessionKeywords, 'session');
+      return sanitizeKeywordPayload(sessionKeywords, 'session', jd);
     }
 
-    const key = 'ats_kw_v2_' + jdHash(jd);
+    const key = 'ats_kw_v7_' + jdHash(jd);
     const cached = await cacheGet(key);
     if (cached?.primary?.length) {
-      return sanitizeKeywordPayload(cached, 'cache');
+      return sanitizeKeywordPayload(cached, 'cache', jd);
     }
 
     // localStorage fallback (legacy)
     try {
       const ls = JSON.parse(localStorage.getItem(key) || 'null');
-      if (ls?.primary?.length) return sanitizeKeywordPayload(ls, 'cache');
+      if (ls?.primary?.length) return sanitizeKeywordPayload(ls, 'cache', jd);
     } catch { /* ignore */ }
 
     const extracted = extractKeywordsRAG(jd);
@@ -1308,6 +2074,187 @@
     };
   }
 
+
+  /**
+   * Career-domain detectors — used to compare JD vs resume domains.
+   * Weighted signals: title hits count more than tool mentions.
+   */
+  const CAREER_DOMAINS = [
+    {
+      id: 'database_administration',
+      label: 'Database Administration (DBA)',
+      family: 'data',
+      signals: [
+        { re: /\b(database administrators?|senior dba|\bdba\b)\b/i, w: 8 },
+        { re: /\b(mssql|microsoft sql server|mysql|mongodb|oracle|postgresql|postgres)\b/i, w: 3 },
+        { re: /\b(stored procedures?|query tuning|index optimization|database backups?|disaster recovery|mssql job agent|aws rds|azure sql)\b/i, w: 4 },
+        { re: /\b(schemas?|triggers?|replication|high[- ]availability)\b/i, w: 2 },
+      ],
+    },
+    {
+      id: 'data_engineering',
+      label: 'Data Engineering',
+      family: 'data',
+      signals: [
+        { re: /\bdata engineers?\b/i, w: 8 },
+        { re: /\bdata engineering\b/i, w: 6 },
+        { re: /\b(etl|elt|data pipeline|spark|hadoop|airflow|databricks|snowflake|kafka|dbt)\b/i, w: 4 },
+        { re: /\b(data modeling|data migration|warehouse|lakehouse)\b/i, w: 2 },
+      ],
+    },
+    {
+      id: 'data_analytics',
+      label: 'Data Analytics / BI',
+      family: 'data',
+      signals: [
+        { re: /\b(data analysts?|business intelligence|bi developer|bi analyst)\b/i, w: 8 },
+        { re: /\b(power bi|tableau|looker|qlik|data visualization)\b/i, w: 4 },
+        { re: /\b(sql reporting|dashboards?|kpi)\b/i, w: 2 },
+      ],
+    },
+    {
+      id: 'software_engineering',
+      label: 'Software Engineering',
+      family: 'engineering',
+      signals: [
+        { re: /\b(software engineers?|full[- ]?stack|backend developers?|frontend developers?|web developers?)\b/i, w: 8 },
+        { re: /\b(react|angular|vue|node\.?js|typescript|java|spring|\.net|c#|django|flask)\b/i, w: 3 },
+        { re: /\b(rest api|microservices|ci\/cd|unit tests?|agile scrum)\b/i, w: 2 },
+      ],
+    },
+    {
+      id: 'devops_cloud',
+      label: 'DevOps / Cloud',
+      family: 'ops',
+      signals: [
+        { re: /\b(devops|sre|site reliability|cloud engineers?|platform engineers?)\b/i, w: 8 },
+        { re: /\b(kubernetes|docker|terraform|ansible|jenkins|github actions|helm)\b/i, w: 4 },
+        { re: /\b(aws|azure|gcp|infrastructure as code|ci\/cd)\b/i, w: 2 },
+      ],
+    },
+    {
+      id: 'it_support',
+      label: 'IT Support / Systems Admin',
+      family: 'ops',
+      signals: [
+        { re: /\b(it support|help ?desk|desktop support|system administrators?|sysadmin|service desk)\b/i, w: 8 },
+        { re: /\b(itil|active directory|office 365|microsoft 365|ticketing|servicenow|hardware support)\b/i, w: 4 },
+        { re: /\b(troubleshooting|end[- ]user support|workstations?)\b/i, w: 2 },
+      ],
+    },
+    {
+      id: 'cybersecurity',
+      label: 'Cybersecurity',
+      family: 'security',
+      signals: [
+        { re: /\b(cybersecurity|security analysts?|infosec|soc analysts?|penetration test)/i, w: 8 },
+        { re: /\b(siem|splunk|firewall|vulnerability|iam|zero trust)\b/i, w: 4 },
+      ],
+    },
+    {
+      id: 'ai_ml',
+      label: 'AI / Machine Learning',
+      family: 'ai',
+      signals: [
+        { re: /\b(machine learning|ml engineers?|ai engineers?|data scientists?|deep learning)\b/i, w: 8 },
+        { re: /\b(tensorflow|pytorch|llm|rag|langchain|nlp|mlops)\b/i, w: 4 },
+      ],
+    },
+    {
+      id: 'marketing',
+      label: 'Marketing / Growth',
+      family: 'business',
+      signals: [
+        { re: /\b(digital marketing|marketing managers?|growth marketing|seo|sem|content marketing)\b/i, w: 8 },
+        { re: /\b(google ads|hubspot|campaigns?|brand marketing|social media)\b/i, w: 4 },
+      ],
+    },
+    {
+      id: 'business_sales',
+      label: 'Business Development / Sales',
+      family: 'business',
+      signals: [
+        { re: /\b(business development|account managers?|sales executives?|bdr|sdr)\b/i, w: 8 },
+        { re: /\b(crm|pipeline|quota|client acquisition)\b/i, w: 3 },
+      ],
+    },
+  ];
+
+  function scoreCareerDomains(text) {
+    const raw = String(text || '');
+    if (!raw.trim()) {
+      return { top: null, scores: [], all: [] };
+    }
+    const scored = CAREER_DOMAINS.map(d => {
+      let score = 0;
+      const hits = [];
+      for (const s of d.signals) {
+        if (s.re.test(raw)) {
+          score += s.w;
+          hits.push(s.re.source.slice(0, 40));
+        }
+      }
+      return { id: d.id, label: d.label, family: d.family, score, hits };
+    }).filter(x => x.score > 0).sort((a, b) => b.score - a.score);
+
+    return {
+      top: scored[0] || null,
+      scores: scored.slice(0, 3),
+      all: scored,
+    };
+  }
+
+  function compareCareerDomains(jdText, resumeText) {
+    const jdDomains = scoreCareerDomains(jdText);
+    const resumeDomains = scoreCareerDomains(resumeText);
+    const jdTop = jdDomains.top;
+    const resumeTop = resumeDomains.top;
+
+    let relation = 'unknown';
+    let sameDomain = null;
+    let summary = 'Could not confidently detect domains for both JD and resume.';
+
+    if (jdTop && resumeTop) {
+      if (jdTop.id === resumeTop.id) {
+        relation = 'same';
+        sameDomain = true;
+        summary = 'Same domain: ' + jdTop.label;
+      } else if (jdTop.family === resumeTop.family) {
+        relation = 'adjacent';
+        sameDomain = false;
+        summary = 'Adjacent but different domains — JD: ' + jdTop.label + ' · Resume: ' + resumeTop.label;
+      } else {
+        relation = 'different';
+        sameDomain = false;
+        summary = 'Different domains — JD: ' + jdTop.label + ' · Resume: ' + resumeTop.label;
+      }
+    } else if (jdTop && !resumeTop) {
+      relation = 'unknown';
+      summary = 'JD domain: ' + jdTop.label + ' · Resume domain unclear';
+    } else if (!jdTop && resumeTop) {
+      relation = 'unknown';
+      summary = 'Resume domain: ' + resumeTop.label + ' · JD domain unclear';
+    }
+
+    return {
+      relation,
+      sameDomain,
+      summary,
+      jd: {
+        label: jdTop?.label || 'Unknown',
+        id: jdTop?.id || null,
+        score: jdTop?.score || 0,
+        alternatives: jdDomains.scores.slice(1).map(s => s.label),
+      },
+      resume: {
+        label: resumeTop?.label || 'Unknown',
+        id: resumeTop?.id || null,
+        score: resumeTop?.score || 0,
+        alternatives: resumeDomains.scores.slice(1).map(s => s.label),
+      },
+    };
+  }
+
   /**
    * First-pass gate: is this resume a reasonable fit for the JD?
    * Combines technical keyword overlap + years-of-experience eligibility.
@@ -1332,6 +2279,7 @@
     else if (matchRatio >= 0.2 || primaryFound.length >= 2) skillLevel = 'weak';
 
     const experience = analyzeExperienceEligibility(jd, resume);
+    const domains = compareCareerDomains(jd, resumeText);
 
     // Overall suitability
     let status = 'partial';
@@ -1340,12 +2288,27 @@
     let message = '';
     let detail = '';
 
-    if (skillLevel === 'poor') {
+    if (domains.relation === 'different') {
+      status = 'unsuitable';
+      suitable = false;
+      title = 'Different domains';
+      message = domains.summary;
+      detail = `Skill overlap ${primaryFound.length}/${prim.length || 0} (${matchPct}%). AI tailor cannot invent ${domains.jd.label} career experience from a ${domains.resume.label} resume.`;
+    } else if (skillLevel === 'poor') {
       status = 'unsuitable';
       suitable = false;
       title = 'Not suitable for this JD';
-      message = `Resume matches only ${primaryFound.length}/${prim.length || 0} primary technical skills (${matchPct}%). Domain overlap is too low — AI tailor cannot invent missing career skills.`;
+      message = `Resume matches only ${primaryFound.length}/${prim.length || 0} primary technical skills (${matchPct}%). Domain overlap is too low — AI tailor cannot invent missing career skills.` +
+        (domains.jd.label !== 'Unknown' || domains.resume.label !== 'Unknown' ? ` (${domains.summary})` : '');
       detail = 'Choose a JD closer to the candidate’s stack, or use a resume that already covers the core technologies.';
+    } else if (domains.relation === 'adjacent') {
+      status = 'partial';
+      suitable = null;
+      title = 'Adjacent domains — partial fit';
+      message = `${domains.summary} · Skills: ${primaryFound.length}/${prim.length} primary (${matchPct}%).`;
+      detail = skillLevel === 'strong'
+        ? `Related career track with good skill overlap — tailor carefully; do not invent pure ${domains.jd.label} tenure.`
+        : 'Domains are related but not the same role track — tailor only truthful adjacent skills.';
     } else if (experience.status === 'ineligible' && skillLevel !== 'strong') {
       status = 'unsuitable';
       suitable = false;
@@ -1355,8 +2318,9 @@
     } else if (skillLevel === 'strong' && experience.status !== 'ineligible') {
       status = 'suitable';
       suitable = true;
-      title = 'Suitable for this JD';
-      message = `Strong technical overlap — ${primaryFound.length}/${prim.length} primary skills found (${matchPct}%).` +
+      title = domains.relation === 'same' ? 'Suitable — same domain' : 'Suitable for this JD';
+      message = (domains.relation === 'same' ? `${domains.summary}. ` : '') +
+        `Strong technical overlap — ${primaryFound.length}/${prim.length} primary skills found (${matchPct}%).` +
         (experience.status === 'eligible'
           ? ` Experience also meets the ${experience.jdYears}+ year requirement.`
           : experience.status === 'unknown'
@@ -1373,7 +2337,8 @@
       status = 'partial';
       suitable = null;
       title = 'Partial fit — some skill gaps';
-      message = `Resume matches ${primaryFound.length}/${prim.length} primary technical skills (${matchPct}%). Tailoring can help if the missing skills are truthful stretch/adjacent skills.`;
+      message = `Resume matches ${primaryFound.length}/${prim.length} primary technical skills (${matchPct}%). Tailoring can help if the missing skills are truthful stretch/adjacent skills.` +
+        (domains.relation !== 'unknown' ? ` ${domains.summary}.` : '');
       detail = primaryMissing.length
         ? `Missing primaries: ${primaryMissing.slice(0, 5).join(', ')}${primaryMissing.length > 5 ? '…' : ''}`
         : 'Close remaining gaps carefully without inventing experience.';
@@ -1387,12 +2352,15 @@
       detail,
       skillLevel,
       matchPct,
+      skillMatchScore: matchPct, // found / JD-extracted count
       primaryFound,
       primaryMissing,
       primaryTotal: prim.length,
+      jdExtractedCount: prim.length,
       secondaryFoundCount: secFound.length,
       secondaryTotal: sec.length,
       experience,
+      domains,
       allowTailor: true, // never block AI Tailor — fit is advisory only
       recommendTailor: status === 'suitable' || status === 'partial',
     };
@@ -1660,6 +2628,7 @@
   const RAGEngine = {
     extractKeywordsRAG,
     computeAtsScore,
+    buildReadinessReport,
     buildCompactRewriteContext,
     getKeywords,
     jdHash,
@@ -1669,6 +2638,9 @@
     SKILL_FAMILIES,
     analyzeExperienceEligibility,
     analyzeJdSuitability,
+    analyzeResumeStructure,
+    compareCareerDomains,
+    scoreCareerDomains,
     extractSkillsFromResume,
     compareSkills,
     preserveRelatedSkills,
@@ -1676,6 +2648,7 @@
     familiesForSkill,
     isJobRoleKeyword,
     filterTechnicalKeywords,
+    skillGroundedInJd,
     sanitizeKeywordPayload,
   };
 
