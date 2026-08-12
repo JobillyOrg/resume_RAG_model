@@ -581,20 +581,17 @@
       background: var(--jb-surface-muted);
       color: var(--jb-ink-secondary);
     }
-    .eligibility-banner.eligible,
-    .eligibility-banner.suitable {
+    .eligibility-banner.eligible {
       background: var(--jb-success-soft);
       color: var(--jb-success-text);
       border-color: var(--jb-success-border);
     }
-    .eligibility-banner.ineligible,
-    .eligibility-banner.unsuitable {
+    .eligibility-banner.ineligible {
       background: var(--jb-danger-soft);
       color: var(--jb-danger);
       border-color: var(--jb-danger-border);
     }
-    .eligibility-banner.unknown,
-    .eligibility-banner.partial {
+    .eligibility-banner.unknown {
       background: var(--jb-warning-soft);
       color: var(--jb-warning);
       border-color: rgba(122, 90, 30, 0.28);
@@ -759,19 +756,20 @@
     #toast {
       position: fixed; bottom: 24px; right: 24px;
       background: var(--jb-ink);
-      color: var(--jb-card);
+      color: #ffffff;
       padding: 14px 18px;
       border-radius: var(--jb-radius-sm);
       font-size: 13px;
       font-weight: 600;
       opacity: 0;
+      pointer-events: none;
       transition: opacity 0.3s;
       z-index: 9999;
-      max-width: 340px;
-      border: 1px solid var(--jb-ink);
+      max-width: min(420px, calc(100vw - 32px));
       box-shadow: var(--jb-shadow-md);
+      line-height: 1.4;
     }
-    #toast.show { opacity: 1; }
+    #toast.show { opacity: 1; pointer-events: auto; }
 
     .char-count { font-size: 12px; color: var(--jb-ink-subtle); text-align: right; margin-top: 6px; }
 
@@ -1449,7 +1447,6 @@
   <!-- FREE ATS RESULT PANEL -->
   <div id="freeAtsPanel" class="hidden card" style="margin-bottom:20px;">
     <div class="card-title">ATS Readiness Report</div>
-    <div id="freeJdFit"></div>
     <div id="freeExpEligibility"></div>
 
     <div class="ats-report jb-report-board" id="freeAtsReport">
@@ -1542,13 +1539,13 @@
     </div>
 
     <div class="ats-report-tabs" role="tablist">
-      <button type="button" class="ats-report-tab active" data-ats-pane="gaps" onclick="switchAtsPane('gaps', this)">Gaps</button>
-      <button type="button" class="ats-report-tab" data-ats-pane="breakdown" onclick="switchAtsPane('breakdown', this)">Score breakdown</button>
+      <button type="button" class="ats-report-tab" data-ats-pane="gaps" onclick="switchAtsPane('gaps', this)">Gaps note</button>
+      <button type="button" class="ats-report-tab active" data-ats-pane="breakdown" onclick="switchAtsPane('breakdown', this)">Score breakdown</button>
     </div>
-    <div class="ats-pane active" id="atsPaneGaps">
+    <div class="ats-pane" id="atsPaneGaps">
       <div id="freeGaps"></div>
     </div>
-    <div class="ats-pane" id="atsPaneBreakdown">
+    <div class="ats-pane active" id="atsPaneBreakdown">
       <div class="scorecard" id="freeScorecard"></div>
     </div>
 
@@ -1567,7 +1564,6 @@
 
   <!-- SCORE CARDS -->
   <div id="scoreSection" class="hidden">
-    <div id="resultsJdFit"></div>
     <div id="resultsExpEligibility"></div>
     <div class="ats-section-label" style="margin-top:4px;">After rewrite</div>
     <div class="score-grid">
@@ -1734,7 +1730,6 @@ let state = {
   filename: '',
   experienceAnalysis: null,
   skillsCompare: null,
-  jdFit: null,
 };
 
 // Simple djb2 hash — converts a JD string into a short stable key for localStorage
@@ -1858,22 +1853,11 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
 
   const expAnalysis = RAGEngine.analyzeExperienceEligibility(jd, resume);
   state.experienceAnalysis = expAnalysis;
-  const jdFit = RAGEngine.analyzeJdSuitability
-    ? RAGEngine.analyzeJdSuitability(jd, resume, primary, secondary, aliasMap)
-    : null;
-  state.jdFit = jdFit;
   const expClass = expAnalysis.status === 'eligible' ? 'sc-green'
     : expAnalysis.status === 'ineligible' ? 'sc-red' : 'sc-yellow';
   const expLabel = expAnalysis.status === 'eligible' ? `Eligible · ~${expAnalysis.candidateYears} yrs`
     : expAnalysis.status === 'ineligible' ? `Not eligible · ${expAnalysis.candidateYears}/${expAnalysis.jdYears} yrs`
     : `~${expAnalysis.candidateYears} yrs (JD req. not detected)`;
-  const fitClass = jdFit?.status === 'suitable' ? 'sc-green'
-    : jdFit?.status === 'unsuitable' ? 'sc-red' : 'sc-yellow';
-  const fitLabel = jdFit
-    ? (jdFit.status === 'suitable' ? `Suitable · ${jdFit.matchPct}% skills`
-      : jdFit.status === 'unsuitable' ? `Not suitable · ${jdFit.matchPct}% skills`
-      : `Partial · ${jdFit.matchPct}% skills`)
-    : '—';
 
   // Score tiles
   document.getElementById('freeKwMatch').textContent  = primaryFound.length + '/' + primary.length;
@@ -1934,36 +1918,28 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
     <div class="scorecard-row"><span class="sc-label">Structure (15%)</span><span class="sc-value sc-blue">${report?.categories?.structure?.score ?? '—'} pts</span></div>
     <div class="scorecard-row"><span class="sc-label">Formatting (10%)</span><span class="sc-value ${fmtCheck === 'PASS' ? 'sc-green' : 'sc-yellow'}">${report?.categories?.formatting?.score ?? '—'} pts · ${fmtCheck}${fmtIssues.length ? ' — ' + fmtIssues.join('; ') : ''}</span></div>
     <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:8px 0 4px;">Fit checks</div>
-    <div class="scorecard-row"><span class="sc-label">JD Domain</span><span class="sc-value sc-blue">${jdFit?.domains?.jd?.label || '—'}</span></div>
-    <div class="scorecard-row"><span class="sc-label">Resume Domain</span><span class="sc-value ${jdFit?.domains?.relation === 'different' ? 'sc-red' : (jdFit?.domains?.relation === 'same' ? 'sc-green' : 'sc-yellow')}">${jdFit?.domains?.resume?.label || '—'}${jdFit?.domains?.relation === 'different' ? ' · Different domains' : ''}</span></div>
-    <div class="scorecard-row"><span class="sc-label">JD Suitability</span><span class="sc-value ${fitClass}">${fitLabel}</span></div>
     <div class="scorecard-row"><span class="sc-label">Experience Eligibility</span><span class="sc-value ${expClass}">${expLabel}</span></div>
   `;
 
-  // Gaps
-  const gapsDiv = document.getElementById('freeGaps');
-  gapsDiv.innerHTML = '';
-  const displayGaps = [
-    ...primaryMissing.map(k => `Keyword "<strong>${k}</strong>" from JD not found in resume — add to Skills or weave into a bullet.`),
-    ...secMissing.map(k => `Secondary keyword "<strong>${k}</strong>" from JD not found in resume — consider adding.`),
-    ...ragGaps.filter(g => !g.startsWith('Keyword ') && !g.startsWith('Secondary keyword ')),
-  ];
-  if (displayGaps.length === 0) {
-    gapsDiv.innerHTML = '<div style="color:#4ade80;font-size:13px;font-weight:600;margin-top:4px;">✅ No critical gaps! Consider AI tailoring to polish language and maximize alignment.</div>';
-  } else {
-    displayGaps.forEach(g => {
-      gapsDiv.innerHTML += `<div class="gap-item" style="margin-top:6px;"><strong>⚠️</strong> ${g}</div>`;
-    });
+  // Keyword gaps belong only in results → Gap Analysis (not in free ATS UI)
+  const freeGapsEl = document.getElementById('freeGaps');
+  if (freeGapsEl) {
+    const n = primaryMissing.length + secMissing.length;
+    freeGapsEl.innerHTML = n
+      ? `<div style="font-size:13px;color:var(--jb-ink-muted);padding:4px 0;">${n} keyword gap(s) tracked in <strong>Gap Analysis</strong> after rewrite — not listed here.</div>`
+      : `<div style="color:var(--jb-success-text);font-size:13px;font-weight:600;">✅ No keyword gaps from this check.</div>`;
   }
 
-  if (jdFit?.status === 'unsuitable') {
-    gapsDiv.innerHTML = `
-      <div class="gap-item critical" style="margin-bottom:10px;">
-        <strong>⚠️ Weak JD fit — proceed with caution</strong><br>
-        ${jdFit.message}<br>
-        <span style="opacity:0.9;">AI Rewrite is still available; it cannot invent missing career-domain experience.</span>
-      </div>` + gapsDiv.innerHTML;
-  }
+  const displayGaps = [
+    ...primaryMissing.map(k => `Keyword "${k}" from JD not found in resume — add to Skills or weave into a bullet.`),
+    ...secMissing.map(k => `Secondary keyword "${k}" from JD not found in resume — consider adding.`),
+    ...(ragGaps || []).filter(g => !/^Keyword "/i.test(g) && !/^Secondary keyword "/i.test(g)),
+  ];
+  renderGapAnalysis({
+    gaps: displayGaps,
+    suggestions: report?.topFixes?.map(f => f.title || f.detail).filter(Boolean).slice(0, 5) || [],
+    expAnalysis,
+  });
 
   const cta = document.getElementById('freeRewriteCta');
   const ctaTitle = document.getElementById('freeRewriteCtaTitle');
@@ -1987,32 +1963,19 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
     }
   }
 
-  renderJdFit('freeJdFit', jdFit);
   renderExperienceEligibility('freeExpEligibility', expAnalysis);
 
-  if (expAnalysis.status === 'ineligible') {
-    gapsDiv.innerHTML = `
-      <div class="gap-item critical" style="margin-bottom:10px;">
-        <strong>⛔ Not eligible — insufficient experience</strong><br>
-        JD requires ${expAnalysis.jdYears}+ years · Candidate has ~${expAnalysis.candidateYears} years (${expAnalysis.shortfall} year(s) short).
-      </div>` + gapsDiv.innerHTML;
-  }
-
   setStep(2);
-  switchAtsPane('gaps', document.querySelector('.ats-report-tab[data-ats-pane="gaps"]'));
+  switchAtsPane('breakdown', document.querySelector('.ats-report-tab[data-ats-pane="breakdown"]'));
 
   // Show panel
   document.getElementById('freeAtsPanel').classList.remove('hidden');
   document.getElementById('freeAtsPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  const fitToast = jdFit?.domains?.relation === 'different'
-    ? `⛔ Different domains — JD: ${jdFit.domains.jd.label} · Resume: ${jdFit.domains.resume.label}`
-    : jdFit?.status === 'unsuitable'
-    ? `⛔ Not suitable for this JD · ${jdFit.matchPct}% skill overlap`
-    : jdFit?.status === 'suitable'
-      ? `✅ Suitable for JD · readiness ${report?.overallReadiness ?? '—'}/100 · ${primaryFound.length}/${primary.length} keywords`
-      : `⚠️ Partial JD fit · readiness ${report?.overallReadiness ?? '—'}/100 · ${primaryFound.length}/${primary.length} keywords`;
-  showToast(fitToast, (jdFit?.domains?.relation === 'different' || jdFit?.status === 'unsuitable') ? '#ef4444' : (report?.readinessColour || atsColour));
+  showToast(
+    `✅ Readiness ${report?.overallReadiness ?? '—'}/100 · ${primaryFound.length}/${primary.length} keywords`,
+    'var(--jb-success)'
+  );
 }
 
 function scoreBand(score) {
@@ -2254,15 +2217,60 @@ function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 function showToast(msg, color) {
   const t = document.getElementById('toast');
+  if (!t) return;
   t.textContent = msg;
-  const tone = color || (/❌|failed|Please paste|No tailored|No resume/i.test(msg)
-    ? 'var(--jb-danger)'
-    : (/✅|Done|Already at|Cleared/i.test(msg) ? 'var(--jb-success)' : 'var(--jb-slate)'));
-  t.style.background = '';
-  t.style.borderLeft = `3px solid ${tone}`;
-  t.style.color = 'var(--jb-ink)';
+  const isError = color === '#ef4444' || color === 'var(--jb-danger)'
+    || /❌|failed|Please paste|No tailored|No resume|Offline|Boost failed/i.test(msg);
+  const isWarn = !isError && (color === '#fbbf24' || color === '#f59e0b' || color === 'var(--jb-warning)'
+    || /⚠️|still below|Partial|caution/i.test(msg));
+  const isSuccess = !isError && !isWarn && (
+    /✅|Done|Already at|Cleared|Passed|Readiness|Copied|downloaded|Filename/i.test(msg)
+    || !color
+    || color === 'var(--jb-success)'
+    || /^#[0-9a-f]{3,8}$/i.test(String(color || ''))
+  );
+  t.style.background = isError ? 'var(--jb-danger)'
+    : isWarn ? 'var(--jb-warning)'
+    : isSuccess ? 'var(--jb-success)'
+    : 'var(--jb-ink)';
+  t.style.color = '#ffffff';
+  t.style.border = 'none';
+  t.style.borderLeft = 'none';
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 4000);
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+/** Gap list lives only in results → Gap Analysis (#gapsContent). */
+function renderGapAnalysis({ gaps = [], suggestions = [], expAnalysis = null } = {}) {
+  const gapsDiv = document.getElementById('gapsContent');
+  if (!gapsDiv) return;
+  gapsDiv.innerHTML = '';
+
+  if (expAnalysis?.status === 'ineligible') {
+    gapsDiv.innerHTML += `
+      <div class="gap-item critical">
+        <strong>⛔ Not eligible — insufficient experience</strong><br>
+        JD requires ${expAnalysis.jdYears}+ years · Candidate has ~${expAnalysis.candidateYears} years (${expAnalysis.shortfall} year(s) short).
+      </div>`;
+  }
+
+  const list = (gaps || []).filter(Boolean);
+  if (!list.length) {
+    gapsDiv.innerHTML += '<div style="color:var(--jb-success-text);font-size:14px;font-weight:600;">✅ No critical gaps detected. All major JD requirements addressed.</div>';
+  } else {
+    list.forEach(g => {
+      gapsDiv.innerHTML += `<div class="gap-item"><strong>⚠️</strong> ${escapeHtml(String(g).replace(/<\/?strong>/gi, ''))}</div>`;
+    });
+  }
+
+  if (suggestions?.length) {
+    gapsDiv.innerHTML += '<div style="margin-top:16px;font-size:12px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.8px;">Score Improvement Tips</div>';
+    suggestions.forEach(tip => {
+      gapsDiv.innerHTML += `<div class="gap-item"><strong>💡</strong> ${escapeHtml(String(tip))}</div>`;
+    });
+  }
+  state.gaps = list;
 }
 
 function setStep(n) {
@@ -2530,46 +2538,6 @@ function renderBeforeAfterCompare() {
     const items = summarizeRewriteChanges(before, after, state.keywords);
     listEl.innerHTML = items.map(t => `<li>${escapeHtml(t)}</li>`).join('');
   }
-}
-
-function renderJdFit(containerId, fit) {
-  const el = document.getElementById(containerId);
-  if (!el || !fit) { if (el) el.innerHTML = ''; return; }
-
-  const cls = fit.status === 'suitable' ? 'suitable'
-    : fit.status === 'unsuitable' ? 'unsuitable' : 'partial';
-  const icon = fit.status === 'suitable' ? '✅'
-    : fit.status === 'unsuitable' ? '⛔' : '⚠️';
-
-  const missingHint = fit.primaryMissing?.length
-    ? `<br><span style="opacity:0.9;">Missing primary skills: ${fit.primaryMissing.slice(0, 6).map(k => `<strong>${k}</strong>`).join(', ')}${fit.primaryMissing.length > 6 ? '…' : ''}</span>`
-    : '';
-
-  const d = fit.domains;
-  const domainLine = d
-    ? `<br><span style="opacity:0.95;">JD domain: <strong>${d.jd.label}</strong> · Resume domain: <strong>${d.resume.label}</strong>` +
-      (d.relation === 'different' ? ' · <strong>Different domains</strong>'
-        : d.relation === 'same' ? ' · Same domain'
-        : d.relation === 'adjacent' ? ' · Adjacent domains'
-        : '') + '</span>'
-    : '';
-
-  const extractedN = fit.primaryTotal || 0;
-  const foundN = fit.primaryFound?.length || 0;
-  const scorePct = fit.matchPct ?? 0;
-
-  el.innerHTML = `
-    <div class="eligibility-banner ${cls}" style="margin-bottom:12px;">
-      <strong>${icon} JD Fit Check (first): ${fit.title}</strong>
-      Skill match score: <strong>${foundN}/${extractedN}</strong> (${scorePct}%) — denominator is skills extracted from this JD (not a fixed 10)
-      ${fit.experience?.status === 'eligible' ? ' · Experience: eligible' : ''}
-      ${fit.experience?.status === 'ineligible' ? ` · Experience: short (${fit.experience.candidateYears}/${fit.experience.jdYears}+ yrs)` : ''}
-      ${domainLine}
-      <br>${fit.message}
-      ${fit.detail ? `<br><span style="opacity:0.9;">${fit.detail}</span>` : ''}
-      ${missingHint}
-      ${fit.status === 'unsuitable' ? '<br><span style="opacity:0.95;">You can still run AI Tailor — results may be limited if core domain skills are missing.</span>' : ''}
-    </div>`;
 }
 
 function renderExperienceEligibility(containerId, analysis) {
@@ -3299,12 +3267,12 @@ async function runAnalysis() {
   document.getElementById('scoreSection').classList.add('hidden');
   document.getElementById('resultsSection').classList.add('hidden');
   document.getElementById('progressSection').classList.remove('hidden');
-  setLoading('Checking JD suitability...');
+  setLoading('Extracting keywords...');
   setStep(2);
 
   try {
-    // ── STEP 0: SUITABILITY GATE (before rewrite) ─────────────────
-    setProgress(5, 'Checking if resume is suitable for this JD...', 'Skill overlap + experience gate...');
+    // ── STEP 0: KEYWORD EXTRACTION ────────────────────────────────
+    setProgress(5, 'Extracting JD keywords...', 'Local RAG · zero API cost');
     let keywords;
     if (USE_RAG) {
       keywords = await RAGEngine.getKeywords(jd, state.keywords);
@@ -3318,29 +3286,12 @@ async function runAnalysis() {
       keywords = parseKeywordJson(kwRaw);
     }
     state.keywords = keywords;
-
-    const jdFit = RAGEngine.analyzeJdSuitability
-      ? RAGEngine.analyzeJdSuitability(jd, resume, keywords.primary, keywords.secondary, keywords.aliasMap)
-      : { status: 'suitable', allowTailor: true, message: '', matchPct: 100, primaryFound: [], primaryTotal: keywords.primary.length };
-    state.jdFit = jdFit;
-    state.experienceAnalysis = jdFit.experience || RAGEngine.analyzeExperienceEligibility(jd, resume);
-
-    // Show fit banner early (warning only — never blocks tailor)
-    document.getElementById('freeAtsPanel').classList.remove('hidden');
-    renderJdFit('freeJdFit', jdFit);
+    state.experienceAnalysis = RAGEngine.analyzeExperienceEligibility(jd, resume);
     if (state.experienceAnalysis) renderExperienceEligibility('freeExpEligibility', state.experienceAnalysis);
-    if (jdFit.status === 'unsuitable' || jdFit.status === 'partial') {
-      showToast(
-        jdFit.status === 'unsuitable'
-          ? `⚠️ Weak JD fit (${jdFit.matchPct}%) — continuing AI Tailor`
-          : `⚠️ Partial JD fit (${jdFit.matchPct}%) — continuing AI Tailor`,
-        '#fbbf24'
-      );
-    }
 
     // ── STEP 1: KEYWORD EXTRACTION DONE ───────────────────────────
     setLoading('Rewriting resume...');
-    setProgress(30, `✓ JD fit: ${jdFit.status} · ${keywords.primary.length} primary + ${keywords.secondary.length} secondary keywords: ${keywords.primary.slice(0,3).join(', ')}...`, 'Keywords ready — zero API cost');
+    setProgress(30, `✓ ${keywords.primary.length} primary + ${keywords.secondary.length} secondary keywords: ${keywords.primary.slice(0,3).join(', ')}...`, 'Keywords ready — zero API cost');
 
     // ── STEP 2: RESUME REWRITE ────────────────────────────────
     // Pre-extract role count so we can show it in the progress bar and validate output
@@ -3428,11 +3379,6 @@ async function runAnalysis() {
 
     const expAnalysis = RAGEngine.analyzeExperienceEligibility(jd, resume);
     state.experienceAnalysis = expAnalysis;
-    const postFit = RAGEngine.analyzeJdSuitability
-      ? RAGEngine.analyzeJdSuitability(jd, tailoredResume, keywords.primary, keywords.secondary || [], aliasMap)
-      : state.jdFit;
-    state.jdFit = postFit;
-    renderJdFit('resultsJdFit', postFit);
     renderExperienceEligibility('resultsExpEligibility', expAnalysis);
 
     const skillsCmp = RAGEngine.compareSkills(resume, tailoredResume);
@@ -3550,32 +3496,19 @@ async function runAnalysis() {
       kwMatch + ' of ' + primaryTotal + ' primary keywords matched · ' +
       (sc.secondaryFound?.length || 0) + ' of ' + secTotal + ' secondary keywords matched';
 
-    // ── GAPS TAB ──────────────────────────────────────────────
+    // ── GAPS TAB (only place keyword gaps appear) ──────────────
     const gaps = sc.gaps || missing.map(k => `"${k}" not prominently featured — add a bullet or skill entry.`);
-    state.gaps = gaps;
-    const gapsDiv = document.getElementById('gapsContent');
-    gapsDiv.innerHTML = '';
-    if (expAnalysis.status === 'ineligible') {
-      gapsDiv.innerHTML += `
-        <div class="gap-item critical">
-          <strong>⛔ Not eligible — insufficient experience</strong><br>
-          JD requires ${expAnalysis.jdYears}+ years · Candidate has ~${expAnalysis.candidateYears} years (${expAnalysis.shortfall} year(s) short).
-          Tailoring added ${skillsCmp.addedCount} skill(s) but cannot replace required tenure.
-        </div>`;
-    }
-    if (gaps.length === 0) {
-      gapsDiv.innerHTML = '<div style="color:#4ade80;font-size:14px;font-weight:600;">✅ No critical gaps detected. All major JD requirements addressed.</div>';
-    } else {
-      gaps.forEach(g => {
-        gapsDiv.innerHTML += `<div class="gap-item"><strong>⚠️</strong> ${g}</div>`;
-      });
-    }
-    // Improvement suggestions below gaps
-    if (sc.improvementSuggestions?.length) {
-      gapsDiv.innerHTML += '<div style="margin-top:16px;font-size:12px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.8px;">Score Improvement Tips</div>';
-      sc.improvementSuggestions.forEach(tip => {
-        gapsDiv.innerHTML += `<div class="gap-item"><strong>💡</strong> ${tip}</div>`;
-      });
+    renderGapAnalysis({
+      gaps,
+      suggestions: sc.improvementSuggestions || [],
+      expAnalysis,
+    });
+    const freeGapsClear = document.getElementById('freeGaps');
+    if (freeGapsClear) {
+      const left = gaps.length;
+      freeGapsClear.innerHTML = left
+        ? `<div style="font-size:13px;color:var(--jb-ink-muted);">${left} remaining gap(s) — see <strong>Gap Analysis</strong> tab.</div>`
+        : `<div style="color:var(--jb-success-text);font-size:13px;font-weight:600;">✅ Gaps cleared — see Gap Analysis.</div>`;
     }
 
     // ── FILENAME TAB ─────────────────────────────────────────
@@ -3656,7 +3589,6 @@ function resetAndRun() {
     filename: '',
     experienceAnalysis: null,
     skillsCompare: null,
-    jdFit: null,
   };
 
   // Hide result panels
@@ -3685,11 +3617,6 @@ function resetAndRun() {
   document.getElementById('gapsContent').innerHTML = '';
   document.getElementById('freeExpEligibility').innerHTML = '';
   document.getElementById('resultsExpEligibility').innerHTML = '';
-  const freeFit = document.getElementById('freeJdFit');
-  if (freeFit) freeFit.innerHTML = '';
-  const resultsFit = document.getElementById('resultsJdFit');
-  if (resultsFit) resultsFit.innerHTML = '';
-  state.jdFit = null;
   renderSkillsCompare(null);
   document.getElementById('suggestedFilename').textContent = '';
   document.getElementById('filenameReason').textContent = '';
@@ -3851,13 +3778,17 @@ function applyBoostScoreUi(keywords, ragScore2) {
     kwMatch2 + ' of ' + primaryTotal + ' primary keywords matched · ' +
     (sc2.secondaryFound?.length || 0) + ' of ' + secTotal2 + ' secondary keywords matched';
 
-  const gapsDiv2 = document.getElementById('gapsContent');
   const gaps2 = sc2.gaps || [];
-  gapsDiv2.innerHTML = '';
-  if (gaps2.length === 0) {
-    gapsDiv2.innerHTML = '<div style="color:#4ade80;font-size:14px;font-weight:600;">✅ No critical gaps detected. All major JD requirements addressed.</div>';
-  } else {
-    gaps2.forEach(g => { gapsDiv2.innerHTML += `<div class="gap-item"><strong>⚠️</strong> ${g}</div>`; });
+  renderGapAnalysis({
+    gaps: gaps2,
+    suggestions: sc2.improvementSuggestions || [],
+    expAnalysis: state.experienceAnalysis,
+  });
+  const freeGapsBoost = document.getElementById('freeGaps');
+  if (freeGapsBoost) {
+    freeGapsBoost.innerHTML = gaps2.length
+      ? `<div style="font-size:13px;color:var(--jb-ink-muted);">${gaps2.length} remaining gap(s) — see <strong>Gap Analysis</strong> tab.</div>`
+      : `<div style="color:var(--jb-success-text);font-size:13px;font-weight:600;">✅ Gaps cleared — see Gap Analysis.</div>`;
   }
   return { atsScore2, kwMatch2, primaryTotal };
 }
