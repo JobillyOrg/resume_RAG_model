@@ -32,15 +32,18 @@
       --jb-accent-5: #a16207;
       --jb-border: rgba(15, 23, 32, 0.09);
       --jb-border-strong: rgba(15, 23, 32, 0.16);
-      --jb-success: #047857;
-      --jb-success-soft: rgba(4, 120, 87, 0.1);
-      --jb-success-border: rgba(4, 120, 87, 0.28);
-      --jb-success-text: #047857;
-      --jb-warning: #a16207;
-      --jb-warning-soft: rgba(161, 98, 7, 0.12);
-      --jb-danger: #b91c1c;
-      --jb-danger-soft: rgba(185, 28, 28, 0.1);
-      --jb-danger-border: rgba(185, 28, 28, 0.24);
+      --jb-success: #16a34a;
+      --jb-success-soft: rgba(22, 163, 74, 0.12);
+      --jb-success-border: rgba(22, 163, 74, 0.32);
+      --jb-success-text: #15803d;
+      --jb-warning: #ca8a04;
+      --jb-warning-soft: rgba(202, 138, 4, 0.14);
+      --jb-orange: #ea580c;
+      --jb-orange-soft: rgba(234, 88, 12, 0.12);
+      --jb-orange-border: rgba(234, 88, 12, 0.3);
+      --jb-danger: #dc2626;
+      --jb-danger-soft: rgba(220, 38, 38, 0.12);
+      --jb-danger-border: rgba(220, 38, 38, 0.3);
       --jb-btn-primary-bg: #0f1720;
       --jb-btn-primary-fg: #f7fafb;
       --jb-btn-primary-hover: #060a0f;
@@ -431,6 +434,7 @@
     .score-value.green { color: var(--jb-success-text); }
     .score-value.blue { color: var(--jb-slate); }
     .score-value.yellow { color: var(--jb-warning); }
+    .score-value.orange { color: var(--jb-orange); }
     .score-value.red { color: var(--jb-danger); }
     .score-sub { font-size: 12px; color: var(--jb-ink-subtle); margin-top: 4px; }
     #freeAtsSourceLabel {
@@ -629,6 +633,129 @@
     .skill-pill.after { color: var(--jb-ink); }
     .skill-pill.removed { color: var(--jb-danger); text-decoration: line-through; opacity: 0.85; border-color: var(--jb-danger-border); }
 
+    /* Before / After print compare */
+    .ba-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .ba-toolbar p {
+      margin: 0;
+      flex: 1;
+      min-width: 220px;
+      font-size: 13px;
+      color: var(--jb-ink-muted);
+    }
+    .ba-changes {
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-sm);
+      background: var(--jb-surface-muted);
+    }
+    .ba-changes h4 {
+      margin: 0 0 8px;
+      font-family: var(--jb-font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--jb-ink);
+    }
+    .ba-changes ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+    .ba-changes li {
+      font-size: 13px;
+      color: var(--jb-ink-secondary);
+      padding-left: 14px;
+      position: relative;
+    }
+    .ba-changes li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--jb-success);
+    }
+    .ba-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .ba-grid { grid-template-columns: 1fr; }
+    }
+    .ba-pane {
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-md);
+      background: #fff;
+      overflow: hidden;
+      box-shadow: var(--jb-shadow-sm);
+    }
+    .ba-pane-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--jb-border);
+      background: var(--jb-surface-muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--jb-ink-muted);
+    }
+    .ba-pane.is-after .ba-pane-head {
+      color: var(--jb-success-text);
+      background: var(--jb-success-soft);
+    }
+    .ba-page {
+      padding: 22px 24px 28px;
+      font-family: Calibri, Arial, sans-serif;
+      font-size: 11pt;
+      color: #111;
+      max-height: 70vh;
+      overflow: auto;
+    }
+    .ba-page .r-name { font-size: 18pt; font-weight: 700; text-align: center; margin-bottom: 4px; }
+    .ba-page .r-contact { font-size: 9.5pt; color: #555; text-align: center; margin-bottom: 2px; }
+    .ba-page .r-divider { border: none; border-top: 2px solid #111; margin: 8px 0 12px; }
+    .ba-page .r-section {
+      font-size: 10.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+      border-bottom: 1px solid #777; margin-top: 12px; margin-bottom: 5px; padding-bottom: 2px;
+    }
+    .ba-page .r-role { font-size: 10pt; font-weight: 600; margin-top: 8px; margin-bottom: 3px; }
+    .ba-page .r-bullet { display: flex; gap: 0; margin: 0 0 4px; line-height: 1.45; font-size: 10pt; color: #222; }
+    .ba-page .r-bullet-dot { width: 1.1em; flex-shrink: 0; }
+    .ba-page .r-body, .ba-page .r-skill-line { font-size: 10pt; color: #222; margin-bottom: 3px; line-height: 1.45; }
+    .ba-page .r-skill-label { font-weight: 700; color: #111; }
+    .ba-page .r-spacer { height: 4px; }
+    .diff-add {
+      color: #15803d;
+      text-decoration: underline;
+      text-decoration-color: #16a34a;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+      background: rgba(22, 163, 74, 0.08);
+      border-radius: 2px;
+    }
+    .ba-empty {
+      padding: 28px 16px;
+      text-align: center;
+      color: var(--jb-ink-muted);
+      font-size: 13px;
+    }
+
     #toast {
       position: fixed; bottom: 24px; right: 24px;
       background: var(--jb-ink);
@@ -682,6 +809,7 @@
     .sc-green { color: var(--jb-success-text); }
     .sc-blue { color: var(--jb-slate); }
     .sc-yellow { color: var(--jb-warning); }
+    .sc-orange { color: var(--jb-orange); }
     .sc-red { color: var(--jb-danger); }
 
     /* ── ATS readiness report UI ── */
@@ -783,13 +911,56 @@
     }
     .ats-badge.is-ok {
       background: var(--jb-warning-soft);
-      border-color: rgba(122, 90, 30, 0.28);
+      border-color: rgba(202, 138, 4, 0.35);
       color: var(--jb-warning);
+    }
+    .ats-badge.is-fair {
+      background: var(--jb-orange-soft);
+      border-color: var(--jb-orange-border);
+      color: var(--jb-orange);
     }
     .ats-badge.is-bad {
       background: var(--jb-danger-soft);
       border-color: var(--jb-danger-border);
       color: var(--jb-danger);
+    }
+    .ats-score-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin: 10px 0 0;
+      font-size: 12px;
+      color: var(--jb-ink-muted);
+    }
+    .ats-score-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+    }
+    .ats-score-legend i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .ats-score-legend .lg-green i { background: var(--jb-success); }
+    .ats-score-legend .lg-yellow i { background: var(--jb-warning); }
+    .ats-score-legend .lg-orange i { background: var(--jb-orange); }
+    .ats-score-legend .lg-red i { background: var(--jb-danger); }
+    .ats-explain {
+      margin: 0 0 12px;
+      padding: 12px 14px;
+      border-radius: var(--jb-radius-sm);
+      border: 1px solid var(--jb-border);
+      background: var(--jb-surface-muted);
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--jb-ink-secondary);
+    }
+    .ats-explain strong {
+      color: var(--jb-ink);
+      font-weight: 700;
     }
     .ats-section-label {
       font-size: 11px;
@@ -1291,13 +1462,22 @@
           </div>
           <div class="ats-report-meta">
             <h3 id="freeReadinessTitle">Run a check to see readiness</h3>
-            <p id="freeReadinessCopy">Jobilly scores keywords, content, parseability, structure, and formatting — then AI rewrite from your top fixes.</p>
+            <p id="freeReadinessCopy">Overall score from Keywords, Content, Parseability, Structure, and Formatting.</p>
             <span class="ats-badge" id="freeReadinessBadge">Awaiting analysis</span>
+            <div class="ats-score-legend" aria-label="Score color guide">
+              <span class="lg-green"><i></i>90+ Excellent</span>
+              <span class="lg-yellow"><i></i>75–89 Good</span>
+              <span class="lg-orange"><i></i>50–74 Needs work</span>
+              <span class="lg-red"><i></i>&lt;50 Poor</span>
+            </div>
           </div>
         </div>
         <div class="jb-report-gauges">
           <div class="ats-section-label">Category gauges</div>
           <div class="ats-report-cats" id="freeCatGrid"></div>
+          <p class="ats-explain" id="freeReportExplain" style="margin-top:12px;">
+            <strong>How to read this:</strong> Green = strong · Yellow = good · Orange = needs work · Red = weak. Fix red/orange categories first.
+          </p>
         </div>
       </div>
 
@@ -1418,6 +1598,7 @@
   <div id="resultsSection" class="hidden card">
     <div class="tab-bar">
       <button class="tab-btn active" onclick="switchTab('tailored', this)">Tailored Resume</button>
+      <button class="tab-btn" onclick="switchTab('compare', this)">Before / After</button>
       <button class="tab-btn" onclick="switchTab('scorecard', this)">ATS Scorecard</button>
       <button class="tab-btn" onclick="switchTab('keywords', this)">Keyword Analysis</button>
       <button class="tab-btn" onclick="switchTab('skills', this)">Skills Changes</button>
@@ -1433,7 +1614,31 @@
         <button class="btn-secondary" onclick="downloadTxt()">Download .txt</button>
         <button class="btn-secondary" onclick="copyToClipboard()">Copy to Clipboard</button>
         <button class="btn-secondary" onclick="printResume()">Print / Save PDF</button>
+        <button class="btn-secondary" onclick="switchTab('compare', document.querySelector('.tab-btn[onclick*=compare]'))">View Before / After</button>
         <button class="btn-warning hidden" id="boostBtn" onclick="boostScore()">Boost to 95+</button>
+      </div>
+    </div>
+
+    <!-- TAB: BEFORE / AFTER PRINT COMPARE -->
+    <div class="tab-content" id="tab-compare">
+      <div class="ba-toolbar">
+        <p><span class="diff-add">Green underline</span> = text added or changed in the rewrite. Both sides use the print template layout.</p>
+        <button class="btn-secondary" onclick="printResume('before')">Print Before</button>
+        <button class="btn-secondary" onclick="printResume('after')">Print After</button>
+      </div>
+      <div class="ba-changes" id="baChangesWrap">
+        <h4>What changed</h4>
+        <ul id="baChangesList"><li>Run AI Rewrite to compare original vs tailored resume.</li></ul>
+      </div>
+      <div class="ba-grid">
+        <div class="ba-pane is-before">
+          <div class="ba-pane-head"><span>Before · Original</span></div>
+          <div class="ba-page" id="baBeforePage"><div class="ba-empty">Original resume will appear here</div></div>
+        </div>
+        <div class="ba-pane is-after">
+          <div class="ba-pane-head"><span>After · Rewritten</span><span>changes underlined</span></div>
+          <div class="ba-page" id="baAfterPage"><div class="ba-empty">Tailored resume will appear here</div></div>
+        </div>
       </div>
     </div>
 
@@ -1719,7 +1924,7 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
 
   // Scorecard breakdown
   const readiness = report?.overallReadiness;
-  const readinessClass = readiness >= 75 ? 'sc-green' : readiness >= 50 ? 'sc-yellow' : 'sc-red';
+  const readinessClass = scoreToneClass(readiness ?? 0);
   document.getElementById('freeScorecard').innerHTML = `
     <div class="scorecard-row"><span class="sc-label">Overall readiness</span><span class="sc-value ${readinessClass}" style="font-size:26px;">${readiness ?? '—'} / 100</span></div>
     <div style="font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:0.8px;padding:8px 0 4px;">Weighted categories</div>
@@ -1810,9 +2015,61 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
   showToast(fitToast, (jdFit?.domains?.relation === 'different' || jdFit?.status === 'unsuitable') ? '#ef4444' : (report?.readinessColour || atsColour));
 }
 
-function catClass(score) {
-  return score >= 75 ? 'is-good' : score >= 50 ? 'is-ok' : 'is-bad';
+function scoreBand(score) {
+  const n = Number(score) || 0;
+  if (n >= 90) return 'excellent';
+  if (n >= 75) return 'good';
+  if (n >= 50) return 'fair';
+  return 'poor';
 }
+
+function catClass(score) {
+  const band = scoreBand(score);
+  return band === 'excellent' ? 'is-good'
+    : band === 'good' ? 'is-ok'
+    : band === 'fair' ? 'is-fair'
+    : 'is-bad';
+}
+
+function scoreBandColor(score) {
+  const band = scoreBand(score);
+  return band === 'excellent' ? 'var(--jb-success)'
+    : band === 'good' ? 'var(--jb-warning)'
+    : band === 'fair' ? 'var(--jb-orange)'
+    : 'var(--jb-danger)';
+}
+
+function scoreToneClass(score) {
+  const band = scoreBand(score);
+  return band === 'excellent' ? 'sc-green'
+    : band === 'good' ? 'sc-yellow'
+    : band === 'fair' ? 'sc-orange'
+    : 'sc-red';
+}
+
+function scoreBandLabel(score) {
+  const band = scoreBand(score);
+  return band === 'excellent' ? 'Excellent'
+    : band === 'good' ? 'Good'
+    : band === 'fair' ? 'Needs work'
+    : 'Poor';
+}
+
+function scoreBandExplain(score) {
+  const band = scoreBand(score);
+  if (band === 'excellent') return 'Ready to submit — polish only if you want a sharper keyword fit.';
+  if (band === 'good') return 'Solid resume. Close remaining keyword/content gaps to reach 90+.';
+  if (band === 'fair') return 'Usable, but ATS may rank you lower. Fix orange/red categories before applying.';
+  return 'High risk of ATS rejection. Fix red categories first, then re-check.';
+}
+
+const CATEGORY_EXPLAIN = {
+  keywords: 'JD skills found in your resume',
+  content: 'Metrics and strong bullet quality',
+  parseability: 'ATS can read the text cleanly',
+  structure: 'Correct sections and order',
+  formatting: 'Plain, single-column layout',
+};
 
 function switchAtsPane(name, btn) {
   document.querySelectorAll('.ats-pane').forEach(p => p.classList.remove('active'));
@@ -1826,11 +2083,11 @@ function buildAtsInsights(report) {
   const cats = report?.categories || {};
   const strengths = [];
   const weaknesses = [];
-  const suggestions = [...(report?.topFixes || []).map(f => f.title + (f.detail ? ' — ' + f.detail : ''))];
+  const suggestions = (report?.topFixes || []).map(f => f.title);
   const tips = [
-    'Keep order: PROFESSIONAL SUMMARY → TECHNICAL SKILLS → PROFESSIONAL EXPERIENCE → EDUCATION → CERTIFICATIONS (if any)',
-    'Put every primary JD skill in TECHNICAL SKILLS and prove it in Experience bullets',
-    'Use hyphen bullets with real metrics (%, counts, time saved) in Experience only',
+    'Order: Summary → Technical Skills → Experience → Education → Certifications (if any)',
+    'Put JD tools in Technical Skills and prove them in Experience bullets',
+    'Add numbers to Experience bullets (%, counts, time saved)',
   ];
 
   const labels = {
@@ -1843,24 +2100,24 @@ function buildAtsInsights(report) {
   Object.entries(labels).forEach(([key, label]) => {
     const score = cats[key]?.score ?? 0;
     const flags = cats[key]?.flags || [];
-    if (score >= 75) strengths.push(`${label} is strong (${score}/100)`);
-    else if (score < 55) {
-      weaknesses.push(`${label} needs work (${score}/100)`);
+    const band = scoreBand(score);
+    if (band === 'excellent' || band === 'good') {
+      strengths.push(`${label} ${score}/100 — ${CATEGORY_EXPLAIN[key]}`);
+    } else {
+      weaknesses.push(`${label} ${score}/100 — ${CATEGORY_EXPLAIN[key]}`);
       if (flags[0]) suggestions.push(flags[0]);
-    } else if (flags[0]) {
-      tips.push(flags[0]);
     }
   });
 
-  if ((cats.keywords?.score ?? 0) < 70) {
-    tips.push('Mirror exact JD tool names (e.g. MSSQL not just SQL) for better ATS match');
+  if ((cats.keywords?.score ?? 0) < 75) {
+    tips.push('Use exact JD skill names (example: MSSQL, not only SQL)');
   }
-  if ((cats.content?.score ?? 0) < 70) {
-    tips.push('Aim for 50%+ of Experience bullets to include a number or measurable outcome');
+  if ((cats.content?.score ?? 0) < 75) {
+    tips.push('Make at least half of Experience bullets include a metric');
   }
-  if (!strengths.length) strengths.push('Clean text layout — good foundation to build on');
-  if (!weaknesses.length) weaknesses.push('No major category weaknesses detected');
-  if (!suggestions.length) suggestions.push('Polish wording with AI rewrite to tighten JD alignment');
+  if (!strengths.length) strengths.push('No strong categories yet — start with Keywords and Structure');
+  if (!weaknesses.length) weaknesses.push('No weak categories detected');
+  if (!suggestions.length) suggestions.push('Run AI Rewrite to tighten JD alignment');
 
   const uniq = (arr) => [...new Set(arr.filter(Boolean))].slice(0, 4);
   return {
@@ -1883,6 +2140,7 @@ function renderAtsReadinessReport(report) {
   const titleEl = document.getElementById('freeReadinessTitle');
   const copyEl = document.getElementById('freeReadinessCopy');
   const badgeEl = document.getElementById('freeReadinessBadge');
+  const explainEl = document.getElementById('freeReportExplain');
   const catGrid = document.getElementById('freeCatGrid');
   const fixesEl = document.getElementById('freeTopFixes');
   if (!ring || !scoreEl || !catGrid || !fixesEl) return;
@@ -1892,10 +2150,13 @@ function renderAtsReadinessReport(report) {
     ring.style.setProperty('--ring', 'var(--jb-slate)');
     scoreEl.innerHTML = '—<small>/100</small>';
     if (titleEl) titleEl.textContent = 'Run a check to see readiness';
-    if (copyEl) copyEl.textContent = 'Jobilly scores keywords, content, parseability, structure, and formatting — then AI rewrite from your top fixes.';
+    if (copyEl) copyEl.textContent = 'Overall score from Keywords, Content, Parseability, Structure, and Formatting.';
     if (badgeEl) {
       badgeEl.className = 'ats-badge';
       badgeEl.textContent = 'Awaiting analysis';
+    }
+    if (explainEl) {
+      explainEl.innerHTML = '<strong>How to read this:</strong> Green = strong · Yellow = good · Orange = needs work · Red = weak. Fix red/orange first.';
     }
     catGrid.innerHTML = '';
     fixesEl.innerHTML = '';
@@ -1908,42 +2169,50 @@ function renderAtsReadinessReport(report) {
 
   const v = Math.max(0, Math.min(100, report.overallReadiness || 0));
   const band = catClass(v);
-  const ringColor = band === 'is-good' ? 'var(--jb-success)'
-    : band === 'is-ok' ? 'var(--jb-warning)'
-    : 'var(--jb-danger)';
+  const label = report.readinessLabel || scoreBandLabel(v);
   ring.style.setProperty('--v', v);
-  ring.style.setProperty('--ring', ringColor);
+  ring.style.setProperty('--ring', scoreBandColor(v));
   scoreEl.innerHTML = `${v}<small>/100</small>`;
+  scoreEl.style.color = scoreBandColor(v);
 
-  if (titleEl) titleEl.textContent = `${report.readinessLabel} readiness`;
-  if (copyEl) {
-    copyEl.textContent = 'Circular gauges show each category. Fix weaknesses first — Keywords and Content carry the most weight.';
-  }
+  if (titleEl) titleEl.textContent = `${label} · ${v}/100`;
+  if (copyEl) copyEl.textContent = scoreBandExplain(v);
   if (badgeEl) {
     badgeEl.className = 'ats-badge ' + band;
-    badgeEl.textContent = report.readinessLabel;
+    badgeEl.textContent = label;
+  }
+  if (explainEl) {
+    const weak = Object.entries(report.categories || {})
+      .filter(([, c]) => (c?.score ?? 0) < 75)
+      .map(([k]) => k)
+      .slice(0, 3);
+    const focus = weak.length
+      ? `Focus next: ${weak.map(k => k.charAt(0).toUpperCase() + k.slice(1)).join(', ')}.`
+      : 'All categories are in good range — polish keywords for 95+.';
+    explainEl.innerHTML = `<strong>${label} (${v}/100).</strong> ${scoreBandExplain(v)} ${focus}`;
   }
 
   const order = [
-    ['keywords', 'Keywords', '30%', 'var(--jb-accent)'],
-    ['content', 'Content', '25%', 'var(--jb-accent-3)'],
-    ['parseability', 'Parseability', '20%', 'var(--jb-accent-2)'],
-    ['structure', 'Structure', '15%', 'var(--jb-accent-4)'],
-    ['formatting', 'Formatting', '10%', 'var(--jb-accent-5)'],
+    ['keywords', 'Keywords', '30%'],
+    ['content', 'Content', '25%'],
+    ['parseability', 'Parseability', '20%'],
+    ['structure', 'Structure', '15%'],
+    ['formatting', 'Formatting', '10%'],
   ];
-  catGrid.innerHTML = order.map(([key, label, weight, color]) => {
+  catGrid.innerHTML = order.map(([key, labelName, weight]) => {
     const cat = report.categories?.[key] || { score: 0 };
     const score = Math.max(0, Math.min(100, cat.score || 0));
-    const flagHint = (key === 'structure' && (cat.flags || []).length)
-      ? `<div class="ats-cat-flag">${(cat.flags[0] || '').slice(0, 70)}</div>`
+    const color = scoreBandColor(score);
+    const hint = CATEGORY_EXPLAIN[key]
+      ? `<div class="ats-cat-flag">${CATEGORY_EXPLAIN[key]}</div>`
       : '';
-    return `<div class="ats-cat" style="--cat-color:${color}">
+    return `<div class="ats-cat ${catClass(score)}" style="--cat-color:${color}">
       <div class="ats-mini-ring" style="--v:${score}">
-        <div class="ats-mini-ring-score">${score}</div>
+        <div class="ats-mini-ring-score" style="color:${color}">${score}</div>
       </div>
-      <div class="ats-cat-label">${label}</div>
-      <div class="ats-cat-weight">${weight} weight</div>
-      ${flagHint}
+      <div class="ats-cat-label">${labelName}</div>
+      <div class="ats-cat-weight">${weight} · ${scoreBandLabel(score)}</div>
+      ${hint}
     </div>`;
   }).join('');
 
@@ -1957,7 +2226,7 @@ function renderAtsReadinessReport(report) {
   if (!fixes.length) {
     fixesEl.innerHTML = `<div class="ats-fix-item">
       <div class="ats-fix-num">✓</div>
-      <div><strong>No critical fixes</strong><span>Resume is in good shape — AI rewrite can still polish keyword coverage and metrics.</span></div>
+      <div><strong>No critical fixes</strong><span>Resume looks solid. AI rewrite can still sharpen keyword fit.</span></div>
     </div>`;
   } else {
     fixesEl.innerHTML = fixes.map((f, i) => `<div class="ats-fix-item ${i === 0 ? 'is-priority' : ''}">
@@ -1986,14 +2255,12 @@ function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 function showToast(msg, color) {
   const t = document.getElementById('toast');
   t.textContent = msg;
+  const tone = color || (/❌|failed|Please paste|No tailored|No resume/i.test(msg)
+    ? 'var(--jb-danger)'
+    : (/✅|Done|Already at|Cleared/i.test(msg) ? 'var(--jb-success)' : 'var(--jb-slate)'));
   t.style.background = '';
-  if (color) {
-    t.style.borderLeft = `3px solid ${color}`;
-    t.style.color = 'var(--jb-ink)';
-  } else {
-    t.style.borderLeft = '';
-    t.style.color = '';
-  }
+  t.style.borderLeft = `3px solid ${tone}`;
+  t.style.color = 'var(--jb-ink)';
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 4000);
 }
@@ -2029,8 +2296,240 @@ function stopLoading() {
 function switchTab(name, btn) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
+  const tab = document.getElementById('tab-' + name);
+  if (tab) tab.classList.add('active');
   if (btn) btn.classList.add('active');
+  if (name === 'compare') renderBeforeAfterCompare();
+}
+
+function escapeHtml(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function tokenizeWords(s) {
+  return String(s || '').split(/(\s+)/).filter(t => t.length);
+}
+
+function wordDiffHtml(beforeLine, afterLine) {
+  const a = tokenizeWords(beforeLine);
+  const b = tokenizeWords(afterLine);
+  if (!a.length) {
+    return b.map(t => /\s+/.test(t) ? escapeHtml(t) : `<span class="diff-add">${escapeHtml(t)}</span>`).join('');
+  }
+  const m = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      m[i][j] = a[i - 1] === b[j - 1]
+        ? m[i - 1][j - 1] + 1
+        : Math.max(m[i - 1][j], m[i][j - 1]);
+    }
+  }
+  const ops = [];
+  let i = a.length, j = b.length;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && a[i - 1] === b[j - 1]) {
+      ops.push({ t: 'eq', v: b[j - 1] });
+      i--; j--;
+    } else if (j > 0 && (i === 0 || m[i][j - 1] >= m[i - 1][j])) {
+      ops.push({ t: 'add', v: b[j - 1] });
+      j--;
+    } else {
+      i--;
+    }
+  }
+  ops.reverse();
+  return ops.map(op => {
+    if (/\s+/.test(op.v)) return escapeHtml(op.v);
+    if (op.t === 'add') return `<span class="diff-add">${escapeHtml(op.v)}</span>`;
+    return escapeHtml(op.v);
+  }).join('');
+}
+
+function alignResumeLines(beforeText, afterText) {
+  const a = String(beforeText || '').replace(/\r\n/g, '\n').split('\n');
+  const b = String(afterText || '').replace(/\r\n/g, '\n').split('\n');
+  const key = (s) => s.trim().toLowerCase();
+  const m = Array.from({ length: a.length + 1 }, () => Array(b.length + 1).fill(0));
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      m[i][j] = key(a[i - 1]) === key(b[j - 1])
+        ? m[i - 1][j - 1] + 1
+        : Math.max(m[i - 1][j], m[i][j - 1]);
+    }
+  }
+  const pairs = [];
+  let i = a.length, j = b.length;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && key(a[i - 1]) === key(b[j - 1])) {
+      pairs.push({ type: 'eq', before: a[i - 1], after: b[j - 1] });
+      i--; j--;
+    } else if (j > 0 && (i === 0 || m[i][j - 1] >= m[i - 1][j])) {
+      pairs.push({ type: 'add', after: b[j - 1] });
+      j--;
+    } else {
+      pairs.push({ type: 'del', before: a[i - 1] });
+      i--;
+    }
+  }
+  pairs.reverse();
+  // Merge adjacent del+add into replace when both non-empty
+  const merged = [];
+  for (let k = 0; k < pairs.length; k++) {
+    const cur = pairs[k];
+    const next = pairs[k + 1];
+    if (cur.type === 'del' && next && next.type === 'add' && cur.before.trim() && next.after.trim()) {
+      merged.push({ type: 'replace', before: cur.before, after: next.after });
+      k++;
+    } else {
+      merged.push(cur);
+    }
+  }
+  return merged;
+}
+
+function buildHighlightedAfterHtml(beforeText, afterText) {
+  const pairs = alignResumeLines(beforeText, afterText);
+  // Rebuild after text with HTML highlights, then parse structure via line walk similar to parseResumeToHtml
+  const highlightedLines = [];
+  for (const p of pairs) {
+    if (p.type === 'del') continue;
+    if (p.type === 'eq') highlightedLines.push(escapeHtml(p.after));
+    else if (p.type === 'add') {
+      const t = p.after || '';
+      if (!t.trim()) highlightedLines.push('');
+      else highlightedLines.push(`<span class="diff-add">${escapeHtml(t)}</span>`);
+    } else if (p.type === 'replace') {
+      highlightedLines.push(wordDiffHtml(p.before || '', p.after || ''));
+    }
+  }
+  return parseResumeToHtmlMarked(highlightedLines.join('\n'));
+}
+
+/** Like parseResumeToHtml but trusts pre-escaped/marked HTML fragments per line. */
+function parseResumeToHtmlMarked(markedText) {
+  if (!markedText || !String(markedText).trim()) return '';
+  const lines = String(markedText).split('\n');
+  let html = '';
+  let lineIndex = 0;
+  let currentSection = '';
+  const plain = (s) => String(s || '').replace(/<[^>]+>/g, '');
+
+  while (lineIndex < lines.length && !plain(lines[lineIndex]).trim()) lineIndex++;
+  if (lineIndex < lines.length) {
+    const raw = lines[lineIndex];
+    const plainName = plain(raw).trim();
+    const displayName = plainName === plainName.toUpperCase() && plainName.length > 1
+      ? toTitleCase(plainName) : plainName;
+    // keep marks if any inside name line
+    html += `<div class="r-name">${raw.includes('diff-add') ? raw : escapeHtml(displayName)}</div>`;
+    lineIndex++;
+  }
+
+  let contactCount = 0;
+  while (lineIndex < lines.length && contactCount < 6) {
+    const l = lines[lineIndex];
+    const p = plain(l).trim();
+    if (!p) { lineIndex++; break; }
+    if (isSectionHeader(p)) break;
+    html += `<div class="r-contact">${l}</div>`;
+    lineIndex++;
+    contactCount++;
+  }
+  html += '<div class="r-divider"></div>';
+
+  const NON_ROLE_SECTIONS = new Set([
+    'CERTIFICATIONS','CERTIFICATION','LICENSES','EDUCATION','ACADEMIC BACKGROUND',
+    'SKILLS','TECHNICAL SKILLS','CORE COMPETENCIES','KEY SKILLS',
+    'PROJECTS','KEY PROJECTS','NOTABLE PROJECTS','AWARDS','PUBLICATIONS'
+  ]);
+  const inSkillsSection = () =>
+    /^(SKILLS|TECHNICAL SKILLS|CORE COMPETENCIES|KEY SKILLS|TECHNOLOGIES)\b/.test(currentSection);
+  const skillWindowRe = /^(?:[-•]\s*)?([A-Za-z][A-Za-z0-9 &\/\+]{1,45}):\s*(.*)$/;
+
+  for (let i = lineIndex; i < lines.length; i++) {
+    const l = lines[i];
+    const p = plain(l).trim();
+    if (!p) {
+      html += '<div class="r-spacer"></div>';
+    } else if (isSectionHeader(p)) {
+      currentSection = p.toUpperCase();
+      html += `<div class="r-section">${l}</div>`;
+    } else if (inSkillsSection() && skillWindowRe.test(p)) {
+      html += `<div class="r-skill-line">${l}</div>`;
+    } else if (/^[-•]\s+\S/.test(p)) {
+      const content = l.replace(/^(\s*(?:<span class="diff-add">)?)[-•]\s+/, (m, open) => open || '');
+      html += `<div class="r-bullet"><span class="r-bullet-dot">•</span><span>${content}</span></div>`;
+    } else if ((p.match(/\|/g) || []).length >= 1 && !NON_ROLE_SECTIONS.has(currentSection) && p.length < 140) {
+      html += `<div class="r-role">${l}</div>`;
+    } else {
+      html += `<div class="r-body">${l}</div>`;
+    }
+  }
+  return html;
+}
+
+function summarizeRewriteChanges(beforeText, afterText, keywords) {
+  const changes = [];
+  const pairs = alignResumeLines(beforeText, afterText);
+  let addedLines = 0;
+  let changedLines = 0;
+  const samples = [];
+  for (const p of pairs) {
+    if (p.type === 'add' && (p.after || '').trim()) {
+      addedLines++;
+      if (samples.length < 4) samples.push('Added: ' + (p.after || '').trim().slice(0, 90));
+    } else if (p.type === 'replace' && (p.after || '').trim()) {
+      changedLines++;
+      if (samples.length < 6) samples.push('Updated: ' + (p.after || '').trim().slice(0, 90));
+    }
+  }
+  if (addedLines) changes.push(`${addedLines} new line(s) added in the rewrite`);
+  if (changedLines) changes.push(`${changedLines} line(s) updated (green underline on After)`);
+
+  const beforeLow = String(beforeText || '').toLowerCase();
+  const afterLow = String(afterText || '').toLowerCase();
+  const prim = keywords?.primary || [];
+  const newly = prim.filter(k => {
+    const key = String(k).toLowerCase();
+    return key && !beforeLow.includes(key) && afterLow.includes(key);
+  });
+  if (newly.length) changes.push('New JD keywords embedded: ' + newly.slice(0, 8).join(', '));
+
+  if (!changes.length) changes.push('No major text differences detected');
+  return [...changes, ...samples].slice(0, 8);
+}
+
+function renderBeforeAfterCompare() {
+  const beforeEl = document.getElementById('baBeforePage');
+  const afterEl = document.getElementById('baAfterPage');
+  const listEl = document.getElementById('baChangesList');
+  if (!beforeEl || !afterEl) return;
+
+  const before = state.originalResume || document.getElementById('resumeInput')?.value || '';
+  const after = state.tailoredResume || document.getElementById('outputArea')?.textContent || '';
+
+  if (!before.trim() && !after.trim()) {
+    beforeEl.innerHTML = '<div class="ba-empty">Paste a resume and run AI Rewrite</div>';
+    afterEl.innerHTML = '<div class="ba-empty">Tailored resume will appear here</div>';
+    if (listEl) listEl.innerHTML = '<li>Run AI Rewrite to compare original vs tailored resume.</li>';
+    return;
+  }
+  if (!after.trim()) {
+    beforeEl.innerHTML = parseResumeToHtml(before) || '<div class="ba-empty">Original resume</div>';
+    afterEl.innerHTML = '<div class="ba-empty">Run AI Rewrite to see the After version</div>';
+    return;
+  }
+
+  beforeEl.innerHTML = parseResumeToHtml(before) || '<div class="ba-empty">Original resume</div>';
+  afterEl.innerHTML = buildHighlightedAfterHtml(before, after) || parseResumeToHtml(after);
+  if (listEl) {
+    const items = summarizeRewriteChanges(before, after, state.keywords);
+    listEl.innerHTML = items.map(t => `<li>${escapeHtml(t)}</li>`).join('');
+  }
 }
 
 function renderJdFit(containerId, fit) {
@@ -2940,6 +3439,7 @@ async function runAnalysis() {
 
     const skillsCmp = RAGEngine.compareSkills(resume, tailoredResume);
     renderSkillsCompare(skillsCmp);
+    renderBeforeAfterCompare();
 
     // ── USE RAG ENGINE SCORE DIRECTLY (single source of truth) ───
     const kwMatch    = sc.keywordMatch != null ? sc.keywordMatch : 0;
@@ -2957,7 +3457,10 @@ async function runAnalysis() {
     const atsScore    = ragScore.atsScore;
 
     // ATS score colour: ≥90 green, ≥70 yellow, else red
-    const atsColour = atsScore >= 90 ? 'green' : atsScore >= 70 ? 'yellow' : 'red';
+    const atsColour = scoreBand(atsScore) === 'excellent' ? 'green'
+      : scoreBand(atsScore) === 'good' ? 'yellow'
+      : scoreBand(atsScore) === 'fair' ? 'orange'
+      : 'red';
     const fmtColour = fmtCheck === 'PASS' ? 'green' : 'yellow';
 
     const atsEl = document.getElementById('atsScore');
@@ -2984,7 +3487,7 @@ async function runAnalysis() {
     const secTotal = keywords.secondary.length || 0;
     // Update header card sub-label to reflect actual keyword count
     document.getElementById('kwMatchSub').textContent = `of ${primaryTotal} skills extracted from JD`;
-    const atsScoreClass = atsScore >= 90 ? 'sc-green' : atsScore >= 70 ? 'sc-yellow' : 'sc-red';
+    const atsScoreClass = scoreToneClass(atsScore);
     scDiv.innerHTML = `
       <div class="scorecard-row"><span class="sc-label">ATS Readiness (Jobilly)</span><span class="sc-value ${atsScoreClass}" style="font-size:28px;">${atsScore} / 100</span></div>
       ${ragScore.report ? `<div class="scorecard-row"><span class="sc-label">Band</span><span class="sc-value" style="color:${ragScore.report.readinessColour}">${ragScore.report.readinessLabel}</span></div>
@@ -3280,7 +3783,10 @@ function applyBoostScoreUi(keywords, ragScore2) {
   const fmtPts2 = ragScore2.fmtPts;
   const secCompPts2 = ragScore2.sectionPts;
 
-  const atsColour2 = atsScore2 >= SCORE_TAILOR_THRESHOLD ? 'green' : atsScore2 >= 70 ? 'yellow' : 'red';
+  const atsColour2 = scoreBand(atsScore2) === 'excellent' ? 'green'
+    : scoreBand(atsScore2) === 'good' ? 'yellow'
+    : scoreBand(atsScore2) === 'fair' ? 'orange'
+    : 'red';
   document.getElementById('atsScore').textContent = atsScore2 + '/100';
   document.getElementById('atsScore').className = 'score-value ' + atsColour2;
   document.getElementById('kwMatch').textContent = kwMatch2 + '/' + primaryTotal;
@@ -3293,7 +3799,7 @@ function applyBoostScoreUi(keywords, ragScore2) {
     confEl.className = 'score-value ' + (confidence2 === 'High' ? 'green' : confidence2 === 'Medium' ? 'yellow' : 'red');
   }
 
-  const atsScoreClass2 = atsScore2 >= SCORE_TAILOR_THRESHOLD ? 'sc-green' : atsScore2 >= 70 ? 'sc-yellow' : 'sc-red';
+  const atsScoreClass2 = scoreToneClass(atsScore2);
   const secFound2 = (sc2.secondaryFound || []).length;
   const bulletsScore2 = sc2.bulletsWithMetrics != null
     ? (sc2.bulletsTotal != null ? `${sc2.bulletsWithMetrics} of ${sc2.bulletsTotal} bullets` : `${sc2.bulletsWithMetrics} bullets`)
@@ -3421,6 +3927,7 @@ async function boostScore(opts = {}) {
       document.getElementById('outputArea').textContent = state.tailoredResume;
 
       renderSkillsCompare(RAGEngine.compareSkills(orig, state.tailoredResume));
+      renderBeforeAfterCompare();
       const expBoost = RAGEngine.analyzeExperienceEligibility(jd, orig);
       state.experienceAnalysis = expBoost;
       renderExperienceEligibility('resultsExpEligibility', expBoost);
@@ -3719,10 +4226,14 @@ function copyToClipboard() {
   navigator.clipboard.writeText(text).then(() => showToast('📋 Copied! Paste into Word or Google Docs'));
 }
 
-function printResume() {
-  const content = state.tailoredResume || document.getElementById('outputArea').textContent;
+function printResume(which) {
+  const before = state.originalResume || document.getElementById('resumeInput')?.value || '';
+  const after = state.tailoredResume || document.getElementById('outputArea')?.textContent || '';
+  const content = which === 'before' ? before : after;
   if (!content.trim()) { showToast('⚠️ No resume to print yet', '#ef4444'); return; }
-  const resumeHtml = parseResumeToHtml(content);
+  const resumeHtml = which === 'before'
+    ? parseResumeToHtml(content)
+    : (before.trim() ? buildHighlightedAfterHtml(before, content) : parseResumeToHtml(content));
 
   // Build full HTML as a Blob URL — avoids "about:blank" in footer
   // Empty <title> removes filename from Chrome header
@@ -3811,6 +4322,14 @@ function printResume() {
     .r-skill-line { margin: 0 0 4px 0; color: #222222; line-height: 1.5; font-family: Calibri, Arial, sans-serif; font-size: 10.5pt; }
     .r-skill-label { color: #111111; font-weight: 700; }
     .r-skill-bullet { margin-left: 12px; }
+    .diff-add {
+      color: #15803d;
+      text-decoration: underline;
+      text-decoration-color: #16a34a;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+      background: rgba(22, 163, 74, 0.08);
+    }
 
     /* ── PRINT STYLES ── */
     @media print {

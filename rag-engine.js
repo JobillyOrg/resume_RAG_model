@@ -1577,9 +1577,10 @@
       formattingScore * 0.10
     );
 
-    const readinessLabel = overallReadiness >= 75 ? 'Strong'
-      : overallReadiness >= 50 ? 'Needs improvement'
-      : 'Critical gaps';
+    const readinessLabel = overallReadiness >= 90 ? 'Excellent'
+      : overallReadiness >= 75 ? 'Good'
+      : overallReadiness >= 50 ? 'Needs work'
+      : 'Poor';
 
     const topFixes = [];
     if (parseScore < 70) {
@@ -1657,7 +1658,10 @@
     return {
       overallReadiness,
       readinessLabel,
-      readinessColour: overallReadiness >= 75 ? '#4ade80' : overallReadiness >= 50 ? '#fbbf24' : '#f87171',
+      readinessColour: overallReadiness >= 90 ? '#16a34a'
+        : overallReadiness >= 75 ? '#ca8a04'
+        : overallReadiness >= 50 ? '#ea580c'
+        : '#dc2626',
       categories,
       topFixes: top3,
       parseFlags,
