@@ -267,54 +267,163 @@
     }
 
     .steps {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-      padding: 0 0 2px;
-      background: transparent;
-      border-bottom: 1px solid var(--jb-border);
+      --steps-progress: 0%;
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0;
+      margin: 0 0 22px;
+      padding: 18px 14px 16px;
+      background: var(--jb-card);
+      border: 1px solid var(--jb-border);
+      border-radius: var(--jb-radius-md);
+      box-shadow: var(--jb-shadow-sm);
+      overflow: hidden;
+    }
+    .steps::before {
+      content: "";
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      top: 34px;
+      height: 2px;
+      background: var(--jb-surface-muted);
+      border-radius: 2px;
+      z-index: 0;
+    }
+    .steps::after {
+      content: "";
+      position: absolute;
+      left: 10%;
+      top: 34px;
+      height: 2px;
+      width: var(--steps-progress);
+      max-width: 80%;
+      background: var(--jb-slate);
+      border-radius: 2px;
+      z-index: 0;
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .step {
       position: relative;
+      z-index: 1;
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 8px;
+      text-align: center;
+      padding: 0 6px;
       background: transparent;
       border: none;
-      border-radius: 0;
-      padding: 12px 14px 14px;
-      font-size: 13px;
-      font-weight: 500;
       color: var(--jb-ink-muted);
-      transition: color 0.2s;
+      transition: color 0.2s ease, transform 0.2s ease;
     }
-    .step::after {
-      content: "";
-      position: absolute;
-      left: 14px;
-      right: 14px;
-      bottom: -1px;
-      height: 2px;
-      background: var(--jb-ink);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.28s ease;
-    }
-    .step.active { color: var(--jb-ink); }
-    .step.active::after { transform: scaleX(1); }
-    .step.done { color: var(--jb-success-text); }
-    .step-num {
-      width: 22px; height: 22px;
-      border-radius: 4px;
+    .step::after { display: none; }
+    .step-node {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
       background: var(--jb-surface);
       border: 1px solid var(--jb-border-strong);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 700;
-      color: var(--jb-ink-muted);
+      box-shadow: 0 0 0 4px var(--jb-card);
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
     }
-    .step.active .step-num { background: var(--jb-brand); color: #fff; border-color: var(--jb-brand); }
-    .step.done .step-num { background: var(--jb-success); border-color: var(--jb-success); color: #fff; }
+    .step-num {
+      width: auto;
+      height: auto;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: var(--jb-ink-muted);
+      line-height: 1;
+      transition: color 0.2s ease;
+    }
+    .step-num::before { content: none; }
+    .step-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .step-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      color: inherit;
+      white-space: nowrap;
+    }
+    .step-hint {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--jb-ink-subtle);
+      letter-spacing: 0.02em;
+    }
+    .step.active {
+      color: var(--jb-ink);
+      transform: translateY(-1px);
+    }
+    .step.active .step-node {
+      background: var(--jb-brand);
+      border-color: var(--jb-brand);
+      box-shadow: 0 0 0 4px var(--jb-card), 0 8px 18px rgba(15, 23, 32, 0.12);
+      transform: scale(1.04);
+    }
+    .step.active .step-num { color: #fff; }
+    .step.active .step-hint { color: var(--jb-slate); font-weight: 600; }
+    .step.done { color: var(--jb-success-text); }
+    .step.done .step-node {
+      background: var(--jb-success-soft);
+      border-color: var(--jb-success-border);
+      box-shadow: 0 0 0 4px var(--jb-card);
+    }
+    .step.done .step-num {
+      font-size: 0;
+      color: transparent;
+      position: relative;
+      width: 14px;
+      height: 14px;
+    }
+    .step.done .step-num::before {
+      content: "";
+      position: absolute;
+      inset: 1px 0 0;
+      margin: auto;
+      width: 7px;
+      height: 4px;
+      border-left: 2px solid var(--jb-success-text);
+      border-bottom: 2px solid var(--jb-success-text);
+      transform: rotate(-45deg);
+    }
+    .step.done .step-hint { color: var(--jb-success-text); opacity: 0.75; }
+    @media (max-width: 720px) {
+      .steps {
+        padding: 14px 8px 12px;
+        overflow-x: auto;
+        grid-template-columns: repeat(5, minmax(92px, 1fr));
+      }
+      .steps::before {
+        left: 46px;
+        right: 46px;
+      }
+      .steps::after {
+        left: 46px;
+        right: auto;
+        width: calc((100% - 92px) * var(--steps-progress-ratio, 0));
+        max-width: none;
+      }
+      .step-hint { display: none; }
+      .step-label { font-size: 11px; white-space: normal; line-height: 1.25; }
+      .step-node { width: 32px; height: 32px; border-radius: 10px; }
+    }
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
     @media (max-width: 768px) {
@@ -1401,13 +1510,43 @@
   </section>
 
   <!-- STEP INDICATORS -->
-  <div class="steps">
-    <div class="step active" id="step1"><div class="step-num">1</div> Paste Inputs</div>
-    <div class="step" id="step2"><div class="step-num">2</div> ATS Report</div>
-    <div class="step" id="step3"><div class="step-num">3</div> AI Rewrite</div>
-    <div class="step" id="step4"><div class="step-num">4</div> Re-score</div>
-    <div class="step" id="step5"><div class="step-num">5</div> Download</div>
-  </div>
+  <nav class="steps" aria-label="Workflow progress" style="--steps-progress: 0%">
+    <div class="step active" id="step1" aria-current="step">
+      <div class="step-node"><span class="step-num">1</span></div>
+      <div class="step-meta">
+        <span class="step-label">Paste Inputs</span>
+        <span class="step-hint">JD + resume</span>
+      </div>
+    </div>
+    <div class="step" id="step2">
+      <div class="step-node"><span class="step-num">2</span></div>
+      <div class="step-meta">
+        <span class="step-label">ATS Report</span>
+        <span class="step-hint">Readiness</span>
+      </div>
+    </div>
+    <div class="step" id="step3">
+      <div class="step-node"><span class="step-num">3</span></div>
+      <div class="step-meta">
+        <span class="step-label">AI Rewrite</span>
+        <span class="step-hint">Tailor</span>
+      </div>
+    </div>
+    <div class="step" id="step4">
+      <div class="step-node"><span class="step-num">4</span></div>
+      <div class="step-meta">
+        <span class="step-label">Re-score</span>
+        <span class="step-hint">95+ target</span>
+      </div>
+    </div>
+    <div class="step" id="step5">
+      <div class="step-node"><span class="step-num">5</span></div>
+      <div class="step-meta">
+        <span class="step-label">Download</span>
+        <span class="step-hint">PDF / DOC</span>
+      </div>
+    </div>
+  </nav>
 
   <!-- WORKSPACE: inputs + sticky action rail -->
   <div class="jb-workspace" id="workspaceSection">
@@ -2274,11 +2413,22 @@ function renderGapAnalysis({ gaps = [], suggestions = [], expAnalysis = null } =
 }
 
 function setStep(n) {
+  const wrap = document.querySelector('.steps');
+  if (wrap) {
+    const pct = Math.max(0, Math.min(4, n - 1)) / 4 * 100;
+    wrap.style.setProperty('--steps-progress', pct + '%');
+    wrap.style.setProperty('--steps-progress-ratio', String(Math.max(0, Math.min(4, n - 1)) / 4));
+  }
   for (let i = 1; i <= 5; i++) {
     const el = document.getElementById('step' + i);
+    if (!el) continue;
     el.classList.remove('active', 'done');
+    el.removeAttribute('aria-current');
     if (i < n) el.classList.add('done');
-    else if (i === n) el.classList.add('active');
+    else if (i === n) {
+      el.classList.add('active');
+      el.setAttribute('aria-current', 'step');
+    }
   }
 }
 
@@ -4158,9 +4308,8 @@ function printResume(which) {
   const after = state.tailoredResume || document.getElementById('outputArea')?.textContent || '';
   const content = which === 'before' ? before : after;
   if (!content.trim()) { showToast('⚠️ No resume to print yet', '#ef4444'); return; }
-  const resumeHtml = which === 'before'
-    ? parseResumeToHtml(content)
-    : (before.trim() ? buildHighlightedAfterHtml(before, content) : parseResumeToHtml(content));
+  // Clean print/PDF only — green underlines stay in Before/After UI, never in downloads
+  const resumeHtml = parseResumeToHtml(content);
 
   // Build full HTML as a Blob URL — avoids "about:blank" in footer
   // Empty <title> removes filename from Chrome header
