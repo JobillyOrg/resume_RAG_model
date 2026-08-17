@@ -165,6 +165,40 @@
       color: var(--jb-ink-muted);
       line-height: 1.2;
     }
+    .mode-toggle {
+      display: inline-flex;
+      align-items: stretch;
+      border: 1px solid var(--jb-border-strong);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--jb-surface);
+      flex-shrink: 0;
+    }
+    .mode-toggle button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--jb-ink-muted);
+      font-family: var(--jb-font-sans);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 7px 14px;
+      cursor: pointer;
+      line-height: 1.2;
+    }
+    .mode-toggle button + button { border-left: 1px solid var(--jb-border); }
+    .mode-toggle button.is-on {
+      background: var(--jb-ink);
+      color: #fff;
+    }
+    .mode-toggle button[data-mode="aggressive"].is-on {
+      background: var(--jb-orange);
+      color: #fff;
+    }
+    @media (max-width: 640px) {
+      .mode-toggle button { padding: 7px 10px; font-size: 11px; }
+    }
 
     .jb-main { position: relative; z-index: 1; }
     .container { max-width: 1180px; margin: 0 auto; padding: 20px clamp(16px, 3vw, 32px) 56px; }
@@ -435,10 +469,12 @@
       font-size: 22px;
       font-weight: 800;
       text-align: center;
-      margin-bottom: 6px;
+      margin: 0 0 4px;
+      letter-spacing: 0.02em;
     }
-    #outputArea.is-formatted .r-contact { text-align: center; color: #555; font-size: 12.5px; margin-bottom: 2px; }
-    #outputArea.is-formatted .r-divider { border: none; border-top: 2px solid #111; margin: 10px 0 12px; }
+    #outputArea.is-formatted .r-contact { text-align: center; color: #333; font-size: 12.5px; margin: 0 0 2px; }
+    #outputArea.is-formatted .r-contact a { color: #1a56c4; text-decoration: underline; }
+    #outputArea.is-formatted .r-divider { border: none; border-top: 1px solid #111; margin: 8px 0 10px; }
     #outputArea.is-formatted .r-section {
       font-size: 12.5px;
       font-weight: 800;
@@ -449,6 +485,22 @@
       padding-bottom: 3px;
     }
     #outputArea.is-formatted .r-role { font-weight: 700; margin: 8px 0 4px; }
+    #outputArea.is-formatted .r-role-row {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 3px;
+    }
+    #outputArea.is-formatted .r-role-left { font-weight: 700; font-size: 13px; color: #111; padding: 0; }
+    #outputArea.is-formatted .r-role-dates {
+      font-weight: 700;
+      font-size: 13px;
+      color: #111;
+      text-align: right;
+      white-space: nowrap;
+      width: 1%;
+      padding: 0 0 0 12px;
+      vertical-align: bottom;
+    }
     #outputArea.is-formatted .r-bullet { margin: 0 0 4px; padding-left: 0; line-height: 1.45; color: #222; }
     #outputArea.is-formatted .r-body { margin-bottom: 4px; }
     #outputArea.is-formatted .r-skill-line { margin: 0 0 3px; line-height: 1.45; color: #222; }
@@ -703,14 +755,18 @@
       max-height: 70vh;
       overflow: auto;
     }
-    .ba-page .r-name { font-size: 18pt; font-weight: 700; text-align: center; margin-bottom: 4px; }
-    .ba-page .r-contact { font-size: 9.5pt; color: #555; text-align: center; margin-bottom: 2px; }
-    .ba-page .r-divider { border: none; border-top: 2px solid #111; margin: 8px 0 12px; }
+    .ba-page .r-name { font-size: 18pt; font-weight: 700; text-align: center; margin: 0 0 3px; }
+    .ba-page .r-contact { font-size: 10pt; color: #333; text-align: center; margin: 0 0 2px; }
+    .ba-page .r-contact a { color: #1a56c4; }
+    .ba-page .r-divider { border: none; border-top: 1px solid #111; margin: 6px 0 10px; }
     .ba-page .r-section {
       font-size: 10.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
       border-bottom: 1px solid #777; margin-top: 12px; margin-bottom: 5px; padding-bottom: 2px;
     }
-    .ba-page .r-role { font-size: 10pt; font-weight: 600; margin-top: 8px; margin-bottom: 3px; }
+    .ba-page .r-role { font-size: 10.5pt; font-weight: 700; margin-top: 8px; margin-bottom: 3px; }
+    .ba-page .r-role-row { width: 100%; border-collapse: collapse; margin: 8px 0 2px; }
+    .ba-page .r-role-left { font-weight: 700; font-size: 10.5pt; color: #111; padding: 0; }
+    .ba-page .r-role-dates { font-weight: 700; font-size: 10.5pt; text-align: right; white-space: nowrap; width: 1%; padding: 0 0 0 10px; vertical-align: bottom; }
     .ba-page .r-bullet { margin: 0 0 4px; line-height: 1.45; font-size: 10pt; color: #222; }
     .ba-page .r-body, .ba-page .r-skill-line { font-size: 10pt; color: #222; margin-bottom: 3px; line-height: 1.45; }
     .ba-page .r-skill-label { font-weight: 700; color: #111; }
@@ -1384,6 +1440,10 @@
     </span>
   </a>
   <div style="flex:1"></div>
+  <div class="mode-toggle" role="group" aria-label="Tailor mode">
+    <button type="button" id="modeHonest" data-mode="honest" class="is-on" onclick="setTailorMode('honest')">Honest</button>
+    <button type="button" id="modeAggressive" data-mode="aggressive" onclick="setTailorMode('aggressive')">Aggressive</button>
+  </div>
   <div class="api-badge" id="apiBadge"><div class="api-dot" id="apiDot"></div> <span id="apiBadgeText">Checking…</span></div>
 </header>
 
@@ -1705,6 +1765,43 @@ const USE_RAG = true;
 const GEMINI_KEYWORD_FALLBACK = false;
 const SCORE_TAILOR_THRESHOLD = 95; // Jobilly readiness target
 const MAX_BOOST_PASSES = 3; // boost only until readiness hits threshold
+const TAILOR_MODE_KEY = 'jobilly_tailor_mode';
+
+function getTailorMode() {
+  const saved = localStorage.getItem(TAILOR_MODE_KEY);
+  if (saved === 'aggressive' || saved === 'honest') return saved;
+  return 'honest';
+}
+
+function setTailorMode(mode) {
+  const next = mode === 'aggressive' ? 'aggressive' : 'honest';
+  localStorage.setItem(TAILOR_MODE_KEY, next);
+  const honestBtn = document.getElementById('modeHonest');
+  const aggBtn = document.getElementById('modeAggressive');
+  if (honestBtn) honestBtn.classList.toggle('is-on', next === 'honest');
+  if (aggBtn) aggBtn.classList.toggle('is-on', next === 'aggressive');
+}
+
+function skillModePrompt(mode, primary, secondary) {
+  const prim = (primary || []).join(', ') || '(none)';
+  const sec = (secondary || []).join(', ') || '(none)';
+  if (mode === 'aggressive') {
+    return `SKILL MODE: AGGRESSIVE
+- Start from the candidate's base resume skills.
+- ALSO add every JD primary (and relevant secondary) skill that is NOT already on the base resume.
+- Put new JD skills into TECHNICAL SKILLS (best-matching category window, or a new one).
+- Weave each added JD skill into at least one EXPERIENCE bullet using the candidate's real employers/roles — do not invent companies.
+- Do not invent certifications, employers, titles, dates, or education.
+Primary JD skills to include (add if missing from base): ${prim}
+Secondary JD skills to include (add if missing): ${sec}`;
+  }
+  return `SKILL MODE: HONEST
+- Use ONLY skills that already appear on the candidate's base resume (and close family of those skills, e.g. Spark → Apache Spark).
+- Do NOT add JD skills that are not on the base resume.
+- You may reword existing skills to match JD terminology when the same skill is already there.
+Primary JD skills to demonstrate only if already on the resume: ${prim}
+Secondary: ${sec}`;
+}
 
 // ─── STATE ────────────────────────────────────────────────────────
 let state = {
@@ -2419,20 +2516,17 @@ function parseResumeToHtmlMarked(markedText) {
     const plainName = plain(raw).trim();
     const displayName = plainName === plainName.toUpperCase() && plainName.length > 1
       ? toTitleCase(plainName) : plainName;
-    // keep marks if any inside name line
     html += `<div class="r-name">${raw.includes('diff-add') ? raw : escapeHtml(displayName)}</div>`;
     lineIndex++;
   }
 
-  let contactCount = 0;
-  while (lineIndex < lines.length && contactCount < 6) {
-    const l = lines[lineIndex];
-    const p = plain(l).trim();
+  const contactLine = buildContactHeaderLine(plain(markedText));
+  if (contactLine) html += `<div class="r-contact">${linkifyContactLine(contactLine)}</div>`;
+  while (lineIndex < lines.length) {
+    const p = plain(lines[lineIndex]).trim();
     if (!p) { lineIndex++; break; }
     if (isSectionHeader(p)) break;
-    html += `<div class="r-contact">${l}</div>`;
     lineIndex++;
-    contactCount++;
   }
   html += '<div class="r-divider"></div>';
 
@@ -2458,8 +2552,14 @@ function parseResumeToHtmlMarked(markedText) {
     } else if (/^[-•]\s+\S/.test(p)) {
       const content = l.replace(/^(\s*(?:<span class="diff-add">)?)[-•]\s+/, (m, open) => open || '');
       html += `<div class="r-bullet">• ${content}</div>`;
-    } else if ((p.match(/\|/g) || []).length >= 1 && !NON_ROLE_SECTIONS.has(currentSection) && p.length < 140) {
-      html += `<div class="r-role">${l}</div>`;
+    } else if ((p.match(/\|/g) || []).length >= 1 && !NON_ROLE_SECTIONS.has(currentSection) && p.length < 180) {
+      const split = splitRoleAndDates(p);
+      let dates = split.dates;
+      if (!dates && i + 1 < lines.length && isDateOnlyLine(plain(lines[i + 1]))) {
+        dates = plain(lines[i + 1]).trim();
+        i++;
+      }
+      html += renderRoleRow(dates ? escapeHtml(split.left) : l, dates ? escapeHtml(dates) : '');
     } else {
       html += `<div class="r-body">${l}</div>`;
     }
@@ -2823,62 +2923,67 @@ function extractRolesFromResume(resumeText) {
   return roles;
 }
 
+function looksLikeLocation(part, opts) {
+  const p = String(part || '').trim();
+  if (!p || p.length > 60) return false;
+  if (/@|linkedin\.com|https?:\/\/|www\./i.test(p)) return false;
+  if (/\d{6,}/.test(p)) return false;
+  if (/engineer|analyst|developer|manager|consultant|scientist|intern|specialist|architect/i.test(p)) return false;
+  if (/^(remote|hybrid|open to relocate|willing to relocate)$/i.test(p)) return true;
+  const US_STATES = /^(AL|AK|AZ|AR|CA|CO|CT|DC|DE|FL|GA|HI|IA|ID|IL|IN|KS|KY|LA|MA|MD|ME|MI|MN|MO|MS|MT|NC|ND|NE|NH|NJ|NM|NV|NY|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VA|VT|WA|WI|WV|WY)$/;
+  if (US_STATES.test(p)) return !!(opts && opts.allowBareState);
+  if (/^[A-Za-z][A-Za-z .'-]+,\s*[A-Z]{2}(?:\s+\d{5}(?:-\d{4})?)?$/.test(p)) return true;
+  if (/^[A-Za-z][A-Za-z .'-]+,\s*[A-Za-z][A-Za-z .'-]+$/.test(p)) return true;
+  if (/^[A-Za-z][A-Za-z .'-]+,\s*[A-Z]{2},\s*[A-Za-z][A-Za-z .'-]+$/.test(p)) return true;
+  return false;
+}
+
+function buildContactHeaderLine(resumeText) {
+  const cf = extractContactFields(resumeText);
+  return [cf.phone, cf.email, cf.location, cf.linkedin].filter(Boolean).join(' | ');
+}
+
 // ─── CONTACT FIELD EXTRACTOR ─────────────────────────────────────
 // Extracts email, phone, and LinkedIn URL from the raw resume text.
 // These are injected as LITERAL VALUES into the prompt so the AI
 // cannot hallucinate or alter them regardless of resume length.
 function extractContactFields(resumeText) {
-  const lines = resumeText.split('\n').map(l => l.trim()).filter(Boolean);
+  const lines = String(resumeText || '').split('\n').map(l => l.trim()).filter(Boolean);
 
   let email    = '';
   let phone    = '';
   let linkedin = '';
   let location = '';
 
-  // Scan first 20 lines — contact info is always near the top
-  const headerLines = lines.slice(0, 20).join(' ');
+  const headerStop = lines.findIndex((line, idx) =>
+    idx > 0 && /^(SUMMARY|PROFESSIONAL SUMMARY|OBJECTIVE|PROFILE|SKILLS|TECHNICAL SKILLS|CORE COMPETENCIES|EXPERIENCE|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EDUCATION|CERTIFICATIONS)\b/i.test(line)
+  );
+  const contactOnlyLines = lines.slice(0, headerStop === -1 ? 8 : Math.min(headerStop, 8));
+  const headerLines = contactOnlyLines.join(' ');
 
-  // Email: standard RFC-compliant pattern
   const emailMatch = headerLines.match(/\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\b/);
   if (emailMatch) email = emailMatch[0];
 
-  // Phone: international or domestic formats
-  // +91-9876543210 / +1 (555) 555-5555 / 9876543210 / (555) 555-5555
   const phoneMatch = headerLines.match(/(?:\+?\d{1,3}[\s\-.]?)?(?:\(?\d{3}\)?[\s\-.]?)?\d{3}[\s\-.]?\d{4,}/);
   if (phoneMatch) {
-    // Ensure it's not just a year (4 digits alone)
     const p = phoneMatch[0].replace(/\s+/g, ' ').trim();
     if (p.replace(/\D/g, '').length >= 7) phone = p;
   }
 
-  // LinkedIn URL: match any linkedin.com/... URL (with or without https://, with or without /in/ path)
-  // Scan line-by-line first for an exact URL, then fall back to the joined header string
-  const linkedinLineMatch = lines.slice(0, 20).join('\n')
+  const linkedinLineMatch = contactOnlyLines.join('\n')
     .match(/(?:https?:\/\/)?(?:www\.)?linkedin\.com\/[^\s|,<>\]"')]+/i);
   if (linkedinLineMatch) linkedin = linkedinLineMatch[0].replace(/[.,;:]+$/, '');
 
-  // Location: scan only the first 5 lines (contact header area) for a standalone location token.
-  // A location token is: City, ST  /  City, State  /  ST  /  City, ST, Country
-  // It must appear AFTER a pipe (|) or on its own line — explicitly NOT inside an experience role line.
-  // We stop before the EXPERIENCE / PROFESSIONAL EXPERIENCE section header.
-  const contactOnlyLines = lines.slice(0, 5);
   for (const line of contactOnlyLines) {
-    // Skip lines that look like experience entries (contain a year range or company/title pattern)
     if (/\b(19|20)\d{2}\b/.test(line)) continue;
-    // Skip lines that are section headers
-    if (/^(SUMMARY|SKILLS|EXPERIENCE|EDUCATION|CERTIFICATIONS|PROFESSIONAL EXPERIENCE)/i.test(line)) continue;
-
-    // Try to find a location segment after a pipe separator
+    if (/^(SUMMARY|SKILLS|EXPERIENCE|EDUCATION|CERTIFICATIONS|PROFESSIONAL EXPERIENCE|PROFESSIONAL SUMMARY|TECHNICAL SKILLS)/i.test(line)) continue;
+    const isContactLine = /@|linkedin\.com|\d{3}[\s\-.]?\d{3}[\s\-.]?\d{4}/i.test(line);
     const pipeParts = line.split('|').map(s => s.trim());
     for (const part of pipeParts) {
-      // Match: "City, ST" / "City, State" / "City, ST, Country" / bare state abbreviation (2 letters)
-      if (/^[A-Za-z][A-Za-z\s]+,\s*[A-Z]{2}(,\s*[A-Za-z]+)?$/.test(part) ||
-          /^[A-Z]{2}$/.test(part)) {
-        location = part;
-        break;
-      }
+      if (!linkedin && /^linkedin$/i.test(part)) linkedin = 'LinkedIn';
+      if (!location && looksLikeLocation(part, { allowBareState: isContactLine })) location = part;
     }
-    if (location) break;
+    if (!location && looksLikeLocation(line, { allowBareState: false })) location = line;
   }
 
   return { email, phone, linkedin, location };
@@ -2910,19 +3015,23 @@ function buildRewritePrompt(jd, resume, keywords, ragContext, atsReport) {
     ? `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nRULE 0 — FOLLOW THE ATS REPORT (highest priority after integrity)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${atsReport.reportPromptBlock}\n\nApply every Top Fix above. Raise Jobilly readiness to ${SCORE_TAILOR_THRESHOLD}+ using the Full-time resume model (truthful JD overlap — do not invent tools or metrics).\n`
     : '';
 
+  const tailorMode = getTailorMode();
   const modelBlock = (typeof FulltimeResumeModel !== 'undefined' && FulltimeResumeModel.promptBlock)
-    ? `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nQUALITY MODEL — FULL-TIME US RESUME\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${FulltimeResumeModel.promptBlock({ threshold: SCORE_TAILOR_THRESHOLD, primary, secondary })}\n`
+    ? `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nQUALITY MODEL — FULL-TIME US RESUME\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${FulltimeResumeModel.promptBlock({ threshold: SCORE_TAILOR_THRESHOLD, primary, secondary, mode: tailorMode })}\n`
     : '';
+  const skillModeBlock = skillModePrompt(tailorMode, primary, secondary);
 
-  return `You are a full-time US resume writer using the Jobilly Full-time resume model. Success = a recruiter-ready targeted resume that also clears ${SCORE_TAILOR_THRESHOLD}+ readiness from truthful JD overlap.
+  return `You are a full-time US resume writer using the Jobilly Full-time resume model (${tailorMode.toUpperCase()} skill mode). Success = a recruiter-ready targeted resume that also clears ${SCORE_TAILOR_THRESHOLD}+ readiness.
 ${reportBlock}${modelBlock}
+${skillModeBlock}
+
 MISSION — first tailor pass:
 1. Keep the master as ground truth (roles, titles, companies, dates, education, contact).
 2. Demonstrate JD-matching work in EXPERIENCE using Action → Technology → Problem → Result.
-3. Put exact tools in TECHNICAL SKILLS + bullets — only if they exist on the master or are a close family of an existing skill.
+3. Skills: HONEST = candidate skills only. AGGRESSIVE = candidate skills PLUS missing JD skills added to Skills and bullets.
 4. Summary uses descriptive/general terms (role, years, domains) — not a skill dump.
 5. Quantify only with defensible numbers from the master (or omit the number). Never invent TB/%, hours, or $.
-6. Target ${SCORE_TAILOR_THRESHOLD}+ by covering real overlap well — not by stuffing unused JD keywords.
+6. Target ${SCORE_TAILOR_THRESHOLD}+.
 
 BEFORE YOU WRITE — think through these 7 questions (10-second test):
 1. What role should a recruiter read in 10 seconds (grounded in the master, aligned to the JD)?
@@ -2931,13 +3040,13 @@ BEFORE YOU WRITE — think through these 7 questions (10-second test):
 4. What problems did they solve (business → technical → result)?
 5. Which metrics are real on the master vs must stay qualitative?
 6. Career progression across roles — execution → ownership if true.
-7. Which JD keywords are truthful to include vs must be skipped because they are not on the master?
+7. Skill mode: if HONEST, skip JD skills not on the master. If AGGRESSIVE, add missing JD skills to Skills + bullets.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 1 — INTEGRITY (non-negotiable)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 - NEVER invent companies, degrees, education history, or certifications not in the original resume
-- DO weave JD keywords into Skills and Experience ONLY when they are already on the master resume or a close family of an existing skill. Never add a tool the candidate cannot explain.
+- DO weave JD keywords into Skills and Experience according to SKILL MODE (Honest = existing skills only; Aggressive = also add missing JD skills).
 - INCLUDE EVERY SINGLE ROLE from the original resume — if the master resume has 4 jobs, the output MUST have all 4 jobs; if it has 6 jobs, output all 6 — DO NOT drop, skip, merge, or omit any role under any circumstances
 - Keep ALL original roles, companies, dates, and education — only rewrite the language
 - If a metric is missing, write a strong truthful accomplishment without inventing a number. Never fabricate TB, %, hours, or $.
@@ -2945,7 +3054,7 @@ RULE 1 — INTEGRITY (non-negotiable)
 
 PERSONAL DETAILS INTEGRITY RULE — the values below are pre-extracted from the master resume and are LOCKED:
 ${contactLockBlock}
-- Full name: copy EXACTLY as written (output it in ALL CAPS as instructed, but spelling must not change)
+- Full name: copy EXACTLY as written (Title Case on line 1; spelling must not change)
 - These fields are READ-ONLY. Do NOT change, correct, abbreviate, or invent any part of them.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -3016,11 +3125,11 @@ Never write "strong communicator" or "team player" in a bullet. Instead, prove i
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 6 — ATS COMPLIANCE (technical, not visible to humans)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CONTACT HEADER — exact order, ATS parses top-to-bottom:
-   Line 1: FULL NAME IN ALL CAPS (name from original resume, do not change spelling)
-   Line 2: Professional title/headline from the original resume — copy it EXACTLY as written in the master resume (e.g. if the master says "Python Backend Engineer | AI & LLM Integration Engineer", write that). Do NOT substitute the JD job title here. Do NOT invent or change the title.
-   Line 3: Build this line using ONLY the fields that are present in LOCKED CONTACT VALUES — omit any field marked NONE. Separator is " | ". Order: Phone | Email | LinkedIn (only if present) | Location (only if present)
-   Line 4: (blank)
+CONTACT HEADER — exact order (Harsha download template). ATS parses top-to-bottom:
+   Line 1: Candidate FULL NAME only (spelling from original resume — do not change). Title Case preferred.
+   Line 2: Contact row DIRECTLY under the name. Build using ONLY LOCKED CONTACT VALUES — omit any field marked NONE. Separator is " | ". Order: Phone | Email | Location | LinkedIn
+   Line 3: (blank)
+   Do NOT put a professional title/headline between the name and the contact row. Job title belongs in PROFESSIONAL SUMMARY, not in the header.
    CRITICAL: use the exact Email and Phone from the LOCKED CONTACT VALUES block above — not what you think the email might be
 
 LOCATION INTEGRITY RULE (critical — never fabricate location):
@@ -3044,10 +3153,9 @@ SECTION HEADERS — ALL CAPS, in this exact order (canonical template):
    - CERTIFICATIONS is optional — include ONLY if the master resume has certifications, and place it LAST
    - Optional PROJECTS (only if in master) go after EDUCATION and before CERTIFICATIONS
 
-CONTACT HEADER (first 3 lines — match template):
+CONTACT HEADER (match download template every time):
    Line 1: Full Name
-   Line 2: Professional Title (e.g. Data Analyst)
-   Line 3: email | phone | LinkedIn
+   Line 2: Phone | Email | Location | LinkedIn  (omit any field that is NONE; no job title on this line)
 
 FORMATTING:
 - Bullet marker: hyphen (-)
@@ -3059,12 +3167,11 @@ FORMATTING:
 - Use a SECOND A4 page only when many real roles/bullets cannot fit on one page without hiding actual work. Never exceed two pages.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-RULE 7 — KEYWORD EMBEDDING (truthful, JD-aligned)
+RULE 7 — KEYWORD EMBEDDING (follows SKILL MODE)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- For each PRIMARY keyword: if it (or a close family skill) is on the master, put it in TECHNICAL SKILLS AND at least one EXPERIENCE bullet using JD wording when accurate
-- SECONDARY: include at least once only if truthful
+- HONEST: only skills already on the base resume (or close family). Skip JD skills that are not on the base.
+- AGGRESSIVE: add every missing JD primary (and relevant secondary) into TECHNICAL SKILLS and at least one Experience bullet. Keep all original candidate skills.
 - PROFESSIONAL SUMMARY: descriptive/general JD themes — not raw tool tokens
-- Do NOT add a missing JD keyword that has no basis on the master. Skip it; do not invent Kafka/K8s/etc.
 - Keyword stuffing (same term 10+ times) is a fail
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -3097,7 +3204,7 @@ TECHNICAL SKILLS (comes RIGHT AFTER Professional Summary — before Experience):
    - Do NOT merge multiple original categories into one line
    - Do NOT remove Soft Skills / Key Skills / Competencies / or any other original skill label just because it is outside Technical/Tools/Methodologies/Core
    - Skill bullets are skill lists — they do NOT need metrics/numbers (metrics apply only to EXPERIENCE bullets)
-   - CRITICAL: Missing a primary keyword that IS on the master is a failed pass. Missing a JD keyword the master never used is OK — do not invent it.
+   - CRITICAL: HONEST — missing a JD skill that is not on the master is OK. AGGRESSIVE — missing a JD primary from Skills is a failed pass; add it.
    - SKILL FAMILY PRESERVE: If the original resume has Python, KEEP related Python-ecosystem skills (Flask, Django, FastAPI, NumPy, Pandas, PyTorch, TensorFlow, Pytest). If Java is present, KEEP Spring Boot, Spring MVC, Spring Security, Hibernate, JPA, JUnit. If AI/ML/LLM is present, KEEP OpenAI API, LangChain, RAG, NLP, BERT, Transformers, PyTorch, TensorFlow. Do NOT strip an entire related family when the anchor skill remains.
 
 PROFESSIONAL EXPERIENCE (MANDATORY — include ALL roles; comes AFTER Technical Skills):
@@ -3105,12 +3212,11 @@ PROFESSIONAL EXPERIENCE (MANDATORY — include ALL roles; comes AFTER Technical 
 - If the original has 4 roles → output 4 roles. If it has 6 → output 6. No exceptions.
 - DO NOT drop any role to save space or improve narrative flow
 
-For each role, use this exact format (template style):
-   Company Name | Location | Job Title
-   MMM YYYY - MMM YYYY
+For each role, use this exact format (Harsha template — dates on the SAME line, right side):
+   Company Name | Location | Job Title     MMM YYYY - MMM YYYY
    - [bullet]
    - [bullet]
-   (If the master uses a single pipe line with dates, you may keep: Company | Location | Title | MMM YYYY - MMM YYYY)
+   Put dates at the end of the company/title line (not on a separate line). Example: Palantir | NY | Data Engineer     May 2024 - Present
 
 EXPERIENCE INTEGRITY — these fields are READ-ONLY, copy token-for-token from the master resume:
 - Company Name: copy EXACTLY — do NOT abbreviate, expand, or rename
@@ -3161,15 +3267,15 @@ ABSOLUTE OUTPUT RULES — violations will disqualify the output
 FINAL SILENT CHECK — verify before outputting:
 =======================================================
 [ ] First line is the candidate's name only — nothing else
-[ ] Line 2 is the professional headline copied EXACTLY from the master resume — not the JD title
+[ ] Line 2 is Phone | Email | Location | LinkedIn from LOCKED CONTACT VALUES (omit NONE fields) — no professional title between name and contact
 [ ] Summary is a human HR-readable overview of ALL experience — NO percentages, NO metric spam, NO "Why join us", NO hiring company name, NO JD marketing fluff
 [ ] ROLE COUNT CHECK: count roles in original resume → confirm same number of roles appear in output — if any are missing, add them before outputting
 [ ] EXPERIENCE JOB TITLES: every role's job title matches the master resume exactly — NOT the JD title (e.g. "Software Engineer Analyst" stays "Software Engineer Analyst")
 [ ] EXPERIENCE COMPANY NAMES: every company name copied exactly — no abbreviations or expansions
 [ ] CONTACT CHECK: email in output EXACTLY matches the locked email value "${cf.email || 'from original'}" · phone EXACTLY matches "${cf.phone || 'from original'}" — check character by character
 [ ] LinkedIn check: master resume LinkedIn is "${cf.linkedin || 'NOT PRESENT'}" — if NOT PRESENT, the contact header must contain NO LinkedIn URL whatsoever; do not construct or infer one
-[ ] KEYWORD AUDIT: for each primary keyword that exists on the master (or close family), it appears in SKILLS and at least one Experience bullet using JD wording when accurate. Do NOT add keywords with no master basis.
-[ ] SECONDARY KEYWORD AUDIT: include secondaries only when truthful — no stuffing
+[ ] KEYWORD AUDIT: follows SKILL MODE — Honest: no new JD skills. Aggressive: every missing JD primary is now in Skills + a bullet.
+[ ] SECONDARY KEYWORD AUDIT: Honest skip if not on master; Aggressive add if missing
 [ ] 10-SECOND TEST: role, years, strongest tech, platforms, problems, real results, match to this JD
 [ ] SKILLS STRUCTURE AUDIT: every original skill category window and every original skill bullet still present (enriched OK, removed NOT OK)
 [ ] METRICS AUDIT: metrics only when defensible from the master — do NOT invent numbers to hit 100%; SKILLS bullets never need metrics
@@ -3657,27 +3763,33 @@ function buildBoostPrompt(jd, sc, currentScore) {
     || (state.atsReport && state.atsReport.reportPromptBlock)
     || '';
 
+  const tailorMode = getTailorMode();
   const modelBlock = (typeof FulltimeResumeModel !== 'undefined' && FulltimeResumeModel.promptBlock)
     ? FulltimeResumeModel.promptBlock({
         threshold: SCORE_TAILOR_THRESHOLD,
         primary: state.keywords?.primary || [],
         secondary: state.keywords?.secondary || [],
+        mode: tailorMode,
       })
     : '';
+  const skillModeBlock = skillModePrompt(tailorMode, state.keywords?.primary || [], state.keywords?.secondary || []);
 
-  return `You are editing a full-time targeted resume using the Jobilly Full-time resume model. Current score: ${currentScore}/100. Target: ${SCORE_TAILOR_THRESHOLD}+ from truthful JD overlap — do not chase 100 with fake keywords or fake metrics.
+  return `You are editing a full-time targeted resume using the Jobilly Full-time resume model (${tailorMode.toUpperCase()}). Current score: ${currentScore}/100. Target: ${SCORE_TAILOR_THRESHOLD}+.
 
 ${modelBlock}
 
-DO NOT invent companies, titles, dates, education, certifications, or technologies not on the master.
-DO weave missing JD keywords into Skills and Experience ONLY if they already exist on the master or are a close family of an existing skill.
-PRESERVE SKILLS STRUCTURE: keep every skill category window and every skill bullet — enrich OK, delete NOT OK.
+${skillModeBlock}
+
+DO NOT invent companies, titles, dates, education, or certifications.
+PRESERVE SKILLS STRUCTURE: keep every original skill category window and skill bullet — enrich OK, delete NOT OK.
+HONEST: do not add JD skills missing from the base resume.
+AGGRESSIVE: add every missing JD primary (and relevant secondary) into Skills and weave into Experience bullets.
 
 ${reportBlock ? `ATS READINESS REPORT (apply Top Fixes first, without inventing tools):\n${reportBlock}\n` : ''}
 EXACT GAPS (fix only with truthful content):
-${missingPrimary.length > 0   ? `MISSING PRIMARY — add to SKILLS + a bullet ONLY if present on the original/master or close family:\n${missingPrimary.map(k => `  - "${k}"`).join('\n')}` : 'PRIMARY: all present.'}
+${missingPrimary.length > 0   ? `MISSING PRIMARY — HONEST: skip if not on base resume. AGGRESSIVE: add each to SKILLS + a bullet:\n${missingPrimary.map(k => `  - "${k}"`).join('\n')}` : 'PRIMARY: all present.'}
 
-${missingSecondary.length > 0 ? `MISSING SECONDARY — add only if truthful:\n${missingSecondary.map(k => `  - "${k}"`).join('\n')}` : 'SECONDARY: all present.'}
+${missingSecondary.length > 0 ? `MISSING SECONDARY — HONEST: skip if not on base. AGGRESSIVE: add if missing:\n${missingSecondary.map(k => `  - "${k}"`).join('\n')}` : 'SECONDARY: all present.'}
 
 ${bulletsNeedFix > 0 ? `BULLETS WITHOUT METRICS — add a number only if the master supports it; otherwise keep a strong achievement bullet with no fake metric.` : 'BULLET METRICS: OK.'}
 
@@ -3686,7 +3798,9 @@ ${suggestions.length > 0 ? `SUGGESTIONS:\n${suggestions.map(s => `  - ${s}`).joi
 
 SUMMARY RULE: 4-6 descriptive sentences (domains, environments, responsibilities). No tool dump. No invented metrics.
 
-INTEGRITY: Do not change name/headline/contact/companies/titles/dates/education/GPA. Never add certifications. Output COMPLETE resume only.
+INTEGRITY: Do not change name/contact/companies/titles/dates/education/GPA. Never add certifications. Output COMPLETE resume only.
+
+HEADER FORMAT: Line 1 = name only. Line 2 = Phone | Email | Location | LinkedIn (omit missing; no job title between name and contact). Experience role line: Company | Location | Title with dates at the right end of the same line.
 
 JOB DESCRIPTION:
 ${jd}
@@ -4097,14 +4211,19 @@ function showTailoredResume(text) {
 /** Plain resume text for export — never use formatted HTML textContent (loses structure). */
 function getPlainResumeText(which) {
   if (which === 'before') {
-    return state.originalResume || document.getElementById('resumeInput')?.value || '';
+    return applyHarshaHeader(state.originalResume || document.getElementById('resumeInput')?.value || '');
   }
-  if (state.tailoredResume && state.tailoredResume.trim()) return state.tailoredResume;
+  if (state.tailoredResume && state.tailoredResume.trim()) return applyHarshaHeader(state.tailoredResume);
   const el = document.getElementById('outputArea');
   if (!el) return '';
   if (el.classList.contains('is-formatted')) {
-    return Array.from(el.querySelectorAll('.r-name, .r-contact, .r-section, .r-role, .r-bullet, .r-body, .r-skill-line'))
+    return Array.from(el.querySelectorAll('.r-name, .r-contact, .r-section, .r-role, .r-role-row, .r-bullet, .r-body, .r-skill-line'))
       .map((n) => {
+        if (n.classList.contains('r-role-row')) {
+          const left = (n.querySelector('.r-role-left')?.innerText || '').trim();
+          const dates = (n.querySelector('.r-role-dates')?.innerText || '').trim();
+          return dates ? `${left}    ${dates}` : left;
+        }
         let t = (n.innerText || '').trim();
         if (n.classList.contains('r-bullet')) t = t.replace(/^•\s*/, '- ');
         return t;
@@ -4112,7 +4231,7 @@ function getPlainResumeText(which) {
       .filter(Boolean)
       .join('\n');
   }
-  return el.innerText || el.textContent || '';
+  return applyHarshaHeader(el.innerText || el.textContent || '');
 }
 
 /** Exact on-screen tailored HTML when available; otherwise rebuild from plain text. */
@@ -4142,7 +4261,7 @@ function resumeExportCss() {
       font-family: Calibri, Arial, Helvetica, sans-serif;
       font-size: 10.5pt;
       color: #111111;
-      line-height: 1.4;
+      line-height: 1.35;
     }
     b, strong { font-weight: bold; color: #111111; }
     a { color: #1a56c4; text-decoration: underline; }
@@ -4152,19 +4271,20 @@ function resumeExportCss() {
       font-weight: bold;
       text-align: center;
       color: #111111;
-      margin: 0 0 4pt 0;
+      margin: 0 0 3pt 0;
+      letter-spacing: 0.3pt;
     }
     .r-contact {
       font-family: Calibri, Arial, Helvetica, sans-serif;
       font-size: 10pt;
       text-align: center;
-      color: #555555;
+      color: #333333;
       margin: 0 0 2pt 0;
     }
     .r-divider {
       border: none;
-      border-top: 2pt solid #111111;
-      margin: 8pt 0 10pt 0;
+      border-top: 1pt solid #111111;
+      margin: 6pt 0 8pt 0;
       height: 0;
     }
     .r-section {
@@ -4175,7 +4295,7 @@ function resumeExportCss() {
       text-transform: uppercase;
       letter-spacing: 0.6pt;
       border-bottom: 1pt solid #777777;
-      margin: 12pt 0 5pt 0;
+      margin: 10pt 0 4pt 0;
       padding-bottom: 2pt;
     }
     .r-role {
@@ -4185,13 +4305,37 @@ function resumeExportCss() {
       color: #111111;
       margin: 8pt 0 2pt 0;
     }
+    .r-role-row {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8pt 0 2pt 0;
+    }
+    .r-role-left {
+      font-family: Calibri, Arial, Helvetica, sans-serif;
+      font-size: 10.5pt;
+      font-weight: bold;
+      color: #111111;
+      padding: 0;
+      vertical-align: bottom;
+    }
+    .r-role-dates {
+      font-family: Calibri, Arial, Helvetica, sans-serif;
+      font-size: 10.5pt;
+      font-weight: bold;
+      color: #111111;
+      text-align: right;
+      white-space: nowrap;
+      width: 1%;
+      padding: 0 0 0 10pt;
+      vertical-align: bottom;
+    }
     .r-bullet, .r-bullet.r-skill-bullet {
       font-family: Calibri, Arial, Helvetica, sans-serif;
       font-size: 10.5pt;
       color: #222222;
-      margin: 0 0 3pt 0;
+      margin: 0 0 2.5pt 0;
       padding-left: 0;
-      line-height: 1.4;
+      line-height: 1.35;
       display: block;
     }
     .r-body {
@@ -4199,24 +4343,76 @@ function resumeExportCss() {
       font-size: 10.5pt;
       color: #222222;
       margin: 0 0 3pt 0;
-      line-height: 1.4;
+      line-height: 1.35;
     }
-    .r-spacer { height: 4pt; font-size: 4pt; line-height: 4pt; margin: 0; }
+    .r-spacer { height: 3pt; font-size: 3pt; line-height: 3pt; margin: 0; }
     .r-skill-line {
       font-family: Calibri, Arial, Helvetica, sans-serif;
       font-size: 10.5pt;
       color: #222222;
-      margin: 0 0 3pt 0;
-      line-height: 1.4;
+      margin: 0 0 2.5pt 0;
+      line-height: 1.35;
     }
     .r-skill-label { color: #111111; font-weight: bold; }
   `;
 }
 
+const ROLE_DATE_TAIL_RE = /\s+((?:(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+)?(?:\d{4}|\d{1,2}\/\d{4})\s*[–—\-]\s*(?:Present|Current|Now|(?:(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+)?(?:\d{4}|\d{1,2}\/\d{4})))$/i;
+
+function isDateOnlyLine(line) {
+  const t = String(line || '').trim();
+  if (!t) return false;
+  return /^(?:(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+)?(?:\d{4}|\d{1,2}\/\d{4})\s*[–—\-]\s*(?:Present|Current|Now|(?:(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+)?(?:\d{4}|\d{1,2}\/\d{4}))$/i.test(t);
+}
+
+function splitRoleAndDates(line) {
+  const raw = String(line || '').trim();
+  const m = raw.match(ROLE_DATE_TAIL_RE);
+  if (!m) return { left: raw, dates: '' };
+  return { left: raw.slice(0, m.index).trim().replace(/\s*\|\s*$/, ''), dates: m[1].trim() };
+}
+
+function renderRoleRow(leftHtml, datesHtml) {
+  if (!datesHtml) return `<div class="r-role">${leftHtml}</div>`;
+  return `<table class="r-role-row" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="r-role-left" valign="bottom">${leftHtml}</td><td class="r-role-dates" valign="bottom">${datesHtml}</td></tr></table>`;
+}
+
+function linkifyContactLine(text) {
+  return escapeHtml(text)
+    .replace(/\b([A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,})\b/g, '<a href="mailto:$1">$1</a>')
+    .replace(/(https?:\/\/[^\s|]+|(?:www\.)?linkedin\.com\/[^\s|]+)/gi, url => {
+      const href = /^https?:\/\//i.test(url) ? url : 'https://' + url;
+      return `<a href="${href}" target="_blank">${url}</a>`;
+    });
+}
+
+function applyHarshaHeader(text) {
+  const raw = String(text || '');
+  if (!raw.trim()) return raw;
+  const lines = raw.split('\n');
+  let i = 0;
+  while (i < lines.length && !lines[i].trim()) i++;
+  if (i >= lines.length) return raw;
+  const rawName = lines[i].trim();
+  const displayName = rawName === rawName.toUpperCase() && rawName.length > 1
+    ? toTitleCase(rawName) : rawName;
+  let sectionAt = -1;
+  for (let j = i + 1; j < lines.length; j++) {
+    const t = lines[j].trim();
+    if (t && isSectionHeader(t)) { sectionAt = j; break; }
+  }
+  const contact = buildContactHeaderLine(raw);
+  const body = sectionAt >= 0
+    ? lines.slice(sectionAt).join('\n').replace(/^\n+/, '')
+    : lines.slice(i + 1).join('\n');
+  return displayName + '\n' + (contact ? contact + '\n' : '') + '\n' + body;
+}
+
 function parseResumeToHtml(text) {
   if (!text || !text.trim()) return '';
-  const skills = collectResumeSkillTerms(text);
-  const lines = text.split('\n');
+  const normalized = applyHarshaHeader(text);
+  const skills = collectResumeSkillTerms(normalized);
+  const lines = normalized.split('\n');
   let html = '';
   let lineIndex = 0;
   let currentSection = '';
@@ -4236,15 +4432,7 @@ function parseResumeToHtml(text) {
     const l = lines[lineIndex].trim();
     if (!l) { lineIndex++; break; }
     if (isSectionHeader(l)) break;
-    const linkedL = escapeHtml(l)
-      .replace(/(https?:\/\/[^\s|]+|linkedin\.com\/[^\s|]+)/gi, url => {
-        const href = /^https?:\/\//.test(url) ? url : 'https://' + url;
-        return `<a href="${href}" target="_blank" style="color:#1a56c4;text-decoration:underline;">${url}</a>`;
-      })
-      .replace(/(?<!href="[^"]*)\bLinkedIn\b(?![^<]*<\/a>)/gi, word => {
-        return `<a href="https://linkedin.com" target="_blank" style="color:#1a56c4;text-decoration:underline;">${word}</a>`;
-      });
-    html += `<div class="r-contact">${linkedL}</div>`;
+    html += `<div class="r-contact">${linkifyContactLine(l)}</div>`;
     lineIndex++;
     contactCount++;
   }
@@ -4282,7 +4470,19 @@ function parseResumeToHtml(text) {
       !/[@]/.test(l) &&
       !NON_ROLE_SECTIONS.has(currentSection)
     ) {
-      html += `<div class="r-role">${formatResumeLine(l, currentSection, skills)}</div>`;
+      const split = splitRoleAndDates(l);
+      let dates = split.dates;
+      let left = split.left;
+      if (!dates && i + 1 < lines.length && isDateOnlyLine(lines[i + 1])) {
+        dates = lines[i + 1].trim();
+        i++;
+      }
+      html += renderRoleRow(
+        formatResumeLine(left, currentSection, skills),
+        dates ? escapeHtml(dates) : ''
+      );
+    } else if (isDateOnlyLine(l) && !NON_ROLE_SECTIONS.has(currentSection)) {
+      html += renderRoleRow('', escapeHtml(l));
     } else {
       html += `<div class="r-body">${formatResumeLine(l, currentSection, skills)}</div>`;
     }
@@ -4307,10 +4507,10 @@ function downloadDocx() {
   <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom><w:DoNotOptimizeForBrowser/></w:WordDocument></xml><![endif]-->
   <style>
     @page WordSection1 {
-      size: 210mm 297mm;
-      margin: 12mm 14mm 14mm 14mm;
-      mso-header-margin: 6mm;
-      mso-footer-margin: 6mm;
+      size: 8.5in 11in;
+      margin: 0.5in 0.6in 0.55in 0.6in;
+      mso-header-margin: 0.3in;
+      mso-footer-margin: 0.3in;
     }
     div.WordSection1 { page: WordSection1; }
     ${resumeExportCss()}
@@ -4364,7 +4564,7 @@ function printResume(which) {
     ${resumeExportCss()}
     body { background: #ffffff; }
     .page {
-      max-width: 190mm;
+      max-width: 7.3in;
       margin: 0 auto;
       padding: 0;
     }
@@ -4372,8 +4572,8 @@ function printResume(which) {
       html, body { margin: 0; padding: 0; background: #fff; height: auto; overflow: hidden; }
       .page { padding: 0; max-width: 100%; page-break-after: avoid; page-break-inside: avoid; }
       @page {
-        size: A4 portrait;
-        margin: 12mm;
+        size: Letter portrait;
+        margin: 0.5in;
       }
     }
   </style>
@@ -4383,7 +4583,7 @@ function printResume(which) {
   <script>
     window.addEventListener('load', function() {
       var page = document.querySelector('.page');
-      var maxPx = (273 / 25.4) * 96;
+      var maxPx = 10 * 96;
       var height = page.scrollHeight;
       if (height > maxPx) {
         var scale = Math.max(0.62, maxPx / height);
@@ -4409,6 +4609,7 @@ function copyFilename() {
 }
 
 // Online / Offline status on load
+setTailorMode(getTailorMode());
 (async function initApiBadge() {
   const badge = document.getElementById('apiBadge');
   const text = document.getElementById('apiBadgeText');

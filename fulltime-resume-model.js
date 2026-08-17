@@ -41,7 +41,11 @@
       const threshold = (opts && opts.threshold) || 95;
       const primary = (opts && opts.primary) || [];
       const secondary = (opts && opts.secondary) || [];
-      return `FULL-TIME RESUME MODEL (${this.id}) — follow this as the quality model for the rewrite.
+      const mode = (opts && opts.mode) === 'aggressive' ? 'aggressive' : 'honest';
+      const skillRule = mode === 'aggressive'
+        ? `- AGGRESSIVE: keep all candidate skills, AND add JD skills that are missing from the base resume into TECHNICAL SKILLS plus at least one Experience bullet (real roles only).\n- Use JD wording for those added skills.`
+        : `- HONEST: Skills and Experience may only use technologies already on the base resume (or a close family of an existing skill). NEVER add a JD skill that is not on the base resume.`;
+      return `FULL-TIME RESUME MODEL (${this.id}) — mode: ${mode.toUpperCase()}
 
 PURPOSE
 Treat the resume as a marketing document for THIS job, not a complete history dump.
@@ -56,7 +60,7 @@ LENGTH
 1. Role  2. Years  3. Strongest tech  4. Cloud/platforms  5. Problems solved  6. Measurable results  7. Match to this JD
 
 STRUCTURE (exact order)
-NAME/CONTACT → PROFESSIONAL SUMMARY → TECHNICAL SKILLS → PROFESSIONAL EXPERIENCE → PROJECTS (if in master) → EDUCATION → CERTIFICATIONS (if in master, last)
+NAME → Phone | Email | Location | LinkedIn (omit missing) → PROFESSIONAL SUMMARY → TECHNICAL SKILLS → PROFESSIONAL EXPERIENCE → PROJECTS (if in master) → EDUCATION → CERTIFICATIONS (if in master, last)
 Experience is the largest section. Education is concise (no coursework unless early-career). No photos, icons, skill bars, tables, or graphics.
 
 SUMMARY
@@ -66,10 +70,9 @@ SUMMARY
 - No "Seeking a challenging position…" copy.
 
 SKILLS
-- Organize around THIS JD (Languages / Cloud / Tools / Platforms / Methodologies as the master already uses).
-- Do NOT list every technology the candidate has ever seen.
-- Add a JD keyword to Skills ONLY if it is already on the master resume OR is a close family of a skill already there (e.g. Spark present → Apache Spark OK).
-- NEVER add Kafka / Kubernetes / Terraform / etc. solely because the JD lists them if the master has no related experience. Credibility > stuffing.
+- Organize around THIS JD using the master's category windows.
+- Do NOT list every unrelated technology.
+${skillRule}
 - Use the JD's wording when accurate (JD says "Apache Airflow" → write Apache Airflow, not "workflow management").
 
 EXPERIENCE BULLETS
@@ -78,23 +81,23 @@ Story: ${this.storyShape}
 - Each bullet answers "So what?" — accomplishment, not "responsible for".
 - Front-load the strongest verb or fact.
 - 1–2 lines typical; 3 only if the result needs it. No giant paragraphs.
-- Quantify ONLY with numbers the candidate can defend in an interview. If the master has no number, write a strong truthful outcome without inventing TB/%, hours, or $.
-- Show JD technologies inside real work: "Built PySpark ETL on AWS EMR, orchestrated in Airflow" — not "Worked on data pipelines using various technologies."
-- Show progression: early roles = execution; recent = ownership / design / mentoring if that is true. Do not inflate "contributed" into "architected".
+- Quantify ONLY with numbers the candidate can defend. If the master has no number, write a strong truthful outcome without inventing TB/%, hours, or $.
+- Show technologies inside real work at real employers. Do not invent companies.
+- Show progression when true. Do not inflate "contributed" into "architected".
 - Vary verbs. Ban: responsible for, worked on, utilized, leveraged, results-driven, passionate, team player.
 
-KEYWORDS (ATS without stuffing)
-Primary JD skills to demonstrate (only if truthful): ${primary.join(', ') || '(none)'}
-Secondary (only if truthful): ${secondary.join(', ') || '(none)'}
+KEYWORDS
+Primary: ${primary.join(', ') || '(none)'}
+Secondary: ${secondary.join(', ') || '(none)'}
 - Exact skill names: TECHNICAL SKILLS + EXPERIENCE bullets.
-- Summary: expanded descriptive phrases for JD themes, not token spam.
+- Summary: expanded descriptive phrases, not token spam.
 - Do not repeat one keyword 10+ times.
 
-INTEGRITY (overrides ATS)
+INTEGRITY
 - Never invent companies, titles, dates, education, certifications, locations, or LinkedIn.
-- Never add a technology the candidate cannot explain.
 - Keep every real role. Shorten bullets; do not drop jobs.
-- Target readiness ${threshold}+ by covering real JD overlap well — not by fabricating keywords or metrics.
+- Target readiness ${threshold}+.
+- HONEST: never add missing JD skills. AGGRESSIVE: do add missing JD skills to Skills + bullets.
 
 BEFORE OUTPUT — silent 10-second check: a recruiter scanning 10 seconds would answer yes to all 7 test questions.`;
     },
