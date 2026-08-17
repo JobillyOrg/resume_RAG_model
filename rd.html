@@ -2973,7 +2973,7 @@ A great resume tells a story of upward momentum. When reading all roles together
 
 - Each role's bullets should reflect the scope and seniority of that time period
 - Show progression: early roles show execution, recent roles show leadership and impact
-- The SUMMARY is a plain-English career overview for HR — readable, human, no metric spam — then the Experience section proves it with details
+- The SUMMARY is a plain-English career overview for HR using descriptive/general terms (domains, environments, responsibilities) — not a tool checklist — then Skills + Experience prove the exact keywords
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 4 — BULLET CRAFT
@@ -3049,29 +3049,32 @@ FORMATTING:
 - Education dates: copy the date token-for-token from the original — if no start date exists, do NOT invent one
 - Plain text only — no tables, columns, icons, markdown, or special Unicode
 - Single column layout throughout
-- PAGE LENGTH: fit on ONE A4 page whenever possible. Keep Professional Summary to 3-4 short sentences. Recent 1-2 roles: 3-5 bullets. Older roles: 2-3 tight bullets. Do NOT drop roles to save space — shorten bullets instead.
+- PAGE LENGTH: fit on ONE A4 page whenever possible. Keep Professional Summary to 4-6 short descriptive sentences (general terms, not a skill dump). Recent 1-2 roles: 3-5 bullets. Older roles: 2-3 tight bullets. Do NOT drop roles to save space — shorten bullets instead.
 - Use a SECOND A4 page only when many real roles/bullets cannot fit on one page without hiding actual work. Never exceed two pages.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 7 — KEYWORD EMBEDDING (mandatory for first-pass ${SCORE_TAILOR_THRESHOLD}+)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Every PRIMARY keyword MUST appear in the SKILLS section AND at least 1-2 more times in Summary + Experience — minimum 2 appearances total
-- Every SECONDARY keyword must appear at least once
-- Before finishing, audit ALL primary and secondary keywords — if any is missing, ADD it NOW
-- Presence of every JD keyword is mandatory to clear ${SCORE_TAILOR_THRESHOLD}+ on this first tailor
-- Prefer natural sentences, but never omit a keyword to sound prettier
+- Every PRIMARY keyword MUST appear in the TECHNICAL SKILLS section AND at least once in EXPERIENCE bullets
+- Every SECONDARY keyword must appear at least once (Skills and/or Experience)
+- PROFESSIONAL SUMMARY: do NOT dump raw tool/skill tokens. Use expanded descriptive / general terms that match JD themes (domains, environments, responsibilities, outcomes). Exact skill names belong in Skills + Experience — not crowded into the Summary
+- Before finishing, audit ALL primary and secondary keywords in Skills + Experience — if any is missing, ADD it NOW
+- Presence of every JD keyword in Skills/Experience is mandatory to clear ${SCORE_TAILOR_THRESHOLD}+ on this first tailor
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 8 — SECTION QUALITY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PROFESSIONAL SUMMARY (3-5 short sentences — human, HR-friendly career overview):
+PROFESSIONAL SUMMARY (4-6 short sentences — richer descriptive overview, not a skill dump):
 - Audience: a recruiter or HR partner scanning in 10 seconds — write so a non-engineer can understand it easily
-- Purpose: SUMMARISE the candidate's FULL work history into a clear story (what they do, domains they've worked in, how they've grown) — not one flashy metric
-- Write ONLY from real skills, tools, years, and roles on the original resume
+- Purpose: SUMMARISE the candidate's FULL work history into a clear story (what they do, domains they've worked in, how they've grown)
+- Prefer GENERAL / descriptive keyword language over tool lists — e.g. "network deployment and data center operations", "infrastructure reliability", "cross-team incident resolution", "hardware lifecycle management" — NOT "Cisco, BGP, Terraform, GPU…"
+- Expand JD themes into natural phrases recruiters search: role focus, environments (enterprise / cloud / on-prem), scope of work, collaboration, delivery outcomes
+- Write ONLY from real experience on the original resume — never invent domains or seniority
 - S1: Who they are — professional title + years of experience + main focus areas in plain words
-- S2: Career arc across ALL roles — industries/domains served, kinds of work (e.g. cloud systems, APIs, data, stakeholder work) without listing every company
-- S3: Core strengths in everyday language — tools and ways of working they actually used (keep skill names natural, not keyword stuffing)
-- S4 (optional): Soft close on what they bring to similar roles — skills/experience only, no employer pitch
+- S2: Career arc across ALL roles — industries/domains served, kinds of work, environments supported
+- S3–S4: Capability descriptions in everyday language (reliability, deployment, troubleshooting, documentation, stakeholder coordination) — keep skill/product names out unless one is essential to identity
+- S5 (optional): Soft close on what they bring to similar roles — still descriptive, not a keyword checklist
+- Put concrete tools, platforms, protocols, and product names in TECHNICAL SKILLS and EXPERIENCE bullets instead
 - NO percentages anywhere in the Summary (never "40%", "reduced by 30%", etc.) — save those for Experience bullets
 - NO dense metric spam in the Summary (avoid "$2M", "3x", stacked numbers) — use plain impact words like "faster delivery", "lower overhead", "broader scale" if needed
 - Years of experience (e.g. "8+ years") is fine; keep the rest readable and conversational
@@ -3666,7 +3669,7 @@ ${bulletsNeedFix > 0 ? `BULLETS WITHOUT METRICS — ${bulletsNeedFix} need a cou
 ${gaps.length > 0 ? `JD GAPS:\n${gaps.map(g => `  - ${g}`).join('\n')}` : ''}
 ${suggestions.length > 0 ? `SUGGESTIONS:\n${suggestions.map(s => `  - ${s}`).join('\n')}` : ''}
 
-SUMMARY RULE: Keep Summary as a plain-English overview of the candidate's full experience for HR — no percentages, no dense metrics; put numbers only in Experience bullets.
+SUMMARY RULE: Write a richer Professional Summary (4-6 sentences) in descriptive/general terms recruiters understand — domains, environments, responsibilities, outcomes. Do NOT stuff raw tool/skill names into the Summary; put exact skills in TECHNICAL SKILLS and EXPERIENCE bullets. No percentages or dense metrics in Summary.
 
 INTEGRITY: Do not change name/headline/contact/companies/titles/dates/education/GPA. Never add certifications. Output COMPLETE resume only.
 
