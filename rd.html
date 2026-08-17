@@ -1508,7 +1508,7 @@
           <div class="ats-rewrite-cta hidden" id="freeRewriteCta">
             <div>
               <h4 id="freeRewriteCtaTitle">Rewrite from this report</h4>
-              <p id="freeRewriteCtaCopy">AI will apply the Top fixes and missing keywords to maximize your ATS score.</p>
+              <p id="freeRewriteCtaCopy">AI rewrite uses the full-time model: tailor to this JD, prove skills in experience, no fake tools or metrics.</p>
             </div>
             <button class="btn-primary" id="freeRewriteBtn" onclick="runAnalysis()">AI Rewrite from Report → 95+</button>
           </div>
@@ -1691,6 +1691,7 @@
 <div id="toast"></div>
 
 <script src="rag-engine.js"></script>
+<script src="fulltime-resume-model.js"></script>
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────────
 // Gemini calls go through /api/gemini — key lives in Vercel env vars only.
@@ -1936,11 +1937,11 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
     cta.classList.remove('hidden');
     if (readinessScore != null && readinessScore < SCORE_TAILOR_THRESHOLD) {
       ctaTitle.textContent = `Raise readiness ${readinessScore}/100 → ${SCORE_TAILOR_THRESHOLD}+`;
-      ctaCopy.textContent = 'AI applies Top Fixes + missing JD keywords to maximize readiness.';
+      ctaCopy.textContent = 'Full-time model: prove JD skills in real experience. No fake tools or metrics.';
       ctaBtn.textContent = `AI Rewrite from Report → ${SCORE_TAILOR_THRESHOLD}+`;
     } else if (primaryMissing.length || (report?.topFixes || []).length) {
       ctaTitle.textContent = readinessScore != null ? `Readiness ${readinessScore}/100` : 'Rewrite from this report';
-      ctaCopy.textContent = 'Polish keyword coverage and Top fixes with AI rewrite.';
+      ctaCopy.textContent = 'Full-time model rewrite: JD wording in bullets, descriptive summary, master facts locked.';
       ctaBtn.textContent = 'AI Rewrite from Report';
     } else {
       ctaTitle.textContent = readinessScore != null ? `Strong readiness · ${readinessScore}/100` : 'Rewrite from this report';
@@ -2906,35 +2907,40 @@ function buildRewritePrompt(jd, resume, keywords, ragContext, atsReport) {
   ].join('\n');
 
     const reportBlock = (atsReport && atsReport.reportPromptBlock)
-    ? `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nRULE 0 — FOLLOW THE ATS REPORT (highest priority after integrity)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${atsReport.reportPromptBlock}\n\nApply every Top Fix above in this rewrite. Raise Jobilly readiness (Keywords/Content/Parse/Structure/Format) to ${SCORE_TAILOR_THRESHOLD}+. Keywords come from our RAG extract — embed every missing primary/secondary term.\n`
+    ? `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nRULE 0 — FOLLOW THE ATS REPORT (highest priority after integrity)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${atsReport.reportPromptBlock}\n\nApply every Top Fix above. Raise Jobilly readiness to ${SCORE_TAILOR_THRESHOLD}+ using the Full-time resume model (truthful JD overlap — do not invent tools or metrics).\n`
     : '';
 
-  return `You are an AGGRESSIVE ATS resume writer. Your ONLY success metric for this first rewrite is an ATS readiness score of ${SCORE_TAILOR_THRESHOLD}+ / 100 (Jobilly weighted readiness).
-${reportBlock}
-MISSION — hit ${SCORE_TAILOR_THRESHOLD}+ readiness on the FIRST tailor pass:
-1. Embed EVERY primary keyword in SKILLS and at least once in Summary/Experience (2+ times total).
-2. Embed EVERY secondary keyword at least once.
-3. Rewrite bullets to mirror JD responsibilities using the candidate's real employers.
-4. Every bullet needs a measurable metric.
-5. Below ${SCORE_TAILOR_THRESHOLD} is a failed first pass — cover gaps aggressively before outputting.
+  const modelBlock = (typeof FulltimeResumeModel !== 'undefined' && FulltimeResumeModel.promptBlock)
+    ? `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nQUALITY MODEL — FULL-TIME US RESUME\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${FulltimeResumeModel.promptBlock({ threshold: SCORE_TAILOR_THRESHOLD, primary, secondary })}\n`
+    : '';
 
-You still write like a human career coach — not robotic keyword soup — but keyword coverage for ${SCORE_TAILOR_THRESHOLD}+ is mandatory.
+  return `You are a full-time US resume writer using the Jobilly Full-time resume model. Success = a recruiter-ready targeted resume that also clears ${SCORE_TAILOR_THRESHOLD}+ readiness from truthful JD overlap.
+${reportBlock}${modelBlock}
+MISSION — first tailor pass:
+1. Keep the master as ground truth (roles, titles, companies, dates, education, contact).
+2. Demonstrate JD-matching work in EXPERIENCE using Action → Technology → Problem → Result.
+3. Put exact tools in TECHNICAL SKILLS + bullets — only if they exist on the master or are a close family of an existing skill.
+4. Summary uses descriptive/general terms (role, years, domains) — not a skill dump.
+5. Quantify only with defensible numbers from the master (or omit the number). Never invent TB/%, hours, or $.
+6. Target ${SCORE_TAILOR_THRESHOLD}+ by covering real overlap well — not by stuffing unused JD keywords.
 
-BEFORE YOU WRITE — think through these 5 questions:
-1. What professional title best fits the candidate from their resume skills + experience (aligned to the JD role, but grounded in their background)?
-2. What seniority level does this candidate appear to be? Match tone accordingly.
-3. How would an HR recruiter describe this person's full career in plain English (roles, domains, strengths) — without percentages?
-4. What career story does this resume tell from their real experience across ALL roles?
-5. Which JD keywords are still missing — and how will every one land in Skills + bullets?
+BEFORE YOU WRITE — think through these 7 questions (10-second test):
+1. What role should a recruiter read in 10 seconds (grounded in the master, aligned to the JD)?
+2. Years of experience and seniority — match tone (do not inflate).
+3. Strongest technologies actually on the master that this JD cares about?
+4. What problems did they solve (business → technical → result)?
+5. Which metrics are real on the master vs must stay qualitative?
+6. Career progression across roles — execution → ownership if true.
+7. Which JD keywords are truthful to include vs must be skipped because they are not on the master?
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 1 — INTEGRITY (non-negotiable)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 - NEVER invent companies, degrees, education history, or certifications not in the original resume
-- DO add every JD primary/secondary keyword into Skills and weave into bullets (required for ${SCORE_TAILOR_THRESHOLD}+)
+- DO weave JD keywords into Skills and Experience ONLY when they are already on the master resume or a close family of an existing skill. Never add a tool the candidate cannot explain.
 - INCLUDE EVERY SINGLE ROLE from the original resume — if the master resume has 4 jobs, the output MUST have all 4 jobs; if it has 6 jobs, output all 6 — DO NOT drop, skip, merge, or omit any role under any circumstances
 - Keep ALL original roles, companies, dates, and education — only rewrite the language
-- If a metric is missing, estimate conservatively based on typical industry benchmarks — never fabricate a specific number without basis
+- If a metric is missing, write a strong truthful accomplishment without inventing a number. Never fabricate TB, %, hours, or $.
 - NEVER invent certifications — omit CERTIFICATIONS section if the original has none
 
 PERSONAL DETAILS INTEGRITY RULE — the values below are pre-extracted from the master resume and are LOCKED:
@@ -2985,8 +2991,8 @@ Good example:  "Cut customer onboarding time from 14 days to 3 by redesigning th
 Bad example:   "Responsible for improving onboarding process which resulted in better customer satisfaction"
 
 - Front-load the most impressive word or number — recruiters scan the first 3 words of each bullet
-- 4-6 bullets per role — enough to cover metrics AND keywords for every role
-- Every bullet needs at least one concrete number (count, %, time, scale, dollar amount)
+- Recent 1–2 roles: 3–5 bullets. Older roles: 2–3. Keep 1–2 lines; no giant paragraphs.
+- Quantify when the master supports a number. If none exists, skip the fake metric — still write an achievement-style bullet.
 - PREFERRED metric formats (use variety across bullets):
   ✓ Counts: "resolved 47 incidents", "across 200 endpoints", "15 deployments per month"
   ✓ Percentages: "reduced by 40%", "cut effort by 30%", "improved coverage from 65% to 90%" — percentages ARE allowed and encouraged as metrics
@@ -2994,7 +3000,7 @@ Bad example:   "Responsible for improving onboarding process which resulted in b
   ✓ Scale: "across 75 branch locations", "supporting 25 users", "12 applications"
   ✓ Dollar impact: "$2M cost savings", "within $50K budget"
   ✓ SLA durations: "within 2-hour SLA windows"
-- GOAL: every single bullet must have at least one metric — target 100% of bullets with a measurable result
+- GOAL: as many bullets as possible have a real metric; never invent one to hit 100%
 - Mix impact types: speed, cost, quality, scale, team, revenue
 - Every bullet MUST end with a full stop (period ".")
 - SPELLING: never write "Troubleshot" — use "Diagnosed and resolved", "Resolved", "Investigated and fixed", or another correct past-tense verb
@@ -3049,17 +3055,17 @@ FORMATTING:
 - Education dates: copy the date token-for-token from the original — if no start date exists, do NOT invent one
 - Plain text only — no tables, columns, icons, markdown, or special Unicode
 - Single column layout throughout
-- PAGE LENGTH: fit on ONE A4 page whenever possible. Keep Professional Summary to 4-6 short descriptive sentences (general terms, not a skill dump). Recent 1-2 roles: 3-5 bullets. Older roles: 2-3 tight bullets. Do NOT drop roles to save space — shorten bullets instead.
+- PAGE LENGTH: 0–5 years → 1 page when possible. 5+ years → up to 2 pages. Never 3+. Keep Professional Summary to 4-6 short descriptive sentences. Recent 1-2 roles: 3-5 bullets. Older roles: 2-3 tight bullets. Do NOT drop roles — shorten bullets instead.
 - Use a SECOND A4 page only when many real roles/bullets cannot fit on one page without hiding actual work. Never exceed two pages.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-RULE 7 — KEYWORD EMBEDDING (mandatory for first-pass ${SCORE_TAILOR_THRESHOLD}+)
+RULE 7 — KEYWORD EMBEDDING (truthful, JD-aligned)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-- Every PRIMARY keyword MUST appear in the TECHNICAL SKILLS section AND at least once in EXPERIENCE bullets
-- Every SECONDARY keyword must appear at least once (Skills and/or Experience)
-- PROFESSIONAL SUMMARY: do NOT dump raw tool/skill tokens. Use expanded descriptive / general terms that match JD themes (domains, environments, responsibilities, outcomes). Exact skill names belong in Skills + Experience — not crowded into the Summary
-- Before finishing, audit ALL primary and secondary keywords in Skills + Experience — if any is missing, ADD it NOW
-- Presence of every JD keyword in Skills/Experience is mandatory to clear ${SCORE_TAILOR_THRESHOLD}+ on this first tailor
+- For each PRIMARY keyword: if it (or a close family skill) is on the master, put it in TECHNICAL SKILLS AND at least one EXPERIENCE bullet using JD wording when accurate
+- SECONDARY: include at least once only if truthful
+- PROFESSIONAL SUMMARY: descriptive/general JD themes — not raw tool tokens
+- Do NOT add a missing JD keyword that has no basis on the master. Skip it; do not invent Kafka/K8s/etc.
+- Keyword stuffing (same term 10+ times) is a fail
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 8 — SECTION QUALITY
@@ -3091,7 +3097,7 @@ TECHNICAL SKILLS (comes RIGHT AFTER Professional Summary — before Experience):
    - Do NOT merge multiple original categories into one line
    - Do NOT remove Soft Skills / Key Skills / Competencies / or any other original skill label just because it is outside Technical/Tools/Methodologies/Core
    - Skill bullets are skill lists — they do NOT need metrics/numbers (metrics apply only to EXPERIENCE bullets)
-   - CRITICAL: Missing a primary keyword from Skills is a failed first pass.
+   - CRITICAL: Missing a primary keyword that IS on the master is a failed pass. Missing a JD keyword the master never used is OK — do not invent it.
    - SKILL FAMILY PRESERVE: If the original resume has Python, KEEP related Python-ecosystem skills (Flask, Django, FastAPI, NumPy, Pandas, PyTorch, TensorFlow, Pytest). If Java is present, KEEP Spring Boot, Spring MVC, Spring Security, Hibernate, JPA, JUnit. If AI/ML/LLM is present, KEEP OpenAI API, LangChain, RAG, NLP, BERT, Transformers, PyTorch, TensorFlow. Do NOT strip an entire related family when the anchor skill remains.
 
 PROFESSIONAL EXPERIENCE (MANDATORY — include ALL roles; comes AFTER Technical Skills):
@@ -3147,7 +3153,7 @@ ABSOLUTE OUTPUT RULES — violations will disqualify the output
 6. DO NOT split the resume into "Original vs Tailored" columns or sections
 7. The output must be ready to submit to a job application with zero editing required
 8. Every EXPERIENCE bullet point MUST end with a period (full stop). No exceptions. Skill-section bullets/lists are exempt.
-9. Every EXPERIENCE bullet point MUST contain at least one measurable metric — counts, percentages, time saved, scale, or dollar amounts all qualify. SKILLS-section bullets/category lines do NOT need metrics — never delete them for lacking numbers.
+9. EXPERIENCE bullets should be achievement-oriented. Include a metric only when defensible from the master. SKILLS bullets never need metrics.
 10. Every single line must be content a real recruiter expects to read — nothing else
 11. Never delete or collapse skill category windows or skill bullets that existed on the master resume
 
@@ -3162,14 +3168,15 @@ FINAL SILENT CHECK — verify before outputting:
 [ ] EXPERIENCE COMPANY NAMES: every company name copied exactly — no abbreviations or expansions
 [ ] CONTACT CHECK: email in output EXACTLY matches the locked email value "${cf.email || 'from original'}" · phone EXACTLY matches "${cf.phone || 'from original'}" — check character by character
 [ ] LinkedIn check: master resume LinkedIn is "${cf.linkedin || 'NOT PRESENT'}" — if NOT PRESENT, the contact header must contain NO LinkedIn URL whatsoever; do not construct or infer one
-[ ] KEYWORD AUDIT: go through all 10 primary keywords one by one — confirm EACH appears in the SKILLS section AND at least once in Summary or Experience; if missing from SKILLS, add it into the best-matching existing category window (or a new one) — do NOT delete other windows
-[ ] SECONDARY KEYWORD AUDIT: go through all 10 secondary keywords — each must appear at least once anywhere in the resume; add missing ones to SKILLS or weave into an EXPERIENCE bullet
+[ ] KEYWORD AUDIT: for each primary keyword that exists on the master (or close family), it appears in SKILLS and at least one Experience bullet using JD wording when accurate. Do NOT add keywords with no master basis.
+[ ] SECONDARY KEYWORD AUDIT: include secondaries only when truthful — no stuffing
+[ ] 10-SECOND TEST: role, years, strongest tech, platforms, problems, real results, match to this JD
 [ ] SKILLS STRUCTURE AUDIT: every original skill category window and every original skill bullet still present (enriched OK, removed NOT OK)
-[ ] METRICS AUDIT: count EXPERIENCE bullets with a number/metric vs total EXPERIENCE bullets — aim for 100%; do NOT apply this to SKILLS bullets
+[ ] METRICS AUDIT: metrics only when defensible from the master — do NOT invent numbers to hit 100%; SKILLS bullets never need metrics
 [ ] Location check — CONTACT HEADER: master resume location is "${cf.location || 'NOT PRESENT'}" — if NOT PRESENT, the contact header line must have NO location token at all; do not copy location from experience lines into the contact header
 [ ] Location check — EXPERIENCE LINES: every role line copies location token-for-token from master resume — no added cities, no added states, no added countries, no removed tokens
 [ ] GPA check: if master resume has a GPA, it appears in the output exactly as written — if master has no GPA, output has no GPA
-[ ] Every bullet has a concrete number — counts, percentages, time saved, dollar amounts, or scale figures all count; aim for 100% of bullets having at least one metric
+[ ] Metrics are real (from master) or omitted — no invented numbers
 [ ] Every bullet ends with a period (full stop ".")
 [ ] No word "Troubleshot" anywhere — replaced with correct past-tense verb
 [ ] No AI phrases, no jargon soup, reads like a human wrote it
@@ -3177,8 +3184,8 @@ FINAL SILENT CHECK — verify before outputting:
 [ ] Education dates copied token-for-token from the original — if the master has only "Graduated: May 2025" with NO start year, the output must also have NO start year; do NOT write "2019 - 2025" or any invented range
 [ ] No suggested certifications, no commentary, no metadata
 
-PRIMARY KEYWORDS (embed 2-3x each): ${primary.join(', ')}
-SECONDARY KEYWORDS (embed at least once): ${secondary.join(', ')}
+PRIMARY KEYWORDS (demonstrate in Skills + Experience if truthful): ${primary.join(', ')}
+SECONDARY KEYWORDS (include if truthful): ${secondary.join(', ')}
 
 ${roleManifest ? roleManifest + '\n\n' : ''}${ragContext ? ragContext + '\n\nFULL JOB DESCRIPTION (reference):\n' + jd.slice(0, 3000) : 'JOB DESCRIPTION:\n' + jd}
 
@@ -3650,26 +3657,34 @@ function buildBoostPrompt(jd, sc, currentScore) {
     || (state.atsReport && state.atsReport.reportPromptBlock)
     || '';
 
-  return `You are an AGGRESSIVE ATS resume editor. Current score: ${currentScore}/100. Target: ${SCORE_TAILOR_THRESHOLD}+ ONLY — stop once that bar is cleared (do not chase 100).
+  const modelBlock = (typeof FulltimeResumeModel !== 'undefined' && FulltimeResumeModel.promptBlock)
+    ? FulltimeResumeModel.promptBlock({
+        threshold: SCORE_TAILOR_THRESHOLD,
+        primary: state.keywords?.primary || [],
+        secondary: state.keywords?.secondary || [],
+      })
+    : '';
 
-Fix every gap below so the resume scores ${SCORE_TAILOR_THRESHOLD}+.
+  return `You are editing a full-time targeted resume using the Jobilly Full-time resume model. Current score: ${currentScore}/100. Target: ${SCORE_TAILOR_THRESHOLD}+ from truthful JD overlap — do not chase 100 with fake keywords or fake metrics.
 
-DO NOT invent companies, titles, dates, education, or certifications.
-DO add every missing JD keyword into Skills and weave into EXPERIENCE bullets.
-PRESERVE SKILLS STRUCTURE: keep every skill category window (not only four labels) and every skill bullet from the current resume — enrich categories with missing keywords, but NEVER delete, merge away, or strip skill bullets because they lack metrics.
+${modelBlock}
 
-${reportBlock ? `ATS READINESS REPORT (apply Top Fixes first):\n${reportBlock}\n` : ''}
-EXACT GAPS:
-${missingPrimary.length > 0   ? `MISSING PRIMARY — add each to SKILLS and at least one bullet:\n${missingPrimary.map(k => `  - "${k}"`).join('\n')}` : 'PRIMARY: all present.'}
+DO NOT invent companies, titles, dates, education, certifications, or technologies not on the master.
+DO weave missing JD keywords into Skills and Experience ONLY if they already exist on the master or are a close family of an existing skill.
+PRESERVE SKILLS STRUCTURE: keep every skill category window and every skill bullet — enrich OK, delete NOT OK.
 
-${missingSecondary.length > 0 ? `MISSING SECONDARY — add each at least once:\n${missingSecondary.map(k => `  - "${k}"`).join('\n')}` : 'SECONDARY: all present.'}
+${reportBlock ? `ATS READINESS REPORT (apply Top Fixes first, without inventing tools):\n${reportBlock}\n` : ''}
+EXACT GAPS (fix only with truthful content):
+${missingPrimary.length > 0   ? `MISSING PRIMARY — add to SKILLS + a bullet ONLY if present on the original/master or close family:\n${missingPrimary.map(k => `  - "${k}"`).join('\n')}` : 'PRIMARY: all present.'}
 
-${bulletsNeedFix > 0 ? `BULLETS WITHOUT METRICS — ${bulletsNeedFix} need a count, %, time, or dollar figure.` : 'BULLET METRICS: OK.'}
+${missingSecondary.length > 0 ? `MISSING SECONDARY — add only if truthful:\n${missingSecondary.map(k => `  - "${k}"`).join('\n')}` : 'SECONDARY: all present.'}
+
+${bulletsNeedFix > 0 ? `BULLETS WITHOUT METRICS — add a number only if the master supports it; otherwise keep a strong achievement bullet with no fake metric.` : 'BULLET METRICS: OK.'}
 
 ${gaps.length > 0 ? `JD GAPS:\n${gaps.map(g => `  - ${g}`).join('\n')}` : ''}
 ${suggestions.length > 0 ? `SUGGESTIONS:\n${suggestions.map(s => `  - ${s}`).join('\n')}` : ''}
 
-SUMMARY RULE: Write a richer Professional Summary (4-6 sentences) in descriptive/general terms recruiters understand — domains, environments, responsibilities, outcomes. Do NOT stuff raw tool/skill names into the Summary; put exact skills in TECHNICAL SKILLS and EXPERIENCE bullets. No percentages or dense metrics in Summary.
+SUMMARY RULE: 4-6 descriptive sentences (domains, environments, responsibilities). No tool dump. No invented metrics.
 
 INTEGRITY: Do not change name/headline/contact/companies/titles/dates/education/GPA. Never add certifications. Output COMPLETE resume only.
 
