@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ATS Resume Tailoring | Jobilly.AI</title>
-  <link rel="icon" href="brand/logo.png" type="image/png" />
+  <link rel="icon" href="brand/jobilly-mark.png" type="image/png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet" />
@@ -38,6 +38,7 @@
       --jb-success-text: #15803d;
       --jb-warning: #ca8a04;
       --jb-warning-soft: rgba(202, 138, 4, 0.14);
+      --jb-yellow: #facc15;
       --jb-orange: #ea580c;
       --jb-orange-soft: rgba(234, 88, 12, 0.12);
       --jb-orange-border: rgba(234, 88, 12, 0.3);
@@ -87,7 +88,9 @@
       color: var(--jb-ink);
       min-height: 100vh;
       line-height: 1.55;
+      letter-spacing: -0.011em;
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
     .jb-mesh {
@@ -127,9 +130,15 @@
       text-decoration: none;
       flex-shrink: 0;
     }
+    .jb-brand-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      justify-content: center;
+    }
     .jb-logo-mark {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       object-fit: contain;
       display: block;
     }
@@ -147,79 +156,18 @@
       font-size: 0.72em;
       color: var(--jb-slate);
       letter-spacing: 0.02em;
+      vertical-align: 0;
     }
-    .jb-nav-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      padding-left: 18px;
-      border-left: 1px solid var(--jb-border-strong);
-    }
-    .jb-nav-eyebrow {
-      font-size: 10px;
+    .jb-nav-label {
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--jb-ink-subtle);
+      letter-spacing: 0.04em;
+      color: var(--jb-ink-muted);
+      line-height: 1.2;
     }
-    .jb-nav-label { font-size: 13px; font-weight: 600; color: var(--jb-ink-secondary); }
 
     .jb-main { position: relative; z-index: 1; }
-    .container { max-width: 1240px; margin: 0 auto; padding: 24px clamp(16px, 3vw, 32px) 72px; }
-
-    .jb-hero {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 28px;
-      align-items: end;
-      margin-bottom: 22px;
-      padding: clamp(18px, 3vw, 28px) 0 6px;
-      border: none;
-      background: transparent;
-      animation: heroIn 0.7s ease both;
-    }
-    @media (max-width: 840px) {
-      .jb-hero { grid-template-columns: 1fr; gap: 12px; }
-    }
-    .jb-hero-brand {
-      font-family: var(--jb-font-display);
-      font-size: clamp(2.4rem, 6vw, 3.4rem);
-      font-weight: 800;
-      letter-spacing: -0.045em;
-      line-height: 0.98;
-      color: var(--jb-ink);
-      margin-bottom: 0;
-    }
-    .jb-hero-brand span {
-      display: block;
-      font-family: var(--jb-font-sans);
-      font-size: 0.28em;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--jb-slate);
-      margin-bottom: 12px;
-    }
-    .jb-eyebrow { display: none; }
-    .jb-hero-side { padding-bottom: 6px; }
-    .jb-hero-title {
-      font-family: var(--jb-font-display);
-      font-size: clamp(1.15rem, 2.4vw, 1.45rem);
-      font-weight: 600;
-      letter-spacing: -0.025em;
-      line-height: 1.3;
-      color: var(--jb-ink-secondary);
-      margin-bottom: 8px;
-      max-width: 28ch;
-    }
-    .jb-hero-copy {
-      font-size: 15px;
-      color: var(--jb-ink-muted);
-      max-width: 42ch;
-      border-left: 3px solid var(--jb-slate);
-      padding-left: 14px;
-      line-height: 1.5;
-    }
+    .container { max-width: 1180px; margin: 0 auto; padding: 20px clamp(16px, 3vw, 32px) 56px; }
 
     /* Workspace: inputs left, actions right */
     .jb-workspace {
@@ -267,168 +215,59 @@
     }
 
     .steps {
-      --steps-progress: 0%;
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 0;
-      margin: 0 0 22px;
-      padding: 18px 14px 16px;
-      background: var(--jb-card);
-      border: 1px solid var(--jb-border);
-      border-radius: var(--jb-radius-md);
-      box-shadow: var(--jb-shadow-sm);
-      overflow: hidden;
-    }
-    .steps::before {
-      content: "";
-      position: absolute;
-      left: 10%;
-      right: 10%;
-      top: 34px;
-      height: 2px;
-      background: var(--jb-surface-muted);
-      border-radius: 2px;
-      z-index: 0;
-    }
-    .steps::after {
-      content: "";
-      position: absolute;
-      left: 10%;
-      top: 34px;
-      height: 2px;
-      width: var(--steps-progress);
-      max-width: 80%;
-      background: var(--jb-slate);
-      border-radius: 2px;
-      z-index: 0;
-      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      gap: 4px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      padding: 0 0 2px;
+      background: transparent;
+      border-bottom: 1px solid var(--jb-border);
     }
     .step {
       position: relative;
-      z-index: 1;
       display: flex;
-      flex-direction: column;
       align-items: center;
       gap: 8px;
-      text-align: center;
-      padding: 0 6px;
       background: transparent;
-      border: none;
-      color: var(--jb-ink-muted);
-      transition: color 0.2s ease, transform 0.2s ease;
-    }
-    .step::after { display: none; }
-    .step-node {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      background: var(--jb-surface);
-      border: 1px solid var(--jb-border-strong);
-      box-shadow: 0 0 0 4px var(--jb-card);
-      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .step-num {
-      width: auto;
-      height: auto;
       border: none;
       border-radius: 0;
-      background: transparent;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      color: var(--jb-ink-muted);
-      line-height: 1;
-      transition: color 0.2s ease;
-    }
-    .step-num::before { content: none; }
-    .step-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
-    }
-    .step-label {
-      font-size: 12px;
-      font-weight: 700;
+      padding: 10px 12px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
       letter-spacing: 0.01em;
-      color: inherit;
-      white-space: nowrap;
+      color: var(--jb-ink-muted);
+      transition: color 0.2s;
     }
-    .step-hint {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--jb-ink-subtle);
-      letter-spacing: 0.02em;
-    }
-    .step.active {
-      color: var(--jb-ink);
-      transform: translateY(-1px);
-    }
-    .step.active .step-node {
-      background: var(--jb-brand);
-      border-color: var(--jb-brand);
-      box-shadow: 0 0 0 4px var(--jb-card), 0 8px 18px rgba(15, 23, 32, 0.12);
-      transform: scale(1.04);
-    }
-    .step.active .step-num { color: #fff; }
-    .step.active .step-hint { color: var(--jb-slate); font-weight: 600; }
-    .step.done { color: var(--jb-success-text); }
-    .step.done .step-node {
-      background: var(--jb-success-soft);
-      border-color: var(--jb-success-border);
-      box-shadow: 0 0 0 4px var(--jb-card);
-    }
-    .step.done .step-num {
-      font-size: 0;
-      color: transparent;
-      position: relative;
-      width: 14px;
-      height: 14px;
-    }
-    .step.done .step-num::before {
+    .step::after {
       content: "";
       position: absolute;
-      inset: 1px 0 0;
-      margin: auto;
-      width: 7px;
-      height: 4px;
-      border-left: 2px solid var(--jb-success-text);
-      border-bottom: 2px solid var(--jb-success-text);
-      transform: rotate(-45deg);
+      left: 14px;
+      right: 14px;
+      bottom: -1px;
+      height: 2px;
+      background: var(--jb-ink);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.28s ease;
     }
-    .step.done .step-hint { color: var(--jb-success-text); opacity: 0.75; }
-    @media (max-width: 720px) {
-      .steps {
-        padding: 14px 8px 12px;
-        overflow-x: auto;
-        grid-template-columns: repeat(5, minmax(92px, 1fr));
-      }
-      .steps::before {
-        left: 46px;
-        right: 46px;
-      }
-      .steps::after {
-        left: 46px;
-        right: auto;
-        width: calc((100% - 92px) * var(--steps-progress-ratio, 0));
-        max-width: none;
-      }
-      .step-hint { display: none; }
-      .step-label { font-size: 11px; white-space: normal; line-height: 1.25; }
-      .step-node { width: 32px; height: 32px; border-radius: 10px; }
+    .step.active { color: var(--jb-ink); }
+    .step.active::after { transform: scaleX(1); }
+    .step.done { color: var(--jb-success-text); }
+    .step-num {
+      width: 22px; height: 22px;
+      border-radius: 4px;
+      background: var(--jb-surface);
+      border: 1px solid var(--jb-border-strong);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      color: var(--jb-ink-muted);
     }
+    .step.active .step-num { background: var(--jb-brand); color: #fff; border-color: var(--jb-brand); }
+    .step.done .step-num { background: var(--jb-success); border-color: var(--jb-success); color: #fff; }
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
     @media (max-width: 768px) {
       .grid-2 { grid-template-columns: 1fr; }
-      .jb-nav-meta { display: none; }
     }
 
     .card {
@@ -439,12 +278,14 @@
       box-shadow: var(--jb-shadow-sm);
     }
     .card-title {
+      font-family: var(--jb-font-sans);
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--jb-ink-muted);
       margin-bottom: 12px;
+      line-height: 1.2;
     }
     #freeAtsPanel.card { box-shadow: var(--jb-shadow-md); }
     #freeAtsPanel .card-title {
@@ -583,6 +424,35 @@
       box-shadow: var(--jb-shadow-sm);
     }
     #outputArea:focus { box-shadow: 0 0 0 3px rgba(61, 79, 95, 0.12); border-color: var(--jb-slate); }
+    #outputArea.is-formatted {
+      white-space: normal;
+      background: #fff;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    #outputArea.is-formatted strong { font-weight: 700; color: #111; }
+    #outputArea.is-formatted .r-name {
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    #outputArea.is-formatted .r-contact { text-align: center; color: #555; font-size: 12.5px; margin-bottom: 2px; }
+    #outputArea.is-formatted .r-divider { border: none; border-top: 2px solid #111; margin: 10px 0 12px; }
+    #outputArea.is-formatted .r-section {
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #777;
+      margin: 14px 0 6px;
+      padding-bottom: 3px;
+    }
+    #outputArea.is-formatted .r-role { font-weight: 700; margin: 8px 0 4px; }
+    #outputArea.is-formatted .r-bullet { display: flex; gap: 0; margin: 0 0 4px; }
+    #outputArea.is-formatted .r-bullet-dot { width: 1.1em; flex-shrink: 0; }
+    #outputArea.is-formatted .r-body { margin-bottom: 4px; }
+    #outputArea.is-formatted .r-skill-label { font-weight: 700; }
 
     .progress-bar-wrap {
       width: 100%;
@@ -898,6 +768,7 @@
     .api-badge.warn .api-dot { background: var(--jb-warning); }
     .api-badge.error { color: var(--jb-danger); }
     .api-badge.error .api-dot { background: var(--jb-danger); }
+    html.embed .api-badge { display: none !important; }
     .api-dot { width: 7px; height: 7px; background: var(--jb-success); border-radius: 50%; }
 
     .streaming-cursor::after { content: '▋'; animation: blink 1s infinite; color: var(--jb-slate); }
@@ -991,6 +862,7 @@
       letter-spacing: -0.02em;
       color: var(--jb-ink);
       margin: 0 0 6px;
+      line-height: 1.25;
     }
     .ats-report-meta p {
       margin: 0 0 12px;
@@ -1480,112 +1352,89 @@
     [style*="color:#f87171"] { color: var(--jb-danger) !important; }
     [style*="color:#d8b4fe"], [style*="color:#a855f7"] { color: var(--jb-ink) !important; }
     [style*="background:linear-gradient(90deg,#a855f7,#6d28d9)"] { background: var(--jb-slate) !important; }
+
+    html.embed .ats-score-legend,
+    html.embed .ats-explain,
+    html.embed #freeAtsSourceLabel,
+    html.embed .ats-rewrite-cta,
+    html.embed .jb-hero { display: none !important; }
+    html.embed .action-label { display: none; }
+    .ats-section-label {
+      font-family: var(--jb-font-sans);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--jb-ink-subtle);
+    }
+    html.embed .jb-mesh { opacity: 0.45; }
+    html.embed .container { padding-top: 12px; padding-bottom: 28px; }
   </style>
 
+  <script>if (new URLSearchParams(location.search).has("embed")) document.documentElement.classList.add("embed");</script>
 </head>
 <body class="jb-app">
 
 <div class="jb-mesh" aria-hidden="true"></div>
 <header class="jb-nav">
   <a href="https://www.jobilly.ai" target="_blank" rel="noopener noreferrer" class="jb-brand">
-    <img src="brand/logo.png" alt="" class="jb-logo-mark" width="38" height="38" />
-    <span class="jb-logo-text">Jobilly<span class="jb-logo-ai">.AI</span></span>
+    <img src="brand/jobilly-mark.png" alt="" class="jb-logo-mark" width="36" height="36" />
+    <span class="jb-brand-copy">
+      <span class="jb-logo-text">Jobilly<span class="jb-logo-ai">.AI</span></span>
+      <span class="jb-nav-label">Resume tailoring</span>
+    </span>
   </a>
-  <div class="jb-nav-meta">
-    <span class="jb-nav-eyebrow">Prepare</span>
-    <span class="jb-nav-label">ATS Resume Tailoring</span>
-  </div>
   <div style="flex:1"></div>
   <div class="api-badge" id="apiBadge"><div class="api-dot" id="apiDot"></div> <span id="apiBadgeText">Checking…</span></div>
 </header>
 
 <main class="jb-main">
 <div class="container">
-  <section class="jb-hero">
-    <h1 class="jb-hero-brand"><span>ATS Resume Studio</span>Jobilly.AI</h1>
-    <div class="jb-hero-side">
-      <p class="jb-hero-title">Score the gaps. Rewrite to win.</p>
-      <p class="jb-hero-copy">Jobilly readiness scoring with smart keyword match — then AI rewrite from your top fixes.</p>
-    </div>
-  </section>
+  <div class="steps" aria-label="Progress">
+    <div class="step active" id="step1"><div class="step-num">1</div> Inputs</div>
+    <div class="step" id="step2"><div class="step-num">2</div> Report</div>
+    <div class="step" id="step3"><div class="step-num">3</div> Rewrite</div>
+    <div class="step" id="step4"><div class="step-num">4</div> Re-score</div>
+    <div class="step" id="step5"><div class="step-num">5</div> Download</div>
+  </div>
 
-  <!-- STEP INDICATORS -->
-  <nav class="steps" aria-label="Workflow progress" style="--steps-progress: 0%">
-    <div class="step active" id="step1" aria-current="step">
-      <div class="step-node"><span class="step-num">1</span></div>
-      <div class="step-meta">
-        <span class="step-label">Paste Inputs</span>
-        <span class="step-hint">JD + resume</span>
-      </div>
-    </div>
-    <div class="step" id="step2">
-      <div class="step-node"><span class="step-num">2</span></div>
-      <div class="step-meta">
-        <span class="step-label">ATS Report</span>
-        <span class="step-hint">Readiness</span>
-      </div>
-    </div>
-    <div class="step" id="step3">
-      <div class="step-node"><span class="step-num">3</span></div>
-      <div class="step-meta">
-        <span class="step-label">AI Rewrite</span>
-        <span class="step-hint">Tailor</span>
-      </div>
-    </div>
-    <div class="step" id="step4">
-      <div class="step-node"><span class="step-num">4</span></div>
-      <div class="step-meta">
-        <span class="step-label">Re-score</span>
-        <span class="step-hint">95+ target</span>
-      </div>
-    </div>
-    <div class="step" id="step5">
-      <div class="step-node"><span class="step-num">5</span></div>
-      <div class="step-meta">
-        <span class="step-label">Download</span>
-        <span class="step-hint">PDF / DOC</span>
-      </div>
-    </div>
-  </nav>
-
-  <!-- WORKSPACE: inputs + sticky action rail -->
   <div class="jb-workspace" id="workspaceSection">
     <div class="jb-workspace-main">
       <div class="grid-2" id="inputSection">
         <div class="card">
-          <div class="card-title">Job Description</div>
-          <textarea id="jdInput" placeholder="Paste the full job description here...&#10;&#10;Include: role title, responsibilities, required skills, preferred skills, tools, certifications..."></textarea>
-          <div class="char-count"><span id="jdCount">0</span> chars · <span id="jdWords">0</span> words</div>
+          <div class="card-title">Job description</div>
+          <textarea id="jdInput" placeholder="Paste the job description — title, skills, and requirements."></textarea>
+          <div class="char-count"><span id="jdCount">0</span> characters · <span id="jdWords">0</span> words</div>
         </div>
         <div class="card">
-          <div class="card-title">Your Resume</div>
-          <textarea id="resumeInput" placeholder="Paste your resume here as plain text...&#10;&#10;Include: name, contact, all roles, education, certifications, skills, projects..."></textarea>
-          <div class="char-count"><span id="resumeCount">0</span> chars · <span id="resumeWords">0</span> words</div>
+          <div class="card-title">Your resume</div>
+          <textarea id="resumeInput" placeholder="Paste your resume as plain text."></textarea>
+          <div class="char-count"><span id="resumeCount">0</span> characters · <span id="resumeWords">0</span> words</div>
         </div>
       </div>
     </div>
     <aside class="jb-action-rail" aria-label="Actions">
       <div class="action-label">Actions</div>
       <button class="btn-free" id="freeAtsBtn" onclick="runFreeAtsCheck()">
-        Check ATS &amp; Get Report
+        Check ATS
       </button>
       <button class="btn-primary" id="analyzeBtn" onclick="runAnalysis()">
-        AI Rewrite from Report
+        Rewrite with AI
       </button>
       <button class="btn-warning hidden" id="rerunBtn" onclick="resetAndRun()">
-        Start Over
+        Start over
       </button>
-      <button class="btn-danger" onclick="clearAll()">Clear All</button>
+      <button class="btn-danger" onclick="clearAll()">Clear</button>
       <div id="loadingIndicator" class="hidden" style="align-items:center;gap:8px;">
         <span class="spinner"></span>
-        <span id="loadingText" style="font-size:13px;color:#94a3b8;">Processing...</span>
+        <span id="loadingText" style="font-size:13px;color:#94a3b8;">Working…</span>
       </div>
     </aside>
   </div>
 
   <!-- FREE ATS RESULT PANEL -->
   <div id="freeAtsPanel" class="hidden card" style="margin-bottom:20px;">
-    <div class="card-title">ATS Readiness Report</div>
+    <div class="card-title">Readiness report</div>
     <div id="freeExpEligibility"></div>
 
     <div class="ats-report jb-report-board" id="freeAtsReport">
@@ -1597,8 +1446,8 @@
             </div>
           </div>
           <div class="ats-report-meta">
-            <h3 id="freeReadinessTitle">Run a check to see readiness</h3>
-            <p id="freeReadinessCopy">Overall score from Keywords, Content, Parseability, Structure, and Formatting.</p>
+            <h3 id="freeReadinessTitle">Run a check to see your score</h3>
+            <p id="freeReadinessCopy">Keywords, content, parseability, structure, and formatting.</p>
             <span class="ats-badge" id="freeReadinessBadge">Awaiting analysis</span>
             <div class="ats-score-legend" aria-label="Score color guide">
               <span class="lg-green"><i></i>90+ Excellent</span>
@@ -1609,7 +1458,7 @@
           </div>
         </div>
         <div class="jb-report-gauges">
-          <div class="ats-section-label">Category gauges</div>
+          <div class="ats-section-label">Categories</div>
           <div class="ats-report-cats" id="freeCatGrid"></div>
           <p class="ats-explain" id="freeReportExplain" style="margin-top:12px;">
             <strong>How to read this:</strong> Green = strong · Yellow = good · Orange = needs work · Red = weak. Fix red/orange categories first.
@@ -1642,7 +1491,7 @@
 
         <div class="jb-report-side">
           <div class="ats-top-fixes" id="freeTopFixesWrap">
-            <div class="ats-section-label">Top fixes · rewrite priority</div>
+            <div class="ats-section-label">Top fixes</div>
             <div class="ats-fix-list" id="freeTopFixes"></div>
           </div>
           <div class="ats-metrics-row" id="freeScoreGrid">
@@ -1668,7 +1517,7 @@
       </div>
 
       <div class="jb-report-keywords ats-kw-block">
-        <div class="ats-section-label">Keyword match from JD</div>
+        <div class="ats-section-label">Keywords</div>
         <div id="freeKwGrid" class="keyword-grid"></div>
         <div style="margin-top:12px;">
           <div class="progress-bar-wrap" style="height:8px;"><div class="progress-bar" id="freeKwBar" style="width:0%;"></div></div>
@@ -1695,7 +1544,7 @@
 
   <!-- PROGRESS -->
   <div id="progressSection" class="hidden card" style="margin-bottom:20px;">
-    <div class="card-title" style="margin-bottom:12px;">AI Processing Pipeline</div>
+    <div class="card-title" style="margin-bottom:12px;">Rewriting</div>
     <div id="progressLabel" style="font-size:13px;color:#94a3b8;margin-bottom:6px;">Initializing...</div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
     <div style="font-size:11px;color:#475569;margin-top:6px;" id="progressSub">Starting…</div>
@@ -1745,12 +1594,11 @@
     <div class="tab-content active" id="tab-tailored">
       <div id="outputArea" contenteditable="true" spellcheck="false" class="streaming-cursor"></div>
       <div class="dl-strip">
-        <button class="btn-success" onclick="downloadDocx()">Download .doc (Word)</button>
-        <button class="btn-secondary" onclick="downloadTxt()">Download .txt</button>
-        <button class="btn-secondary" onclick="copyToClipboard()">Copy to Clipboard</button>
-        <button class="btn-secondary" onclick="printResume()">Print / Save PDF</button>
-        <button class="btn-secondary" onclick="switchTab('compare', document.querySelector('.tab-btn[onclick*=compare]'))">View Before / After</button>
-        <button class="btn-warning hidden" id="boostBtn" onclick="boostScore()">Boost to 95+</button>
+        <button class="btn-success" onclick="downloadDocx()">Download Word</button>
+        <button class="btn-secondary" onclick="downloadTxt()">Download text</button>
+        <button class="btn-secondary" onclick="copyToClipboard()">Copy</button>
+        <button class="btn-secondary" onclick="printResume()">Print / PDF</button>
+        <button class="btn-warning hidden" id="boostBtn" onclick="boostScore()">Boost score</button>
       </div>
     </div>
 
@@ -2120,7 +1968,7 @@ function runFreeAtsCheckWithKeywords(jd, resume, primary, secondary, aliasMap) {
 function scoreBand(score) {
   const n = Number(score) || 0;
   if (n >= 90) return 'excellent';
-  if (n >= 75) return 'good';
+  if (n >= 70) return 'good';
   if (n >= 50) return 'fair';
   return 'poor';
 }
@@ -2136,7 +1984,7 @@ function catClass(score) {
 function scoreBandColor(score) {
   const band = scoreBand(score);
   return band === 'excellent' ? 'var(--jb-success)'
-    : band === 'good' ? 'var(--jb-warning)'
+    : band === 'good' ? 'var(--jb-yellow)'
     : band === 'fair' ? 'var(--jb-orange)'
     : 'var(--jb-danger)';
 }
@@ -2413,22 +2261,11 @@ function renderGapAnalysis({ gaps = [], suggestions = [], expAnalysis = null } =
 }
 
 function setStep(n) {
-  const wrap = document.querySelector('.steps');
-  if (wrap) {
-    const pct = Math.max(0, Math.min(4, n - 1)) / 4 * 100;
-    wrap.style.setProperty('--steps-progress', pct + '%');
-    wrap.style.setProperty('--steps-progress-ratio', String(Math.max(0, Math.min(4, n - 1)) / 4));
-  }
   for (let i = 1; i <= 5; i++) {
     const el = document.getElementById('step' + i);
-    if (!el) continue;
     el.classList.remove('active', 'done');
-    el.removeAttribute('aria-current');
     if (i < n) el.classList.add('done');
-    else if (i === n) {
-      el.classList.add('active');
-      el.setAttribute('aria-current', 'step');
-    }
+    else if (i === n) el.classList.add('active');
   }
 }
 
@@ -3211,8 +3048,10 @@ FORMATTING:
 - Bullet marker: hyphen (-)
 - Experience dates: MMM YYYY - MMM YYYY  (e.g. Mar 2021 - Present)
 - Education dates: copy the date token-for-token from the original — if no start date exists, do NOT invent one
-- Plain text only — no tables, columns, icons, bold, italics, or special Unicode
+- Plain text only — no tables, columns, icons, markdown, or special Unicode
 - Single column layout throughout
+- PAGE LENGTH: fit on ONE A4 page whenever possible. Keep Professional Summary to 3-4 short sentences. Recent 1-2 roles: 3-5 bullets. Older roles: 2-3 tight bullets. Do NOT drop roles to save space — shorten bullets instead.
+- Use a SECOND A4 page only when many real roles/bullets cannot fit on one page without hiding actual work. Never exceed two pages.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RULE 7 — KEYWORD EMBEDDING (mandatory for first-pass ${SCORE_TAILOR_THRESHOLD}+)
@@ -3481,6 +3320,7 @@ async function runAnalysis() {
 
     // Stream output visually
     const outputEl = document.getElementById('outputArea');
+    outputEl.classList.remove('is-formatted');
     outputEl.textContent = '';
     outputEl.classList.add('streaming-cursor');
     setProgress(65, '✓ Resume rewritten · Rendering output...', 'Streaming to display...');
@@ -3496,6 +3336,7 @@ async function runAnalysis() {
       await delay(8);
     }
     outputEl.classList.remove('streaming-cursor');
+    showTailoredResume(tailoredResume);
 
     // ── ROLE COUNT GUARD ─────────────────────────────────────
     // Compare roles in output vs roles extracted from input
@@ -4001,7 +3842,7 @@ async function boostScore(opts = {}) {
         cleaned = RAGEngine.sanitizeSummaryFluff(cleaned, jd);
       }
       state.tailoredResume = cleaned;
-      document.getElementById('outputArea').textContent = state.tailoredResume;
+      showTailoredResume(state.tailoredResume);
 
       renderSkillsCompare(RAGEngine.compareSkills(orig, state.tailoredResume));
       renderBeforeAfterCompare();
@@ -4078,41 +3919,185 @@ function toTitleCase(str) {
   return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
 }
 
+const SKILL_STOP_WORDS = new Set([
+  'and', 'or', 'of', 'the', 'to', 'in', 'on', 'for', 'with', 'using',
+  'including', 'other', 'skills', 'tools', 'services', 'plus', 'via',
+  'from', 'into', 'over', 'such', 'like', 'etc', 'both', 'all',
+]);
+
+function isSkillsHeader(section) {
+  return /^(SKILLS|TECHNICAL SKILLS|CORE COMPETENCIES|KEY SKILLS|TECHNOLOGIES|TECHNICAL SKILL)\b/.test(section || '');
+}
+
+function isNarrativeHeader(section) {
+  return /^(SUMMARY|PROFESSIONAL SUMMARY|OBJECTIVE|PROFILE|PROFESSIONAL PROFILE|EXPERIENCE|WORK EXPERIENCE|PROFESSIONAL EXPERIENCE|EMPLOYMENT|PROJECTS|KEY PROJECTS|NOTABLE PROJECTS)\b/.test(section || '');
+}
+
+function isKeepShortSkill(skill) {
+  return /^(c|r|go|ai|ml|ui|ux|js|ts|qa|bi|db|os|cd|ci|k8s|s3|ec2|iam|eks|ecs|gke|sql|aws|gcp|css|html|api|sdk|ide)$/i.test(skill);
+}
+
+function looksLikeSkillAtom(word) {
+  if (!word) return false;
+  if (SKILL_STOP_WORDS.has(word.toLowerCase())) return false;
+  if (word.length < 2) return isKeepShortSkill(word);
+  if (word.length > 40) return false;
+  if (/[0-9+#./]/.test(word)) return true;
+  if (/^[A-Z]{2,}$/.test(word)) return true;
+  if (/^[A-Z][a-zA-Z0-9+#.]{1,}$/.test(word)) return true;
+  if (/^[a-z][a-z0-9+#.]{2,}$/i.test(word)) return true;
+  return false;
+}
+
+function splitSkillTokens(chunk) {
+  const parts = [];
+  const normalized = String(chunk || '')
+    .replace(/\s*[&/·•–—]\s*/g, ',')
+    .replace(/\s+and\s+/gi, ',');
+  normalized.split(/[,;|]/).forEach((piece) => {
+    const trimmed = piece.trim();
+    if (!trimmed) return;
+    const inner = trimmed.match(/\(([^)]+)\)/);
+    if (inner) {
+      inner[1].split(/[,;/]/).forEach((item) => {
+        const t = item.trim();
+        if (t) parts.push(t);
+      });
+    }
+    const main = trimmed.replace(/\(.*?\)/g, '').trim();
+    if (!main) return;
+    parts.push(main);
+    const words = main.split(/\s+/).filter(Boolean);
+    if (words.length >= 2 && words.every(looksLikeSkillAtom)) {
+      words.forEach((w) => parts.push(w));
+    }
+  });
+  return parts;
+}
+
+function expandSkillVariants(skill) {
+  const raw = String(skill || '').trim();
+  if (!raw) return [];
+  const variants = [raw];
+  variants.push(raw.replace(/\./g, ''));
+  variants.push(raw.replace(/-/g, ' '));
+  variants.push(raw.replace(/-/g, ''));
+  variants.push(raw.replace(/\s+/g, ''));
+  if (/s$/i.test(raw) && raw.length > 4) variants.push(raw.slice(0, -1));
+  if (/ies$/i.test(raw) && raw.length > 5) variants.push(raw.slice(0, -3) + 'y');
+  if (raw.includes('/')) {
+    raw.split('/').forEach((part) => {
+      const t = part.trim();
+      if (t) variants.push(t);
+    });
+  }
+  return variants;
+}
+
+function collectResumeSkillTerms(resumeText) {
+  const found = [];
+  const lines = String(resumeText || '').split('\n');
+  let inSkills = false;
+  for (const line of lines) {
+    const t = line.trim();
+    if (!t) continue;
+    if (isSectionHeader(t)) {
+      inSkills = isSkillsHeader(t.toUpperCase());
+      continue;
+    }
+    if (!inSkills) continue;
+    let rest = t.replace(/^[-•]\s*/, '');
+    const labeled = rest.match(/^[^:]{1,60}:\s*(.*)$/);
+    if (labeled) rest = labeled[1] || '';
+    splitSkillTokens(rest).forEach((token) => {
+      const skill = token.replace(/^[-•]\s*/, '').trim();
+      if (!skill || SKILL_STOP_WORDS.has(skill.toLowerCase())) return;
+      if (skill.length < 2 && !isKeepShortSkill(skill)) return;
+      if (skill.length > 48) return;
+      found.push(skill);
+    });
+  }
+  if (typeof state !== 'undefined' && state.keywords) {
+    (state.keywords.primary || []).forEach((k) => found.push(k));
+    (state.keywords.secondary || []).forEach((k) => found.push(k));
+    const aliases = state.keywords.aliasMap || {};
+    Object.keys(aliases).forEach((k) => found.push(k));
+    Object.values(aliases).forEach((list) => {
+      if (Array.isArray(list)) list.forEach((k) => found.push(k));
+    });
+  }
+  const unique = [];
+  const seen = new Set();
+  const expanded = found.flatMap(expandSkillVariants).sort((a, b) => b.length - a.length);
+  for (const skill of expanded) {
+    const key = skill.toLowerCase();
+    if (!key || seen.has(key) || SKILL_STOP_WORDS.has(key)) continue;
+    if (key.length < 2 && !isKeepShortSkill(skill)) continue;
+    seen.add(key);
+    unique.push(skill);
+  }
+  return unique;
+}
+
+function highlightSkillsAndPercents(plainText, skills) {
+  let html = escapeHtml(plainText);
+  html = html.replace(/(\d+(?:\.\d+)?\s*%)/g, '<strong>$1</strong>');
+  for (const skill of skills) {
+    const pattern = skill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+    const re = new RegExp(`(?<![A-Za-z0-9+#])(${pattern})(?![A-Za-z0-9+#])`, 'gi');
+    html = html.replace(re, (match, _g, offset, full) => {
+      const before = full.slice(0, offset);
+      const opens = (before.match(/<strong>/gi) || []).length;
+      const closes = (before.match(/<\/strong>/gi) || []).length;
+      if (opens > closes) return match;
+      return `<strong>${match}</strong>`;
+    });
+  }
+  return html;
+}
+
+function formatResumeLine(text, section, skills) {
+  if (isNarrativeHeader(section)) {
+    return highlightSkillsAndPercents(text, skills);
+  }
+  return escapeHtml(text);
+}
+
+function showTailoredResume(text) {
+  const el = document.getElementById('outputArea');
+  if (!el) return;
+  el.classList.add('is-formatted');
+  el.innerHTML = parseResumeToHtml(text);
+}
+
 function parseResumeToHtml(text) {
   if (!text || !text.trim()) return '';
+  const skills = collectResumeSkillTerms(text);
   const lines = text.split('\n');
   let html = '';
   let lineIndex = 0;
   let currentSection = '';
 
-  // Skip leading blank lines
   while (lineIndex < lines.length && !lines[lineIndex].trim()) lineIndex++;
 
-  // First non-blank line = Name
   if (lineIndex < lines.length) {
     const rawName = lines[lineIndex].trim();
-    // If ALL CAPS name, convert to Title Case for display
     const displayName = rawName === rawName.toUpperCase() && rawName.length > 1
       ? toTitleCase(rawName) : rawName;
-    html += `<div class="r-name">${displayName}</div>`;
+    html += `<div class="r-name">${escapeHtml(displayName)}</div>`;
     lineIndex++;
   }
 
-  // Next lines = contact info (title + phone/email/linkedin) until blank or section header
-  // Cap at 6 lines — some resumes have 5-line contact blocks (name / title / phone+email / linkedin / city)
   let contactCount = 0;
   while (lineIndex < lines.length && contactCount < 6) {
     const l = lines[lineIndex].trim();
     if (!l) { lineIndex++; break; }
     if (isSectionHeader(l)) break;
-    // Make LinkedIn (and any http/https) URLs into clickable links
-    const linkedL = l
-      // Match full linkedin.com/in/... URLs (with or without https://)
+    const linkedL = escapeHtml(l)
       .replace(/(https?:\/\/[^\s|]+|linkedin\.com\/[^\s|]+)/gi, url => {
         const href = /^https?:\/\//.test(url) ? url : 'https://' + url;
         return `<a href="${href}" target="_blank" style="color:#1a56c4;text-decoration:underline;">${url}</a>`;
       })
-      // Match bare word "LinkedIn" or "Linkedin" not already inside an <a> tag
       .replace(/(?<!href="[^"]*)\bLinkedIn\b(?![^<]*<\/a>)/gi, word => {
         return `<a href="https://linkedin.com" target="_blank" style="color:#1a56c4;text-decoration:underline;">${word}</a>`;
       });
@@ -4122,49 +4107,41 @@ function parseResumeToHtml(text) {
   }
   html += '<div class="r-divider"></div>';
 
-  // Sections where | lines are NOT role lines (certs, education, projects, skills)
   const NON_ROLE_SECTIONS = new Set([
     'CERTIFICATIONS','CERTIFICATION','LICENSES','EDUCATION','ACADEMIC BACKGROUND',
     'SKILLS','TECHNICAL SKILLS','CORE COMPETENCIES','KEY SKILLS',
     'PROJECTS','KEY PROJECTS','NOTABLE PROJECTS','AWARDS','PUBLICATIONS'
   ]);
 
-  const inSkillsSection = () =>
-    /^(SKILLS|TECHNICAL SKILLS|CORE COMPETENCIES|KEY SKILLS|TECHNOLOGIES)\b/.test(currentSection);
-
-  // Any skill category window: "Tools & Platforms: …", optional leading "- "
+  const inSkillsSection = () => isSkillsHeader(currentSection);
   const skillWindowRe = /^(?:[-•]\s*)?([A-Za-z][A-Za-z0-9 &\/\+]{1,45}):\s*(.*)$/;
 
-  // Remaining body lines
   for (let i = lineIndex; i < lines.length; i++) {
     const l = lines[i].trim();
     if (!l) {
       html += '<div class="r-spacer"></div>';
     } else if (isSectionHeader(l)) {
       currentSection = l.trim().toUpperCase();
-      html += `<div class="r-section">${l}</div>`;
+      html += `<div class="r-section">${escapeHtml(l)}</div>`;
     } else if (inSkillsSection() && skillWindowRe.test(l)) {
-      // Skill category window (any label — not limited to four) ± inline values
       const m = l.match(skillWindowRe);
-      const label = (m[1] || '').trim();
-      const value = (m[2] || '').trim();
+      const label = escapeHtml((m[1] || '').trim());
+      const value = escapeHtml((m[2] || '').trim());
       html += value
         ? `<div class="r-skill-line"><span class="r-skill-label">${label}:</span> ${value}</div>`
         : `<div class="r-skill-line"><span class="r-skill-label">${label}:</span></div>`;
     } else if (/^[-•]\s+\S/.test(l)) {
-      // Bullet — keep skill bullets under SKILLS; experience bullets elsewhere
-      const bulletText = l.replace(/^[-•]\s+/, '');
+      const bulletText = formatResumeLine(l.replace(/^[-•]\s+/, ''), currentSection, skills);
       const cls = inSkillsSection() ? 'r-bullet r-skill-bullet' : 'r-bullet';
-      html += `<div class="${cls}"><span class="r-bullet-dot">•</span>${bulletText}</div>`;
+      html += `<div class="${cls}"><span class="r-bullet-dot">•</span><span>${bulletText}</span></div>`;
     } else if (
       /^[A-Za-z].+\|.+/.test(l) &&
       !/[@]/.test(l) &&
       !NON_ROLE_SECTIONS.has(currentSection)
     ) {
-      // Role/company line in EXPERIENCE section: "Company | Title | Date"
-      html += `<div class="r-role">${l}</div>`;
+      html += `<div class="r-role">${formatResumeLine(l, currentSection, skills)}</div>`;
     } else {
-      html += `<div class="r-body">${l}</div>`;
+      html += `<div class="r-body">${formatResumeLine(l, currentSection, skills)}</div>`;
     }
   }
   return html;
@@ -4188,24 +4165,25 @@ function downloadDocx() {
   <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom><w:DoNotOptimizeForBrowser/></w:WordDocument></xml><![endif]-->
   <style>
     @page WordSection1 {
-      size: 8.5in 11in;
-      margin: 0.75in 0.9in 0.9in 0.9in;
-      mso-header-margin: 0.3in;
-      mso-footer-margin: 0.3in;
+      size: 210mm 297mm;
+      margin: 10mm 12mm 12mm 12mm;
+      mso-header-margin: 6mm;
+      mso-footer-margin: 6mm;
     }
     body {
       font-family: Calibri, Arial, sans-serif;
-      font-size: 10.5pt;
+      font-size: 9.5pt;
       color: #111111;
-      line-height: 1.45;
+      line-height: 1.28;
     }
+    strong { font-weight: bold; color: #111111; }
     .r-name {
       font-family: Calibri, Arial, sans-serif;
-      font-size: 20pt;
+      font-size: 16pt;
       font-weight: bold;
       text-align: center;
       color: #111111;
-      margin: 0 0 3pt 0;
+      margin: 0 0 2pt 0;
     }
     .r-contact {
       font-family: Calibri, Arial, sans-serif;
@@ -4308,7 +4286,6 @@ function printResume(which) {
   const after = state.tailoredResume || document.getElementById('outputArea')?.textContent || '';
   const content = which === 'before' ? before : after;
   if (!content.trim()) { showToast('⚠️ No resume to print yet', '#ef4444'); return; }
-  // Clean print/PDF only — green underlines stay in Before/After UI, never in downloads
   const resumeHtml = parseResumeToHtml(content);
 
   // Build full HTML as a Blob URL — avoids "about:blank" in footer
@@ -4323,106 +4300,92 @@ function printResume(which) {
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: Calibri, Arial, sans-serif;
-      font-size: 11pt;
+      font-size: 9.5pt;
       color: #111111;
       background: #ffffff;
     }
     .page {
-      max-width: 740px;
+      max-width: 190mm;
       margin: 0 auto;
-      padding: 36px 48px 48px 48px;
+      padding: 0;
     }
     .r-name {
       font-family: Calibri, Arial, sans-serif;
-      font-size: 22pt;
+      font-size: 16pt;
       font-weight: 700;
       color: #111111;
       text-align: center;
-      margin-bottom: 5px;
+      margin-bottom: 2px;
     }
     .r-contact {
       font-family: Calibri, Arial, sans-serif;
-      font-size: 10pt;
+      font-size: 9pt;
       color: #555555;
       text-align: center;
-      margin-bottom: 3px;
+      margin-bottom: 1px;
     }
     .r-divider {
       border: none;
-      border-top: 2px solid #111111;
-      margin: 10px 0 14px 0;
+      border-top: 1.5px solid #111111;
+      margin: 6px 0 8px 0;
     }
     .r-section {
       font-family: Calibri, Arial, sans-serif;
-      font-size: 11pt;
+      font-size: 10pt;
       font-weight: 700;
       color: #111111;
       text-transform: uppercase;
-      letter-spacing: 0.7px;
+      letter-spacing: 0.5px;
       border-bottom: 1px solid #777777;
-      margin-top: 16px;
-      margin-bottom: 6px;
-      padding-bottom: 3px;
+      margin-top: 8px;
+      margin-bottom: 3px;
+      padding-bottom: 2px;
     }
     .r-role {
       font-family: Calibri, Arial, sans-serif;
-      font-size: 10.5pt;
-      font-weight: 600;
+      font-size: 9.5pt;
+      font-weight: 700;
       color: #111111;
-      margin-top: 9px;
-      margin-bottom: 4px;
+      margin-top: 5px;
+      margin-bottom: 2px;
     }
     .r-bullet {
       font-family: Calibri, Arial, sans-serif;
-      font-size: 10.5pt;
+      font-size: 9.5pt;
       color: #222222;
-      margin: 0 0 5px 0;
+      margin: 0 0 1.5px 0;
       padding-left: 0;
-      line-height: 1.55;
+      line-height: 1.28;
       display: flex;
       align-items: flex-start;
     }
     .r-bullet-dot {
       flex-shrink: 0;
-      width: 1.1em;
-      font-size: 10.5pt;
+      width: 1.05em;
+      font-size: 9.5pt;
     }
     .r-body {
       font-family: Calibri, Arial, sans-serif;
-      font-size: 10.5pt;
+      font-size: 9.5pt;
       color: #222222;
-      margin-bottom: 4px;
-      line-height: 1.5;
+      margin-bottom: 2px;
+      line-height: 1.3;
     }
-    .r-spacer { height: 4px; }
-    .r-skill-line { margin: 0 0 4px 0; color: #222222; line-height: 1.5; font-family: Calibri, Arial, sans-serif; font-size: 10.5pt; }
+    .r-spacer { height: 2px; }
+    .r-skill-line { margin: 0 0 1.5px 0; color: #222222; line-height: 1.3; font-family: Calibri, Arial, sans-serif; font-size: 9.5pt; }
     .r-skill-label { color: #111111; font-weight: 700; }
-    .r-skill-bullet { margin-left: 12px; }
-    .diff-add {
-      color: #15803d;
-      text-decoration: underline;
-      text-decoration-color: #16a34a;
-      text-decoration-thickness: 2px;
-      text-underline-offset: 3px;
-      background: rgba(22, 163, 74, 0.08);
-    }
+    .r-skill-bullet { margin-left: 8px; }
 
-    /* ── PRINT STYLES ── */
+    strong { font-weight: 700; color: #111111; }
+
     @media print {
-      html, body { margin: 0; padding: 0; background: #fff; }
-      .page { padding: 0; max-width: 100%; }
+      html, body { margin: 0; padding: 0; background: #fff; height: auto; overflow: hidden; }
+      .page { padding: 0; max-width: 100%; page-break-after: avoid; page-break-inside: avoid; }
 
-      /* Standard page size and content margins */
       @page {
-        size: letter portrait;
-        margin: 0.65in 0.75in 0.75in 0.75in;
+        size: A4 portrait;
+        margin: 10mm;
       }
-
-      /* Chrome/Edge: suppress running header & footer using named strings */
-      @page { margin-top: 0.65in; margin-bottom: 0.65in; }
-
-      .r-section { page-break-after: avoid; }
-      .r-role    { page-break-after: avoid; }
     }
   </style>
 </head>
@@ -4432,8 +4395,15 @@ function printResume(which) {
     // Use blob URL so Chrome shows a blob:// URL not "about:blank" in footer
     // Empty title ensures filename is NOT shown in header
     window.addEventListener('load', function() {
+      var page = document.querySelector('.page');
+      var maxPx = (277 / 25.4) * 96;
+      var height = page.scrollHeight;
+      if (height > maxPx) {
+        var scale = Math.max(0.58, maxPx / height);
+        page.style.zoom = String(scale);
+      }
       window.focus();
-      setTimeout(function() { window.print(); }, 250);
+      setTimeout(function() { window.print(); }, 280);
     });
   <\/script>
 </body>

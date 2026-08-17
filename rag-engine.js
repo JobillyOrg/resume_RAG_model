@@ -1578,7 +1578,7 @@
     );
 
     const readinessLabel = overallReadiness >= 90 ? 'Excellent'
-      : overallReadiness >= 75 ? 'Good'
+      : overallReadiness >= 70 ? 'Good'
       : overallReadiness >= 50 ? 'Needs work'
       : 'Poor';
 
@@ -1659,7 +1659,7 @@
       overallReadiness,
       readinessLabel,
       readinessColour: overallReadiness >= 90 ? '#16a34a'
-        : overallReadiness >= 75 ? '#ca8a04'
+        : overallReadiness >= 70 ? '#facc15'
         : overallReadiness >= 50 ? '#ea580c'
         : '#dc2626',
       categories,
