@@ -3933,7 +3933,7 @@ function isNarrativeHeader(section) {
 }
 
 function isKeepShortSkill(skill) {
-  return /^(c|r|go|ai|ml|ui|ux|js|ts|qa|bi|db|os|cd|ci|k8s|s3|ec2|iam|eks|ecs|gke|sql|aws|gcp|css|html|api|sdk|ide)$/i.test(skill);
+  return /^(c|r|go|ai|ml|ui|ux|js|ts|qa|bi|db|os|cd|ci|k8s|s3|ec2|iam|eks|ecs|gke|sql|aws|gcp|css|html|api|sdk|ide|gpu|vpn|dns|dhcp|lan|wan|ospf|bgp|stp|tcp|ip|it|ups)$/i.test(skill);
 }
 
 function looksLikeSkillAtom(word) {
@@ -3945,6 +3945,15 @@ function looksLikeSkillAtom(word) {
   if (/^[A-Z]{2,}$/.test(word)) return true;
   if (/^[A-Z][a-zA-Z0-9+#.]{1,}$/.test(word)) return true;
   if (/^[a-z][a-z0-9+#.]{2,}$/i.test(word)) return true;
+  return false;
+}
+
+function isAtomicTechToken(word) {
+  if (!word || SKILL_STOP_WORDS.has(word.toLowerCase())) return false;
+  if (isKeepShortSkill(word)) return true;
+  if (/[0-9+#./]/.test(word)) return true;
+  if (/^[A-Z]{2,10}$/.test(word)) return true; // DNS, BGP, AWS
+  if (/^[A-Za-z][A-Za-z0-9+#.]{0,20}[+#0-9.]$/.test(word)) return true; // C++, Node.js
   return false;
 }
 
@@ -3966,9 +3975,12 @@ function splitSkillTokens(chunk) {
     const main = trimmed.replace(/\(.*?\)/g, '').trim();
     if (!main) return;
     parts.push(main);
+    // Only peel out real tech atoms (GPU, AWS, CI/CD) — not English words from phrases
     const words = main.split(/\s+/).filter(Boolean);
-    if (words.length >= 2 && words.every(looksLikeSkillAtom)) {
-      words.forEach((w) => parts.push(w));
+    if (words.length >= 2) {
+      words.forEach((w) => {
+        if (isAtomicTechToken(w)) parts.push(w);
+      });
     }
   });
   return parts;
@@ -3982,7 +3994,9 @@ function expandSkillVariants(skill) {
   variants.push(raw.replace(/-/g, ' '));
   variants.push(raw.replace(/-/g, ''));
   variants.push(raw.replace(/\s+/g, ''));
-  if (/s$/i.test(raw) && raw.length > 4) variants.push(raw.slice(0, -1));
+  if (/s$/i.test(raw) && raw.length > 4 && !/(ss|us|is|ous|ics)$/i.test(raw)) {
+    variants.push(raw.slice(0, -1));
+  }
   if (/ies$/i.test(raw) && raw.length > 5) variants.push(raw.slice(0, -3) + 'y');
   if (raw.includes('/')) {
     raw.split('/').forEach((part) => {
@@ -3993,6 +4007,7 @@ function expandSkillVariants(skill) {
   return variants;
 }
 
+/** Only terms listed under Technical Skills / Skills — bold these in Summary & Experience. */
 function collectResumeSkillTerms(resumeText) {
   const found = [];
   const lines = String(resumeText || '').split('\n');
@@ -4016,15 +4031,7 @@ function collectResumeSkillTerms(resumeText) {
       found.push(skill);
     });
   }
-  if (typeof state !== 'undefined' && state.keywords) {
-    (state.keywords.primary || []).forEach((k) => found.push(k));
-    (state.keywords.secondary || []).forEach((k) => found.push(k));
-    const aliases = state.keywords.aliasMap || {};
-    Object.keys(aliases).forEach((k) => found.push(k));
-    Object.values(aliases).forEach((list) => {
-      if (Array.isArray(list)) list.forEach((k) => found.push(k));
-    });
-  }
+  // Never merge JD keywords — bold only Technical Skills entries
   const unique = [];
   const seen = new Set();
   const expanded = found.flatMap(expandSkillVariants).sort((a, b) => b.length - a.length);
